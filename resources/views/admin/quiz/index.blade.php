@@ -26,12 +26,16 @@
                             <div class="card-header">
                                 <h3 class="card-title">
                                     Quiz list
-
                                 </h3>
                                 <div class="card-tools">
                                     <button type="button" class="btn btn-success" data-toggle="modal"
                                         data-target="#modal-default">
                                         Add
+                                    </button>
+
+                                    <button type="button" class="btn btn-success" data-toggle="modal"
+                                        data-target="#modal-import">
+                                        import
                                     </button>
                                 </div>
                             </div>
@@ -42,7 +46,7 @@
                                         <tr>
                                             <th>Title</th>
                                             <th>Description</th>
-                                            <th>Status</th>
+                                            <th>Questions</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -51,22 +55,110 @@
                                             <tr>
                                                 <td>{{ $item->name }}</td>
                                                 <td>{{ $item->description }}</td>
-                                                <td>
-                                                    @if ($item->is_published)
-                                                        <span class="tag tag-success">Approved</span>
-                                                    @else
-                                                        <span class="tag tag-danger">Approved</span>
-                                                    @endif
-                                                </td>
+                                                <td>{{ $item->questions_count }}</td>
+
                                                 <td>
                                                     <a href="{{ route('quiz.show', ['quiz' => $item]) }}"
-                                                        class="btn btn-success">Add
+                                                        class="btn btn-success">
+                                                        <i class="fas fa-eye fa-lg"></i>
+                                                        Add
                                                         question</a>
-                                                    <a href="{{ route('quiz.edit', ['quiz' => $item]) }}"
-                                                        class="btn btn-primary">Update</a>
-                                                    <button type="button" class="btn btn-danger">Delete</button>
+
+
+                                                    <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
+                                                        class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
+
+
+                                                    <a data-toggle="modal" data-target="#modal-delete-{{ $item->id }}"
+                                                        class="btn btn-danger">
+                                                        <i class="fas fa-trash"></i> Delete
+                                                    </a>
                                                 </td>
                                             </tr>
+                                            <div class="modal fade" id="modal-delete-{{ $item->id }}" aria-modal="true"
+                                                role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Delete quiz</h4>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form method="POST"
+                                                                action="{{ route('quiz.destroy', ['quiz' => $item]) }}">
+                                                                <div class="row">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <div class="col-12">
+                                                                        Are you sure {{ $item->name }}?
+                                                                    </div>
+                                                                    <div class="col-12 d-flex justify-content-end gap-5">
+                                                                        <button type="button" class="btn btn-default mr-3"
+                                                                            data-dismiss="modal">Close</button>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">Supprimez</button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="modal fade" id="modal-update-{{ $item->id }}" aria-modal="true"
+                                                role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Update quiz</h4>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form method="POST"
+                                                                action="{{ route('quiz.update', ['quiz' => $item]) }}">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        @csrf
+                                                                        @method('PUT')
+                                                                        <div class="form-group">
+                                                                            <label>Text</label>
+                                                                            <input type="text" name="name"
+                                                                                value="{{ $item->name }}"
+                                                                                class="form-control"
+                                                                                placeholder="Enter ...">
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-sm-12">
+
+                                                                        <div class="form-group">
+                                                                            <label>Textarea</label>
+                                                                            <textarea class="form-control" name="description" rows="3">{{ $item->description }}</textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12 d-flex justify-content-end gap-5">
+                                                                        <button type="button" class="btn btn-default mr-3"
+                                                                            data-dismiss="modal">Close</button>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">Add</button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -94,7 +186,8 @@
                                     @csrf
                                     <div class="form-group">
                                         <label>Text</label>
-                                        <input type="text" name="name" class="form-control" placeholder="Enter ...">
+                                        <input type="text" name="name" class="form-control"
+                                            placeholder="Enter ...">
                                     </div>
                                 </div>
 
@@ -105,9 +198,47 @@
                                         <textarea class="form-control" name="description" rows="3" placeholder="Enter ..."></textarea>
                                     </div>
                                 </div>
-                                <div class="modal-footer justify-content-between">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <div class="col-12 d-flex justify-content-end gap-5">
+                                    <button type="button" class="btn btn-default mr-3"
+                                        data-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Add</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="modal fade" id="modal-import" aria-modal="true" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add quiz</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="{{ route('quiz.import') }}" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label>File</label>
+                                        <input type="file" name="file" class="form-control"
+                                            placeholder="Upload ...">
+                                        <a href="{{ url('/excel/quiz.xlsx') }}">excel exmeple file</a>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-12 d-flex justify-content-end gap-5">
+                                    <button type="button" class="btn btn-default mr-3"
+                                        data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Import</button>
                                 </div>
                             </div>
                         </form>

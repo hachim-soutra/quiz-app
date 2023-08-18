@@ -28,7 +28,9 @@
                                     @foreach ($question->question->options as $option)
                                         <div class="ans ml-2">
                                             <label class="radio">
-                                                <input type="radio" name="question[{{ $question->question->id }}]"
+                                                <input
+                                                    type="{{ $question->question->question_type && $question->question->question_type->name === 'one answer' ? 'radio' : 'checkbox' }}"
+                                                    name="question[{{ $question->question->id }}][]"
                                                     value="{{ $option->id }}">
                                                 <span>{{ $option->name }}</span>
                                             </label>

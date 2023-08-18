@@ -51,8 +51,16 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::post('/quiz/add-question/{id}', [QuizController::class, 'storeQuestion'])->name('quiz.store-answer');
 
 Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::post('/quiz/import', [QuizController::class, 'import'])->name('quiz.import');
+    Route::get('/questions/show/{id}', [QuizController::class, 'questionsShow'])->name('question.show');
+    Route::post('/questions/import/{id}', [QuizController::class, 'questionsImport'])->name('questions.import');
+
     Route::post('/quiz/add-question/{id}', [QuizController::class, 'addQuestion'])->name('quiz.add-question');
-    Route::post('/quiz/add-option/{id}', [QuizController::class, 'addOption'])->name('quiz.add-option');
+    Route::put('/quiz/update-question/{id}', [QuizController::class, 'updateQuestion'])->name('quiz.update-question');
     Route::post('/quiz/delete-question/{id}', [QuizController::class, 'removeQuestion'])->name('quiz.delete-question');
+
+    Route::post('/quiz/add-option/{id}', [QuizController::class, 'addOption'])->name('quiz.add-option');
+    Route::put('/quiz/update-option/{id}', [QuizController::class, 'updateOption'])->name('quiz.update-option');
+    Route::post('/quiz/delete-option/{id}', [QuizController::class, 'removeOption'])->name('quiz.delete-option');
     Route::resource("quiz", QuizController::class);
 });

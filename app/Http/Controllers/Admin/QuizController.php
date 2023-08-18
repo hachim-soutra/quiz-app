@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Imports\QuestionImport;
+use App\Imports\QuizImport;
 use App\Models\Answer;
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
@@ -10,6 +12,7 @@ use Harishdurga\LaravelQuiz\Models\QuestionType;
 use Harishdurga\LaravelQuiz\Models\Quiz;
 use Harishdurga\LaravelQuiz\Models\QuizQuestion;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Str;
 
 class QuizController extends Controller
@@ -19,7 +22,7 @@ class QuizController extends Controller
      */
     public function index()
     {
-        $data = Quiz::all();
+        $data = Quiz::withCount('questions')->get();
         return view('admin.quiz.index')
             ->with('data', $data);
     }
@@ -62,25 +65,40 @@ class QuizController extends Controller
             'quiz_id' => $quiz->id,
             'question_id' => $question->id,
         ]);
-        return redirect()->back()->with('status', 'Blog Post Form Data Has Been inserted');
+        return redirect()->back()->with('status', 'Question Has Been inserted');
     }
-    public function addOption(string $id, Request $request)
+
+    public function updateQuestion(string $id, Request $request)
     {
         $question = Question::findOrFail($id);
-
-        QuestionOption::create([
-            'question_id' => $question->id,
+        $question->update([
             'name' => $request->name,
-            'is_correct' => $request->is_correct == 1 ? true : false
+            'question_type_id' => $request->type,
+            'is_active' => true
         ]);
-        return redirect()->back();
+        return redirect()->back()->with('status', 'Question Has Been updated');
     }
+
+    public function questionsShow(string $id)
+    {
+        $question = Question::findOrFail($id);
+        return view('admin.quiz.question')->with(["question" => $question]);
+    }
+
+
+
     public function storeQuestion(string $id, Request $request)
     {
         $correct = 0;
         foreach ($request->question as $key => $value) {
             $question = Question::find($key);
-            if (in_array($value, $question->options()->where('is_correct', 1)->pluck('id')->toArray())) {
+            if ($question->question_type->name === 'one answer' && in_array($value[0], $question->options()->where('is_correct', 1)->pluck('id')->toArray())) {
+                $correct++;
+            }
+
+
+            if ($question->question_type->name === 'multiple answer') {
+                dd(array_diff($value, $question->options()->where('is_correct', 1)->pluck('id')->toArray()), $question->options()->where('is_correct', 1)->pluck('id')->toArray());
                 $correct++;
             }
         }
@@ -123,7 +141,13 @@ class QuizController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $quiz = Quiz::whereSlug($id)->firstOrFail();
+        $quiz->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'slug' => Str::slug($request->name),
+        ]);
+        return redirect()->back()->with('status', 'Quiz updated Successfully');
     }
 
     /**
@@ -131,6 +155,57 @@ class QuizController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $quiz = Quiz::whereSlug($id)->firstOrFail();
+        $quiz->delete();
+        return redirect()->back()->with('status', 'Quiz deleted Successfully');
+    }
+
+    public function import(Request $request)
+    {
+        Excel::import(new QuizImport, $request->file);
+        return redirect()->back()->with('status', 'Quiz Imported Successfully');
+    }
+
+    public function questionsImport(Request $request, $id)
+    {
+        Excel::import(new QuestionImport($id), $request->file);
+        return redirect()->back()->with('status', 'Questions Imported Successfully');
+    }
+
+
+    public function addOption(string $id, Request $request)
+    {
+        $question = Question::findOrFail($id);
+        if ($question->question_type->name === 'one answer' && $request->is_correct == 1) {
+            $question->options()->update(['is_correct' => 0]);
+        }
+        QuestionOption::create([
+            'question_id' => $question->id,
+            'name' => $request->name,
+            'is_correct' => $request->is_correct == 1
+        ]);
+        return redirect()->back();
+    }
+
+    public function updateOption(string $id, Request $request)
+    {
+        $option = QuestionOption::findOrFail($id);
+        if ($option->question->question_type->name === 'one answer' && $request->is_correct == 1) {
+            $option->question->options()->update(['is_correct' => 0]);
+        }
+        $option->update([
+            'name' => $request->name,
+            'question_type_id' => $request->type,
+            'is_correct' => $request->is_correct == 1,
+            'is_active' => true
+        ]);
+        return redirect()->back()->with('status', 'Answer Has Been updated');
+    }
+
+    public function removeOption(string $id)
+    {
+        $question = QuestionOption::whereId($id)->firstOrFail();
+        $question->delete();
+        return redirect()->back()->with('status', 'Answer has been deleted');
     }
 }

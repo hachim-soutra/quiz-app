@@ -7,13 +7,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Quiz : {{ $quiz->name }}</h1>
+                        <h1>Question : {{ $question->name }}</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('quiz.index') }}">Quiz</a></li>
-                            <li class="breadcrumb-item active"> {{ $quiz->name }}</li>
+                            <li class="breadcrumb-item active">{{ $question->name }}</li>
                         </ol>
                     </div>
                 </div>
@@ -26,57 +26,32 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Add new question :
+                                    Add new answer :
                                 </h3>
                             </div>
                             <div class="card-body">
-                                <form method="POST" action="{{ route('quiz.add-question', ['id' => $quiz->id]) }}">
-                                    @csrf
+                                <form method="POST" action="{{ route('quiz.add-option', ['id' => $question->id]) }}">
                                     <div class="row">
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-2">
                                             <div class="form-group">
-                                                <label>Type</label>
-
-                                                <select name="type" id="type" class="form-control">
-                                                    <option value="" disabled selected></option>
-                                                    @foreach ($types as $type)
-                                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                                    @endforeach
+                                                <label>Correct answer</label>
+                                                <select name="is_correct" id="is_correct" class="form-control">
+                                                    <option value="0" selected>No</option>
+                                                    <option value="1">Yes</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-sm-7">
+                                        <div class="col-sm-8">
+                                            @csrf
                                             <div class="form-group">
-                                                <label>Title</label>
+                                                <label>Answer</label>
                                                 <input type="text" name="name" class="form-control"
                                                     placeholder="Enter ...">
                                             </div>
                                         </div>
-
                                         <div class="col-sm-2">
                                             <label style="opacity: 0">xx</label>
                                             <button type="submit" class="btn btn-primary form-control">Add</button>
-                                        </div>
-                                    </div>
-                                </form>
-                                <hr>
-                                <form method="POST" action="{{ route('questions.import', ['id' => $quiz->id]) }}"
-                                    enctype="multipart/form-data">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            @csrf
-                                            <div class="form-group">
-                                                <label>File</label>
-                                                <input type="file" name="file" class="form-control"
-                                                    placeholder="Upload ...">
-                                                <a href="{{ url('/excel/questions.xlsx') }}">excel exmeple file</a>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col-sm-2">
-                                            <label style="opacity: 0">xx</label>
-                                            <button type="submit" class="btn btn-primary form-control">Import</button>
                                         </div>
                                     </div>
                                 </form>
@@ -87,25 +62,17 @@
                         <table class="table table-hover text-nowrap">
                             <thead>
                                 <tr>
-                                    <th>Title</th>
-                                    <th>Type</th>
-                                    <th>Answers</th>
+                                    <th>Option</th>
+                                    <th>Correct</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($quiz->questions as $item)
+                                @foreach ($question->options as $item)
                                     <tr>
-                                        <td>{{ $item->question->name }}</td>
-                                        <td>{{ $item->question->question_type?->name }}</td>
-                                        <td>{{ count($item->question->options) }}</td>
+                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->is_correct ? 'Yes' : 'NO' }}</td>
                                         <td>
-                                            <a href="{{ route('question.show', ['id' => $item->question->id]) }}"
-                                                class="btn btn-success">
-                                                <i class="fas fa-eye fa-lg"></i>
-                                                Dupliacte
-                                            </a>
-
                                             <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
                                                 class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
 
@@ -119,7 +86,7 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Delete question</h4>
+                                                        <h4 class="modal-title">Delete answer</h4>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
                                                             <span aria-hidden="true">×</span>
@@ -127,11 +94,11 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <form method="POST"
-                                                            action="{{ route('quiz.delete-question', ['id' => $item->question->id]) }}">
+                                                            action="{{ route('quiz.delete-option', ['id' => $item->id]) }}">
                                                             <div class="row">
                                                                 @csrf
                                                                 <div class="col-12">
-                                                                    Are you sure delete {{ $item->question->name }}?
+                                                                    Are you sure delete {{ $item->name }}?
                                                                 </div>
                                                                 <div class="col-12 d-flex justify-content-end gap-5">
                                                                     <button type="button" class="btn btn-default mr-3"
@@ -153,7 +120,7 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Update quiz</h4>
+                                                        <h4 class="modal-title">Update option</h4>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
                                                             <span aria-hidden="true">×</span>
@@ -161,7 +128,7 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <form method="POST"
-                                                            action="{{ route('quiz.update-question', ['id' => $item->question->id]) }}">
+                                                            action="{{ route('quiz.update-option', ['id' => $item->id]) }}">
                                                             <div class="row">
                                                                 <div class="col-sm-12">
                                                                     @csrf
@@ -169,21 +136,15 @@
                                                                     <div class="form-group">
                                                                         <label>Answer</label>
                                                                         <input type="text" name="name"
-                                                                            value="{{ $item->question->name }}"
+                                                                            value="{{ $item->name }}"
                                                                             class="form-control">
                                                                     </div>
                                                                     <div class="form-group">
-                                                                        <label>Type</label>
-
-                                                                        <select name="type" id="type"
+                                                                        <label>Correct answer</label>
+                                                                        <select name="is_correct" id="is_correct"
                                                                             class="form-control">
-                                                                            <option value="" disabled selected>
-                                                                            </option>
-                                                                            @foreach ($types as $type)
-                                                                                <option value="{{ $type->id }}"
-                                                                                    {{ $item->question->question_type_id == $type->id ? 'selected' : '' }}>
-                                                                                    {{ $type->name }}</option>
-                                                                            @endforeach
+                                                                            <option value="0" selected>No</option>
+                                                                            <option value="1">Yes</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -277,12 +238,8 @@
                             </div>
                         @endif
                     @endforeach --}}
-
                 </div>
             </div>
-
-
         </section>
-
     </div>
 @endsection

@@ -19,7 +19,6 @@
                                     <h3 class="text-danger">Q.</h3>
                                     <h5 class="mt-1 ml-2">{{ $question->question->name }}</h5>
                                 </div>
-                                {{-- {{ $answer->answers[0] }} --}}
                                 @foreach ($question->question->options as $option)
                                     <div class="ans ml-2">
                                         <label class="radio {{ $option->is_correct == 1 ? 'text-success' : '' }}">
