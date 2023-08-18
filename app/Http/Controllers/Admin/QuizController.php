@@ -96,9 +96,7 @@ class QuizController extends Controller
                 $correct++;
             }
 
-
-            if ($question->question_type->name === 'multiple answer') {
-                dd(array_diff($value, $question->options()->where('is_correct', 1)->pluck('id')->toArray()), $question->options()->where('is_correct', 1)->pluck('id')->toArray());
+            if ($question->question_type->name === 'multiple answer' && count(array_diff($value, $question->options()->where('is_correct', 1)->pluck('id')->toArray())) == 0) {
                 $correct++;
             }
         }
