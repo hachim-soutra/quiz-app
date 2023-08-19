@@ -59,6 +59,7 @@ class QuizController extends Controller
         $question = Question::create([
             'name' => $request->name,
             'question_type_id' => $request->type,
+            'error' => $request->error,
             'is_active' => true
         ]);
         QuizQuestion::create([
@@ -74,6 +75,7 @@ class QuizController extends Controller
         $question->update([
             'name' => $request->name,
             'question_type_id' => $request->type,
+            'error' => $request->error,
             'is_active' => true
         ]);
         return redirect()->back()->with('status', 'Question Has Been updated');

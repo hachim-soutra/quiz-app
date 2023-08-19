@@ -58,6 +58,15 @@
                                             <button type="submit" class="btn btn-primary form-control">Add</button>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-sm-7">
+                                            <div class="form-group">
+                                                <label>Error</label>
+                                                <input type="text" name="error" class="form-control"
+                                                    placeholder="Enter ...">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </form>
                                 <hr>
                                 <form method="POST" action="{{ route('questions.import', ['id' => $quiz->id]) }}"
@@ -90,6 +99,7 @@
                                     <th>Title</th>
                                     <th>Type</th>
                                     <th>Answers</th>
+                                    <th>Error</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -99,6 +109,7 @@
                                         <td>{{ $item->question->name }}</td>
                                         <td>{{ $item->question->question_type?->name }}</td>
                                         <td>{{ count($item->question->options) }}</td>
+                                        <td>{{ $item->question->error }}</td>
                                         <td>
                                             <a href="{{ route('question.show', ['id' => $item->question->id]) }}"
                                                 class="btn btn-success">
@@ -185,6 +196,12 @@
                                                                                     {{ $type->name }}</option>
                                                                             @endforeach
                                                                         </select>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Error</label>
+                                                                        <input type="text" name="error"
+                                                                            value="{{ $item->question->error }}"
+                                                                            class="form-control">
                                                                     </div>
                                                                 </div>
 
