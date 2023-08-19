@@ -69,6 +69,25 @@ class QuizController extends Controller
         return redirect()->back()->with('status', 'Question Has Been inserted');
     }
 
+    public function duplicateQuestion (string $id, string $qst_id , Request $request)
+    {
+        $quiz = Quiz::whereId($id)->firstOrFail();
+        $question_exist = Question::findOrFail($qst_id);
+        $question = Question::create([
+            'id' => $question_exist->id,
+            'name' => $question_exist->name,
+            'question_type_id' => $question_exist->type,
+            'error' => $question_exist->error,
+            'is_active' => true
+        ]);
+        QuizQuestion::create([
+            'quiz_id' => $quiz->id,
+            'question_id' => $question_exist->id,
+        ]);
+        return redirect()->back()->with('status', 'Question Has Been duplicated');
+
+    }
+
     public function updateQuestion(string $id, Request $request)
     {
         $question = Question::findOrFail($id);

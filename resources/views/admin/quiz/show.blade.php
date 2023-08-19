@@ -114,8 +114,17 @@
                                             <a href="{{ route('question.show', ['id' => $item->question->id]) }}"
                                                 class="btn btn-success">
                                                 <i class="fas fa-eye fa-lg"></i>
-                                                Dupliacte
+                                                Options
                                             </a>
+                                            <form method="POST" action="{{ route('quiz.duplicate-question', ['id' => $quiz->id , 'qst_id' => $item->question->id]) }}" class="d-inline-block">
+                                                @csrf
+                                                <button
+                                                class="btn btn-secondary">
+                                                <i class="fas fa-copy"></i>
+                                                Duplicate
+                                                </button>
+                                            </form>
+
 
                                             <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
                                                 class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
