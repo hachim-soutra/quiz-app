@@ -26,6 +26,11 @@
                                                 {{ $option->is_correct == 1 ? 'checked' : '' }}>
                                             <span>{{ $option->name }}</span>
                                         </label>
+                                        @if($option->is_correct == 0)
+                                           <br>
+                                           <strong class="text-danger ms-3">
+                                            {{$question->question->error}}</strong>
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>
