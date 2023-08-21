@@ -39,22 +39,19 @@
                                                         @endif
                                                         <td>
                                                             <input required type="radio"
-                                                                {{ $answer->answers[$question->question->id][$option->id] == $optionl->value && $option->id === $optionl->id ? 'checked' : '' }}
+                                                                {{ $answer->answers[$question->question->id][$optionl->id] == $option->value ? 'checked' : '' }}
                                                                 name="question[{{ $question->question->id }}][{{ $optionl->id }}]"
                                                                 value="{{ $optionl->value }}">
-                                                            {{-- {{ $option->id }} --}}
-                                                            {{-- {{ $optionl->id }} --}}
+
                                                         </td>
                                                     @endforeach
                                                 </tr>
                                             @endforeach
-                                            {{-- {{ dd($answer->answers) }} --}}
                                         </tbody>
                                     </table>
-                                    {{-- count(array_diff(array_values($answer->answers[$question->question->id]),
-                                                $question->question->options()->pluck('value')->toArray())) > 0 || --}}
-                                    @if (count(array_diff(array_values($answer->answers[$question->question->id]),
-                                                $question->question->options()->pluck('value')->toArray())) > 0)
+                                    @if (count(array_diff(
+                                                $question->question->options()->pluck('value')->toArray(),
+                                                array_values($answer->answers[$question->question->id]))) > 0)
                                         <br>
                                         <strong class="text-danger ms-3">
                                             {{ $question->question->error }}

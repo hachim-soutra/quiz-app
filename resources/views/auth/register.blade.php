@@ -10,7 +10,7 @@
                 <div class="card-body register-card-body">
                     <p class="login-box-msg">Register a new membership</p>
 
-                    <form method="post" action="{{ route('register') }}">
+                    {{-- <form method="post" action="{{ route('register') }}">
                         @csrf
 
                         <div class="input-group mb-3">
@@ -76,7 +76,7 @@
                             </div>
                             <!-- /.col -->
                         </div>
-                    </form>
+                    </form> --}}
 
                     <a href="{{ route('login') }}" class="text-center">I already have a membership</a>
                 </div>

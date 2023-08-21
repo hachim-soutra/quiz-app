@@ -45,9 +45,7 @@
                                                             <td>
                                                                 <input required type="radio"
                                                                     name="question[{{ $question->question->id }}][{{ $optionl->id }}]"
-                                                                    value="{{ $optionl->value }}">
-
-                                                                {{ $optionl->id }}
+                                                                    value="{{ $option->value }}">
                                                             </td>
                                                         @endforeach
                                                     </tr>
