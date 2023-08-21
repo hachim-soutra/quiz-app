@@ -69,7 +69,7 @@ class QuizController extends Controller
         return redirect()->back()->with('status', 'Question Has Been inserted');
     }
 
-    public function duplicateQuestion (string $id, string $qst_id , Request $request)
+    public function duplicateQuestion(string $id, string $qst_id, Request $request)
     {
         $quiz = Quiz::whereId($id)->firstOrFail();
         $question_exist = Question::findOrFail($qst_id);
@@ -85,7 +85,6 @@ class QuizController extends Controller
             'question_id' => $question_exist->id,
         ]);
         return redirect()->back()->with('status', 'Question Has Been duplicated');
-
     }
 
     public function updateQuestion(string $id, Request $request)
@@ -110,6 +109,7 @@ class QuizController extends Controller
 
     public function storeQuestion(string $id, Request $request)
     {
+        // dd($request->all());
         $correct = 0;
         foreach ($request->question as $key => $value) {
             $question = Question::find($key);
@@ -120,6 +120,17 @@ class QuizController extends Controller
             if ($question->question_type->name === 'multiple answer' && count(array_diff($value, $question->options()->where('is_correct', 1)->pluck('id')->toArray())) == 0) {
                 $correct++;
             }
+
+            if ($question->question_type->name === 'row answers') {
+                $correct++;
+
+                foreach ($question->options as $option) {
+                    if ($value[$option->id] !== $option->value) {
+                        $correct--;
+                        break;
+                    }
+                }
+            }
         }
         $token = Str::random(16);
         Answer::create([
@@ -127,7 +138,7 @@ class QuizController extends Controller
             "token" => $token,
             "answers" => $request->question,
             "email" => $request->email,
-            "score" => $correct / count($request->question)
+            "score" => $correct * 100 / count($request->question)
         ]);
         return redirect()->route('answer', ['token' => $token]);
     }
@@ -201,7 +212,8 @@ class QuizController extends Controller
         QuestionOption::create([
             'question_id' => $question->id,
             'name' => $request->name,
-            'is_correct' => $request->is_correct == 1
+            'is_correct' => $request->is_correct == 1,
+            'value' => $question->question_type->name === 'row answers' ? $request->value : '',
         ]);
         return redirect()->back();
     }
@@ -216,7 +228,9 @@ class QuizController extends Controller
             'name' => $request->name,
             'question_type_id' => $request->type,
             'is_correct' => $request->is_correct == 1,
-            'is_active' => true
+            'is_active' => true,
+            'value' => $option->question->question_type->name === 'row answers' ? $request->value : '',
+
         ]);
         return redirect()->back()->with('status', 'Answer Has Been updated');
     }

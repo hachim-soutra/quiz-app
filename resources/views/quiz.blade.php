@@ -25,17 +25,49 @@
                                         <h3 class="text-danger">Q.</h3>
                                         <h5 class="mt-1 ml-2">{{ $question->question->name }}</h5>
                                     </div>
-                                    @foreach ($question->question->options as $option)
-                                        <div class="ans ml-2">
-                                            <label class="radio">
-                                                <input required
-                                                    type="{{ $question->question->question_type && $question->question->question_type->name === 'one answer' ? 'radio' : 'checkbox' }}"
-                                                    name="question[{{ $question->question->id }}][]"
-                                                    value="{{ $option->id }}">
-                                                <span>{{ $option->name }}</span>
-                                            </label>
-                                        </div>
-                                    @endforeach
+                                    @if ($question->question->question_type->name === 'row answers')
+                                        <table width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    @foreach ($question->question->options as $option)
+                                                        <th> {{ $option->name }}</th>
+                                                    @endforeach
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($question->question->options as $optionl)
+                                                    <tr>
+                                                        @foreach ($question->question->options as $k => $option)
+                                                            @if ($loop->first)
+                                                                <td> {{ $optionl->value }}</td>
+                                                            @endif
+                                                            <td>
+                                                                <input required type="radio"
+                                                                    name="question[{{ $question->question->id }}][{{ $optionl->id }}]"
+                                                                    value="{{ $optionl->value }}">
+
+                                                                {{ $optionl->id }}
+                                                            </td>
+                                                        @endforeach
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    @else
+                                        @foreach ($question->question->options as $option)
+                                            <div class="ans ml-2">
+                                                <label class="radio">
+                                                    <input required
+                                                        type="{{ $question->question->question_type && $question->question->question_type->name === 'one answer' ? 'radio' : 'checkbox' }}"
+                                                        name="question[{{ $question->question->id }}][]"
+                                                        value="{{ $option->id }}">
+                                                    <span>{{ $option->name }}</span>
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    @endif
+
                                 </div>
                             @endif
                         @endforeach

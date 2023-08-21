@@ -32,16 +32,19 @@
                             <div class="card-body">
                                 <form method="POST" action="{{ route('quiz.add-option', ['id' => $question->id]) }}">
                                     <div class="row">
-                                        <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <label>Correct answer</label>
-                                                <select name="is_correct" id="is_correct" class="form-control">
-                                                    <option value="0" selected>No</option>
-                                                    <option value="1">Yes</option>
-                                                </select>
+                                        @if ($question->question_type->name !== 'row answers')
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <label>Correct answer</label>
+                                                    <select name="is_correct" id="is_correct" class="form-control">
+                                                        <option value="0" selected>No</option>
+                                                        <option value="1">Yes</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-sm-8">
+                                        @endif
+                                        <div
+                                            class="{{ $question->question_type->name !== 'row answers' ? 'col-sm-8' : 'col-sm-5' }}">
                                             @csrf
                                             <div class="form-group">
                                                 <label>Answer</label>
@@ -49,6 +52,16 @@
                                                     placeholder="Enter ...">
                                             </div>
                                         </div>
+                                        @if ($question->question_type->name === 'row answers')
+                                            <div class="col-sm-5">
+                                                @csrf
+                                                <div class="form-group">
+                                                    <label>Value</label>
+                                                    <input type="text" name="value" class="form-control"
+                                                        placeholder="Enter ...">
+                                                </div>
+                                            </div>
+                                        @endif
                                         <div class="col-sm-2">
                                             <label style="opacity: 0">xx</label>
                                             <button type="submit" class="btn btn-primary form-control">Add</button>
@@ -63,7 +76,7 @@
                             <thead>
                                 <tr>
                                     <th>Option</th>
-                                    <th>Correct</th>
+                                    <th>{{ $question->question_type->name === 'row answers' ? 'Value' : 'Correct' }}</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -71,7 +84,11 @@
                                 @foreach ($question->options as $item)
                                     <tr>
                                         <td>{{ $item->name }}</td>
-                                        <td>{{ $item->is_correct ? 'Yes' : 'NO' }}</td>
+                                        @if ($question->question_type->name !== 'row answers')
+                                            <td>{{ $item->is_correct ? 'Yes' : 'NO' }}</td>
+                                        @else
+                                            <td>{{ $item->value }}</td>
+                                        @endif
                                         <td>
                                             <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
                                                 class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
@@ -139,14 +156,23 @@
                                                                             value="{{ $item->name }}"
                                                                             class="form-control">
                                                                     </div>
-                                                                    <div class="form-group">
-                                                                        <label>Correct answer</label>
-                                                                        <select name="is_correct" id="is_correct"
-                                                                            class="form-control">
-                                                                            <option value="0" selected>No</option>
-                                                                            <option value="1">Yes</option>
-                                                                        </select>
-                                                                    </div>
+                                                                    @if ($question->question_type->name !== 'row answers')
+                                                                        <div class="form-group">
+                                                                            <label>Correct answer</label>
+                                                                            <select name="is_correct" id="is_correct"
+                                                                                class="form-control">
+                                                                                <option value="0" selected>No</option>
+                                                                                <option value="1">Yes</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    @else
+                                                                        <div class="form-group">
+                                                                            <label>Value</label>
+                                                                            <input type="text" name="value"
+                                                                                value="{{ $item->value }}"
+                                                                                class="form-control">
+                                                                        </div>
+                                                                    @endif
                                                                 </div>
 
 
