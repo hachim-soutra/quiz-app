@@ -20,9 +20,7 @@
                     reliable
                     and fast way</p>
 
-                <img src="{{ url('assets/images/Group171.svg') }}" alt="" width="50%">
-
-
+                <img src="{{ asset('assets/images/Group171.svg') }}" alt="" width="50%">
 
             </div>
         </div>
