@@ -13,7 +13,7 @@
 <body>
     <section>
         <div class="container">
-            <div class="d-flex flex-column align-items-center ">
+            <div class="d-flex flex-column align-items-center p-5">
                 <img src="{{ asset('images/logo.jfif') }}" alt="">
                 <p class="text-bold text-center h1">Welcome to pminlife online quiz application</p>
                 <p class="pb-5 text-center h5">Take assesment tests in very
