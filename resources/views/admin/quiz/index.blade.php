@@ -60,9 +60,8 @@
                                                 <td>
                                                     <a href="{{ route('quiz.show', ['quiz' => $item]) }}"
                                                         class="btn btn-success">
-                                                        <i class="fas fa-eye fa-lg"></i>
-                                                        Add
-                                                        question</a>
+                                                        <i class="fas fa-eye"></i>
+                                                        Questions</a>
 
 
                                                     <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
