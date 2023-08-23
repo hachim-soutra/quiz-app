@@ -74,7 +74,6 @@ class QuizController extends Controller
         $quiz = Quiz::whereId($id)->firstOrFail();
         $question_exist = Question::findOrFail($qst_id);
         $question = Question::create([
-            'id' => $question_exist->id,
             'name' => $question_exist->name,
             'question_type_id' => $question_exist->type,
             'error' => $question_exist->error,
