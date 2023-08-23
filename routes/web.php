@@ -45,12 +45,15 @@ Route::get('/answer/{token}', function ($token) {
     return view('answer')->with(["answer" => $answer]);
 })->name('answer');
 
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/quiz/add-question/{id}', [QuizController::class, 'storeQuestion'])->name('quiz.store-answer');
 
 Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/answer', [App\Http\Controllers\Admin\AnswerController::class, 'index'] )->name('admin.answer');
+
     Route::post('/quiz/import', [QuizController::class, 'import'])->name('quiz.import');
     Route::get('/questions/show/{id}', [QuizController::class, 'questionsShow'])->name('question.show');
     Route::post('/questions/import/{id}', [QuizController::class, 'questionsImport'])->name('questions.import');
