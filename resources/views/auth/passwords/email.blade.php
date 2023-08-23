@@ -3,7 +3,7 @@
     <body class="hold-transition login-page">
         <div class="login-box">
             <div class="login-logo">
-                <a href="{{ url('/home') }}"><b>{{ config('app.name') }}</b></a>
+                <a href="{{ url('/home') }}"><img src="{{asset('images/logo.jfif')}}" alt=""></a>
             </div>
 
             <!-- /.login-logo -->
@@ -41,9 +41,7 @@
                     <p class="mt-3 mb-1">
                         <a href="{{ route("login") }}">Login</a>
                     </p>
-                    <p class="mb-0">
-                        <a href="{{ route("register") }}" class="text-center">Register a new membership</a>
-                    </p>
+                   
                 </div>
                 <!-- /.login-card-body -->
             </div>
