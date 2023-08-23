@@ -2,12 +2,15 @@
 
 @section('content')
     <div class="container mt-5">
+
         <div class="d-flex justify-content-center row">
+
             <div class="col-md-10 col-lg-10">
                 <div class="border">
                     <form method="POST" action="{{ route('quiz.store-answer', ['id' => $quiz->id]) }}">
 
                         <div class="question bg-white p-3 border-bottom">
+                            <img src="{{ asset('images/logo.jfif') }}" alt="">
                             <div class="d-flex flex-column justify-content-between align-items-center">
                                 <h4>{{ $quiz->name }}</h4>
                                 <p>{{ $quiz->description }}</p>
