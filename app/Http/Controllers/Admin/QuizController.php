@@ -22,7 +22,7 @@ class QuizController extends Controller
      */
     public function index()
     {
-        $data = Quiz::withCount('questions')->get();
+        $data = Quiz::with('questions')->get();
         return view('admin.quiz.index')
             ->with('data', $data);
     }

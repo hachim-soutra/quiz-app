@@ -1,9 +1,8 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <a href="{{ route('home') }}" class="brand-link">
-        <img src="https://assets.infyom.com/logo/blue_logo_150x150.png"
+    <a href="{{ route('home') }}" class="brand-link" style="padding: 1.81rem 0.5rem;">
+        <img src="{{asset('images/logo.jfif')}}"
              alt="AdminLTE Logo"
-             class="brand-image img-circle elevation-3">
-        <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
+             class="brand-image img-circle elevation-3" style="margin-left: 3rem; margin-top: -1rem;">
     </a>
 
     <div class="sidebar">

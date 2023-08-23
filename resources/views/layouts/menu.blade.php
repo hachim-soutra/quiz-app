@@ -11,9 +11,9 @@
         <p>Quiz</p>
     </a>
 </li>
-{{-- <li class="nav-item">
-    <a href="{{ route('answer') }}" class="nav-link {{ Request::is('answer') ? 'active' : '' }}">
+<li class="nav-item">
+    <a href="{{ route('admin.answer') }}" class="nav-link {{ Request::is('answer') ? 'active' : '' }}">
         <i class="nav-icon fas fa-gift"></i>
         <p>Answer</p>
     </a>
-</li> --}}
+</li>

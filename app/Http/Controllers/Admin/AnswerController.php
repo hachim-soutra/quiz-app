@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Answer;
 use App\Http\Requests\StoreAnswerRequest;
 use App\Http\Requests\UpdateAnswerRequest;
@@ -13,7 +14,8 @@ class AnswerController extends Controller
      */
     public function index()
     {
-        //
+        $answers = Answer::with('quiz')->get();
+        return view('admin.answer.show')->with('answers', $answers);
     }
 
     /**
