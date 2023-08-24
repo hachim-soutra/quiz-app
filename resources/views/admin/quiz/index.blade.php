@@ -63,6 +63,15 @@
                                                         <i class="fas fa-eye"></i>
                                                         Questions</a>
 
+                                                    <form method="POST" action="{{ route('quiz.duplicate-quiz', ['id' => $item->id]) }}" class="d-inline-block">
+                                                        @csrf
+                                                        <button
+                                                        class="btn btn-secondary">
+                                                        <i class="fas fa-copy"></i>
+                                                        Duplicate
+                                                        </button>
+                                                    </form>
+
 
                                                     <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
                                                         class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>

@@ -50,6 +50,18 @@ class QuizController extends Controller
         return redirect()->back()->with('status', 'Blog Post Form Data Has Been inserted');
     }
 
+    public function duplicateQuiz(string $id, Request $request)
+    {
+        $existed_quiz = Quiz::findOrFail($id);
+        Quiz::create([
+            'name' => $existed_quiz->name,
+            'description' => $existed_quiz->description,
+            'slug' => Str::slug($existed_quiz->name),
+        ]);
+
+        return redirect()->back()->with('status', 'quiz Has Been duplicated');
+    }
+
     /**
      * Display the specified resource.
      */
