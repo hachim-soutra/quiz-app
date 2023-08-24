@@ -6,18 +6,27 @@ use App\Http\Controllers\Controller;
 use App\Models\Answer;
 use App\Http\Requests\StoreAnswerRequest;
 use App\Http\Requests\UpdateAnswerRequest;
+use Illuminate\Http\Request;
 
 class AnswerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $answers = Answer::with('quiz')->get();
-        return view('admin.answer.show')->with('answers', $answers);
-    }
 
+
+    public function index(Request $request)
+    {
+        $search = $request->input('search');
+        $answers = Answer::with('quiz')->latest()
+            ->Where('email', 'LIKE', "%{$search}%")
+            ->orWhereHas('quiz', function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%");
+            })
+
+            ->paginate(10);
+        return view('admin.answer.index', compact('answers', 'search'));
+    }
     /**
      * Show the form for creating a new resource.
      */

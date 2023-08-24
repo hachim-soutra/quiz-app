@@ -46,6 +46,7 @@ Route::get('/answer/{token}', function ($token) {
 })->name('answer');
 
 
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -53,6 +54,7 @@ Route::post('/quiz/add-question/{id}', [QuizController::class, 'storeQuestion'])
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/answer', [App\Http\Controllers\Admin\AnswerController::class, 'index'] )->name('admin.answer');
+
 
     Route::post('/quiz/import', [QuizController::class, 'import'])->name('quiz.import');
     Route::get('/questions/show/{id}', [QuizController::class, 'questionsShow'])->name('question.show');

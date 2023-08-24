@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="{{ route('home') }}" class="brand-link" style="padding: 1.81rem 0.5rem;">
-        <img src="{{ asset('images/logo.jfif') }}" alt="AdminLTE Logo" class="w-100">
+        <img src="{{ asset('images/logo.png') }}" alt="AdminLTE Logo" class="w-100">
     </a>
 
     <div class="sidebar">

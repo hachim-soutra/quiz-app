@@ -3,7 +3,7 @@
     <body class="hold-transition login-page">
         <div class="login-box">
             <div class="login-logo">
-                <a href="{{ url('/home') }}"><img src="{{asset('images/logo.jfif')}}" alt=""></a>
+                <a href="{{ url('/home') }}"><img src="{{asset('images/logo.png')}}" alt=""></a>
             </div>
             <!-- /.login-logo -->
 
@@ -58,7 +58,7 @@
                     <p class="mb-1">
                         <a href="{{ route('password.request') }}">I forgot my password</a>
                     </p>
-                    
+
                 </div>
                 <!-- /.login-card-body -->
             </div>

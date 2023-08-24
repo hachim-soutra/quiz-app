@@ -11,7 +11,7 @@
 
                         <div class="question bg-white p-3 border-bottom"
                             style="display: flex;flex-direction: column;    align-items: center;">
-                            <img src="{{ asset('images/logo.jfif') }}" alt="" width="300px" class="pb-5">
+                            <img src="{{ asset('images/logo.png') }}" alt="" width="300px" class="pb-5">
                             <div class="d-flex flex-column justify-content-between align-items-center">
                                 <h4>{{ $quiz->name }}</h4>
                                 <p>{{ $quiz->description }}</p>
