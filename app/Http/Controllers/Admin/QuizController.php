@@ -13,6 +13,7 @@ use Harishdurga\LaravelQuiz\Models\Quiz;
 use Harishdurga\LaravelQuiz\Models\QuizQuestion;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\File;
 use Str;
 
 class QuizController extends Controller
@@ -20,11 +21,13 @@ class QuizController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Quiz::with('questions')->get();
-        return view('admin.quiz.index')
-            ->with('data', $data);
+        $search = $request->search;
+        $data = Quiz::with('questions')->latest()
+        ->where('name','like',"%{$search}%")
+        ->paginate(10);
+        return view('admin.quiz.index', compact('data'));
     }
 
     /**
@@ -40,14 +43,39 @@ class QuizController extends Controller
      */
     public function store(Request $request)
     {
-        Quiz::create([
+        if($request->hasFile('image'))
+        {
+            $file = $request->file('image');
+            $extention = $file->getClientOriginalExtension();
+            $filename = time().'.'.$extention;
+            $file->move('images/',$filename);
+        }
+
+        $quiz = Quiz::create([
             'name' => $request->name,
             'description' => $request->description,
             'slug' => Str::slug($request->name),
-            'is_published' => 1
+            'image' => $filename,
+            'is_published' => 1,
         ]);
 
+
+        // $quiz->save();
+
         return redirect()->back()->with('status', 'Blog Post Form Data Has Been inserted');
+    }
+
+    public function duplicateQuiz(string $id, Request $request)
+    {
+        $existed_quiz = Quiz::findOrFail($id);
+        Quiz::create([
+            'name' => $existed_quiz->name,
+            'description' => $existed_quiz->description,
+            'slug' => Str::slug($existed_quiz->name),
+            'image' => $existed_quiz->image
+        ]);
+
+        return redirect()->back()->with('status', 'quiz Has Been duplicated');
     }
 
     /**
@@ -197,11 +225,26 @@ class QuizController extends Controller
     public function update(Request $request, string $id)
     {
         $quiz = Quiz::whereSlug($id)->firstOrFail();
+
+        if($request->hasFile('image'))
+        {
+            $destination = 'images/'.$quiz->image;
+            if(File::exists($destination)){
+                File::delete($destination);
+            }
+            $file = $request->file('image');
+            $extention = $file->getClientOriginalExtension();
+            $filename = time().'.'.$extention;
+            $file->move('images/',$filename);
+        }
+
         $quiz->update([
             'name' => $request->name,
             'description' => $request->description,
             'slug' => Str::slug($request->name),
+            'image' => $filename,
         ]);
+
         return redirect()->back()->with('status', 'Quiz updated Successfully');
     }
 

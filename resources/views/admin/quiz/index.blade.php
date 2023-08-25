@@ -28,8 +28,16 @@
                                     Quiz list
                                 </h3>
                                 <div class="card-tools">
+                                    <form action="{{ route('quiz.index') }}" method="GET" class="d-flex ms-3">
+                                        <input type="text" name="search" class="form-control"
+                                            placeholder="Search" value="{{isset($search) ? $search : ''}}">
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-default" style="margin-right: 13px;">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                    </form>
                                     <button type="button" class="btn btn-success" data-toggle="modal"
-                                        data-target="#modal-default">
+                                        data-target="#modal-default" style="margin-right: 13px;">
                                         Add
                                     </button>
 
@@ -47,6 +55,7 @@
                                             <th>Title</th>
                                             <th>Description</th>
                                             <th>Questions</th>
+                                            <th>Image</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -56,12 +65,24 @@
                                                 <td>{{ $item->name }}</td>
                                                 <td>{{ $item->description }}</td>
                                                 <td>{{ $item->questions_count }}</td>
+                                                <td><img src="{{ asset('images/' . $item->image) }}" alt=""
+                                                        width="70px" class="rounded"></td>
 
                                                 <td>
                                                     <a href="{{ route('quiz.show', ['quiz' => $item]) }}"
                                                         class="btn btn-success">
                                                         <i class="fas fa-eye"></i>
                                                         Questions</a>
+
+                                                    <form method="POST"
+                                                        action="{{ route('quiz.duplicate-quiz', ['id' => $item->id]) }}"
+                                                        class="d-inline-block">
+                                                        @csrf
+                                                        <button class="btn btn-secondary">
+                                                            <i class="fas fa-copy"></i>
+                                                            Duplicate
+                                                        </button>
+                                                    </form>
 
 
                                                     <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
@@ -122,7 +143,8 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <form method="POST"
-                                                                action="{{ route('quiz.update', ['quiz' => $item]) }}">
+                                                                action="{{ route('quiz.update', ['quiz' => $item]) }}"
+                                                                enctype="multipart/form-data">
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
                                                                         @csrf
@@ -143,11 +165,22 @@
                                                                             <textarea class="form-control" name="description" rows="3">{{ $item->description }}</textarea>
                                                                         </div>
                                                                     </div>
+                                                                    <div class="col-sm-12">
+
+                                                                        <div class="form-group">
+                                                                            <label>upload image</label>
+                                                                            <input type="file" class="form-control"
+                                                                                name="image">
+                                                                            <img src="{{ asset('images/' . $item->image) }}"
+                                                                                width="150" class="mt-3 rounded">
+                                                                        </div>
+                                                                    </div>
                                                                     <div class="col-12 d-flex justify-content-end gap-5">
-                                                                        <button type="button" class="btn btn-default mr-3"
+                                                                        <button type="button"
+                                                                            class="btn btn-default mr-3"
                                                                             data-dismiss="modal">Close</button>
                                                                         <button type="submit"
-                                                                            class="btn btn-primary">Add</button>
+                                                                            class="btn btn-primary">Update</button>
                                                                     </div>
                                                                 </div>
                                                             </form>
@@ -161,6 +194,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <div class="d-flex align-items-center justify-content-end p-5">
+                                    {{ $data->links() }}
+                                </div>
                             </div>
 
                         </div>
@@ -179,7 +215,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" action="{{ route('quiz.store') }}">
+                        <form method="POST" action="{{ route('quiz.store') }}" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-sm-12">
                                     @csrf
@@ -191,10 +227,15 @@
                                 </div>
 
                                 <div class="col-sm-12">
-
                                     <div class="form-group">
                                         <label>Textarea</label>
                                         <textarea class="form-control" name="description" rows="3" placeholder="Enter ..."></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>upload image</label>
+                                        <input class="form-control" name="image" type="file">
                                     </div>
                                 </div>
                                 <div class="col-12 d-flex justify-content-end gap-5">
