@@ -21,11 +21,13 @@ class QuizController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Quiz::with('questions')->get();
-        return view('admin.quiz.index')
-            ->with('data', $data);
+        $search = $request->search;
+        $data = Quiz::with('questions')->latest()
+        ->where('name','like',"%{$search}%")
+        ->paginate(10);
+        return view('admin.quiz.index', compact('data'));
     }
 
     /**
