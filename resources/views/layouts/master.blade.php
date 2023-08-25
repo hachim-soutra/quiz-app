@@ -15,6 +15,24 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <style>
+        .cover {
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .profil {
+            height: 150px;
+            width: 150px;
+            border-radius: 50%;
+            object-fit: contain;
+            top: -75px;
+            position: relative;
+            border: 2px solid black;
+            margin-left: 1rem;
+
+        }
+    </style>
 </head>
 
 <body>

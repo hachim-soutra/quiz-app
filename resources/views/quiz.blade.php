@@ -9,10 +9,10 @@
                 <div class="border">
                     <form method="POST" action="{{ route('quiz.store-answer', ['id' => $quiz->id]) }}">
 
-                        <div class="question bg-white p-3 border-bottom"
-                            style="display: flex;flex-direction: column;    align-items: center;">
-                            <img src="{{ asset('images/logo.png') }}" alt="" width="300px" class="pb-5">
-                            <div class="d-flex flex-column justify-content-between align-items-center">
+                        <div class="question bg-white border-bottom" style="display: flex;flex-direction: column;">
+                            <img src="{{ asset('images/logo.png') }}" alt="" width="100%" class="cover">
+                            <img src="{{ asset('images/logo.png') }}" alt="" width="300px" class="profil">
+                            <div class="d-flex flex-column justify-content-between px-2">
                                 <h4>{{ $quiz->name }}</h4>
                                 <p>{{ $quiz->description }}</p>
                                 <div>
