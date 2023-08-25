@@ -7,7 +7,7 @@
                 <div class="border">
                     <div class="question bg-white p-3 border-bottom">
                         <div class="d-flex flex-column justify-content-between align-items-center">
-                            <h4>User email : {{ $answer->email }}</h4>
+                            <h2>User email : {{ $answer->email }}</h2>
                             <p>Score {{ $answer->score }}%</p>
                         </div>
                     </div>
@@ -16,8 +16,8 @@
                         @if ($question->question)
                             <div class="question bg-white p-3 border-bottom">
                                 <div class="d-flex flex-row align-items-center question-title">
-                                    <h3 class="text-danger">Q.</h3>
-                                    <h5 class="mt-1 ml-2">{{ $question->question->name }}</h5>
+                                    <h2 class="text-danger">Q.</h2>
+                                    <h3 class="mt-1 ml-2">{{ $question->question->name }}</h3>
                                 </div>
                                 @if ($question->question->question_type->name === 'row answers')
                                     <table width="100%">
@@ -32,7 +32,7 @@
                                         <tbody>
                                             @foreach ($question->question->options as $optionl)
                                                 <tr
-                                                    bgcolor="{{ $answer->answers[$question->question->id][$optionl->id] === $optionl->value ? 'green' : 'red' }}">
+                                                    class="{{ $answer->answers[$question->question->id][$optionl->id] === $optionl->value ? 'bg-success-1' : 'bg-danger-1' }}">
                                                     @foreach ($question->question->options as $k => $option)
                                                         @if ($loop->first)
                                                             <td>{{ $optionl->value }}</td>

@@ -26,15 +26,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/seed-type', function () {
-    QuestionType::all()->each(function ($q) {
-        $q->delete();
-    });
-    QuestionType::create(['name' => 'one answer']);
-    QuestionType::create(['name' => 'multiple answer']);
-    QuestionType::create(['name' => 'row answers']);
-});
-
 Route::get('/quiz/{slug}', function ($slug) {
     $quiz = Quiz::whereSlug($slug)->firstOrFail();
     return view('quiz')->with(["quiz" => $quiz]);
@@ -45,16 +36,20 @@ Route::get('/answer/{token}', function ($token) {
     return view('answer')->with(["answer" => $answer]);
 })->name('answer');
 
-
+Route::get('/questions/{token}/{id}', function ($token, $id) {
+    $answer = Answer::with("quiz")->whereToken($token)->firstOrFail();
+    $question = Question::findOrFail($id);
+    return view('question')->with(["answer" => $answer, "question" => $question]);
+})->name('questions');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::post('/quiz/add-question/{id}', [QuizController::class, 'storeQuestion'])->name('quiz.store-answer');
+Route::post('/quiz/add-question/{id}/{question_id}', [QuizController::class, 'storeQuestion'])->name('quiz.store-answer');
+Route::post('/quiz/create-answer/{id}', [QuizController::class, 'createAnswer'])->name('quiz.create-answer');
 
 Route::prefix('admin')->middleware('auth')->group(function () {
-    Route::get('/answer', [App\Http\Controllers\Admin\AnswerController::class, 'index'] )->name('admin.answer');
-
+    Route::get('/answer', [App\Http\Controllers\Admin\AnswerController::class, 'index'])->name('admin.answer');
 
     Route::post('/quiz/import', [QuizController::class, 'import'])->name('quiz.import');
     Route::get('/questions/show/{id}', [QuizController::class, 'questionsShow'])->name('question.show');

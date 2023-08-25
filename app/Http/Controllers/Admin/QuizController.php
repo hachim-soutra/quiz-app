@@ -104,42 +104,68 @@ class QuizController extends Controller
         return view('admin.quiz.question')->with(["question" => $question]);
     }
 
-
-
-    public function storeQuestion(string $id, Request $request)
+    public function createAnswer(string $id, Request $request)
     {
-        // dd($request->all());
+        $token = Str::random(16);
+        $answer = Answer::create([
+            "quiz_id" => $id,
+            "token" => $token,
+            "answers" => [],
+            "email" => $request->email,
+            "score" => 0
+        ]);
+
+        $question = Question::whereHas("quiz_questions", function ($q) use ($id) {
+            $q->where("quiz_id", $id);
+        })->whereNull('deleted_at')->first();
+
+        return redirect()->route('questions', ['token' => $token, 'id' => $question->id]);
+    }
+
+    public function storeQuestion(int $id, int $question_id, Request $request)
+    {
+        $answer = Answer::findOrFail($id);
+        $questions = $answer->answers;
+        $questions[$question_id] = isset($request->question[$question_id]) ? $request->question[$question_id] : $request->question;
         $correct = 0;
-        foreach ($request->question as $key => $value) {
-            $question = Question::find($key);
-            if ($question->question_type->name === 'one answer' && in_array($value[0], $question->options()->where('is_correct', 1)->pluck('id')->toArray())) {
-                $correct++;
-            }
+        if ($questions) {
+            foreach ($questions as $key => $value) {
+                $question = Question::find($key);
+                if ($question->question_type->name === 'one answer' && in_array($value[0], $question->options()->where('is_correct', 1)->pluck('id')->toArray())) {
+                    $correct++;
+                }
 
-            if ($question->question_type->name === 'multiple answer' && count(array_diff($value, $question->options()->where('is_correct', 1)->pluck('id')->toArray())) == 0) {
-                $correct++;
-            }
+                if ($question->question_type->name === 'multiple answer' && count(array_diff($value, $question->options()->where('is_correct', 1)->pluck('id')->toArray())) == 0) {
+                    $correct++;
+                }
 
-            if ($question->question_type->name === 'row answers') {
-                $correct++;
+                if ($question->question_type->name === 'row answers') {
+                    $correct++;
 
-                foreach ($question->options as $option) {
-                    if ($value[$option->id] !== $option->value) {
-                        $correct--;
-                        break;
+                    foreach ($question->options as $option) {
+                        if ($value[$option->id] !== $option->value) {
+                            $correct--;
+                            break;
+                        }
                     }
                 }
             }
         }
-        $token = Str::random(16);
-        Answer::create([
-            "quiz_id" => $id,
-            "token" => $token,
-            "answers" => $request->question,
-            "email" => $request->email,
-            "score" => $correct * 100 / count($request->question)
+        $answer->update([
+            "answers" => $questions,
+            "score" => $answer->answers ? $correct * 100 / count($answer->answers) : 0
         ]);
-        return redirect()->route('answer', ['token' => $token]);
+        $questionL = Question::whereHas("quiz_questions", function ($q) use ($answer) {
+            $q->where("quiz_id", $answer->quiz_id);
+        })->whereNull('deleted_at')
+            ->where("id", '>', $question_id)
+            ->first();
+
+        if ($questionL) {
+            return redirect()->route('questions', ['token' => $answer->token, 'id' => $questionL->id]);
+        } else {
+            return redirect()->route('answer', ['token' => $answer->token]);
+        }
     }
 
     public function removeQuestion(string $id)

@@ -30,7 +30,26 @@
             position: relative;
             border: 2px solid black;
             margin-left: 1rem;
+        }
 
+        .quiz-info {
+            position: relative;
+            height: 450px;
+        }
+
+        .user-info {
+            position: relative;
+            top: -150px;
+            left: 170px;
+            width: calc(100% - 200px);
+        }
+
+        .bg-success-1 {
+            background-color: #c2e8b3f7 !important;
+        }
+
+        .bg-danger-1 {
+            background-color: #ff00004d !important;
         }
     </style>
 </head>

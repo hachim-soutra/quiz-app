@@ -13,12 +13,6 @@ class Answer extends Model
 
     protected $fillable  = ['answers', 'email', 'score', 'token', 'quiz_id'];
 
-
-    // protected function getAnswersAttribute()
-    // {
-    //     return json_decode($this->answers, true);
-    // }
-
     protected $casts = [
         'answers' => 'array'
     ];
