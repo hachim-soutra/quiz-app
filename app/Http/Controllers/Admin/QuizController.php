@@ -13,6 +13,7 @@ use Harishdurga\LaravelQuiz\Models\Quiz;
 use Harishdurga\LaravelQuiz\Models\QuizQuestion;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\File;
 use Str;
 
 class QuizController extends Controller
@@ -40,12 +41,24 @@ class QuizController extends Controller
      */
     public function store(Request $request)
     {
-        Quiz::create([
+        if($request->hasFile('image'))
+        {
+            $file = $request->file('image');
+            $extention = $file->getClientOriginalExtension();
+            $filename = time().'.'.$extention;
+            $file->move('images/',$filename);
+        }
+
+        $quiz = Quiz::create([
             'name' => $request->name,
             'description' => $request->description,
             'slug' => Str::slug($request->name),
-            'is_published' => 1
+            'image' => $filename,
+            'is_published' => 1,
         ]);
+
+
+        // $quiz->save();
 
         return redirect()->back()->with('status', 'Blog Post Form Data Has Been inserted');
     }
@@ -183,11 +196,26 @@ class QuizController extends Controller
     public function update(Request $request, string $id)
     {
         $quiz = Quiz::whereSlug($id)->firstOrFail();
+
+        if($request->hasFile('image'))
+        {
+            $destination = 'images/'.$quiz->image;
+            if(File::exists($destination)){
+                File::delete($destination);
+            }
+            $file = $request->file('image');
+            $extention = $file->getClientOriginalExtension();
+            $filename = time().'.'.$extention;
+            $file->move('images/',$filename);
+        }
+
         $quiz->update([
             'name' => $request->name,
             'description' => $request->description,
             'slug' => Str::slug($request->name),
+            'image' => $filename,
         ]);
+
         return redirect()->back()->with('status', 'Quiz updated Successfully');
     }
 
