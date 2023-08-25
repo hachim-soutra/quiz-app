@@ -70,6 +70,7 @@ class QuizController extends Controller
             'name' => $existed_quiz->name,
             'description' => $existed_quiz->description,
             'slug' => Str::slug($existed_quiz->name),
+            'image' => $existed_quiz->image
         ]);
 
         return redirect()->back()->with('status', 'quiz Has Been duplicated');
