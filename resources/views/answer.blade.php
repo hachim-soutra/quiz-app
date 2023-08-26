@@ -5,10 +5,32 @@
         <div class="d-flex justify-content-center row">
             <div class="col-md-10 col-lg-10">
                 <div class="border">
+                    <div class="question bg-white border-bottom quiz-info">
+                        <img src="{{ asset('images/' . $answer->quiz->image) }}" alt="" width="100%"
+                            class="cover">
+                        <img src="{{ asset('images/logo.png') }}" alt="" width="300px" class="profil">
+                        <div class="d-flex flex-column justify-content-between px-2 user-info my-3">
+                            <h2 class="text-deco">{{ $answer->quiz->name }}</h2>
+                            <p class="sous-title">{{ $answer->quiz->description }}</p>
+                        </div>
+                    </div>
+
                     <div class="question bg-white p-3 border-bottom">
                         <div class="d-flex flex-column justify-content-between align-items-center">
                             <h2>User email : {{ $answer->email }}</h2>
-                            <p>Score {{ $answer->score }}%</p>
+                            @if($answer->score < 75)
+                            <p class="text-review">
+                                Thank you for completing the quiz, unfortunatly your score is below target 😟, which is 75% of correct answers, here below a quick summarize of your assessment
+                            </p>
+                            @else
+                            <p class="text-review">
+                                Thank you for completing the quiz, Well done 👍  your score is above target, which is 75% of correct answers, here below a quick summarize of your assessment
+                            </p>
+
+                            @endif
+                            <p class="fw-bold">Score :
+                                <span class="{{ $answer->score > 75 ? 'text-success' : 'text-danger' }}">{{ $answer->score }}%</span>
+                                </p>
                         </div>
                     </div>
 

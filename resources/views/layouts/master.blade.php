@@ -31,28 +31,44 @@
         }
 
         .cover {
-            height: 300px;
-            object-fit: contain;
+            height: auto;
+            object-fit: cover;
         }
 
         .profil {
             height: 150px;
             width: 150px;
             border-radius: 50%;
-            object-fit: contain;
+            object-fit: cover;
             margin-top: -75px;
             position: relative;
-            border: 2px solid black;
-            margin-left: 1rem;
+            border: 1px solid #d7d5d5;
+            margin-left: 4rem;
+        }
+
+        .sous-title {
+            font-size: 20px;
+            margin-left: 14px;
+            font-weight: 400;
+        }
+
+        .text-deco {
+            text-decoration: underline;
+            text-underline-offset: 7px;
         }
 
         .user-info {
             position: relative;
-            top: -150px;
-            left: 170px;
+            top: 2px;
+            left: 94px;
             width: calc(100% - 200px);
         }
 
+        .text-review {
+            margin: 1rem 14rem;
+            font-size: 19px;
+            text-align: center;
+        }
         .bg-success-1 {
             background-color: #c2e8b3f7 !important;
         }

@@ -2,17 +2,17 @@
 
 @section('content')
     <div class="d-flex justify-content-center row w-100 m-0">
-        <img src="{{ asset('images/' . $quiz->image) }}" alt="" width="100%" class="cover border-bottom">
+        <img src="{{ asset('images/' . $quiz->image) }}" alt="" width="100%" class="cover border-bottom p-0">
 
         <div class="col-md-10 col-lg-10">
             <img src="{{ asset('images/logo.png') }}" alt="" width="300px" class="profil">
 
-            <div class="">
+            <div class="ms-5 mt-5">
                 <form method="POST" action="{{ route('quiz.create-answer', ['id' => $quiz->id]) }}">
 
-                    <div class="d-flex flex-column justify-content-between px-2">
-                        <h2>{{ $quiz->name }}</h2>
-                        <p>{{ $quiz->description }}</p>
+                    <div class="d-flex flex-column justify-content-between px-2 mb-5">
+                        <h2 class="text-deco">{{ $quiz->name }}</h2>
+                        <p class="sous-title">{{ $quiz->description }}</p>
                     </div>
                     <div class="question bg-white p-3">
                         <table width="100%">

@@ -13,9 +13,9 @@
                             <img src="{{ asset('images/' . $answer->quiz->image) }}" alt="" width="100%"
                                 class="cover">
                             <img src="{{ asset('images/logo.png') }}" alt="" width="300px" class="profil">
-                            <div class="d-flex flex-column justify-content-between px-2 user-info">
-                                <h2>{{ $answer->quiz->name }}</h2>
-                                <p>{{ $answer->quiz->description }}</p>
+                            <div class="d-flex flex-column justify-content-between px-2 user-info my-3">
+                                <h2 class="text-deco">{{ $answer->quiz->name }}</h2>
+                                <p class="sous-title">{{ $answer->quiz->description }}</p>
                             </div>
                         </div>
 
