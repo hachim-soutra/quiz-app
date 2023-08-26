@@ -22,7 +22,7 @@
                             <!-- User image -->
                             <li class="p-5 text-center">
                                 <p>
-                                    {{ Auth::user()->name }}<br />
+                                    {{ Auth::user()->email }}<br />
                                     <small>Member since {{ Auth::user()->created_at->format('M. Y') }}</small>
                                 </p>
                             </li>

@@ -61,7 +61,7 @@
                                     <div class="row">
                                         <div class="col-sm-7">
                                             <div class="form-group">
-                                                <label>Error</label>
+                                                <label>Comment if wrong answer</label>
                                                 <input type="text" name="error" class="form-control"
                                                     placeholder="Enter ...">
                                             </div>
@@ -99,29 +99,30 @@
                                     <th>Title</th>
                                     <th>Type</th>
                                     <th>Answers</th>
-                                    <th>Error</th>
+                                    <th>Comment if wrong answer</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($quiz->questions as $item)
                                     <tr>
-                                        <td>{{ $item->question->name }}</td>
+                                        <td>{{ Str::limit($item->question->name, 20) }}</td>
                                         <td>{{ $item->question->question_type?->name }}</td>
                                         <td>{{ count($item->question->options) }}</td>
-                                        <td>{{ $item->question->error }}</td>
+                                        <td>{{ Str::limit($item->question->error, 20) }}</td>
                                         <td>
                                             <a href="{{ route('question.show', ['id' => $item->question->id]) }}"
                                                 class="btn btn-success">
                                                 <i class="fas fa-eye fa-lg"></i>
                                                 Options
                                             </a>
-                                            <form method="POST" action="{{ route('quiz.duplicate-question', ['id' => $quiz->id , 'qst_id' => $item->question->id]) }}" class="d-inline-block">
+                                            <form method="POST"
+                                                action="{{ route('quiz.duplicate-question', ['id' => $quiz->id, 'qst_id' => $item->question->id]) }}"
+                                                class="d-inline-block">
                                                 @csrf
-                                                <button
-                                                class="btn btn-secondary">
-                                                <i class="fas fa-copy"></i>
-                                                Duplicate
+                                                <button class="btn btn-secondary">
+                                                    <i class="fas fa-copy"></i>
+                                                    Duplicate
                                                 </button>
                                             </form>
 
@@ -207,7 +208,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="form-group">
-                                                                        <label>Error</label>
+                                                                        <label>Comment if wrong answer</label>
                                                                         <input type="text" name="error"
                                                                             value="{{ $item->question->error }}"
                                                                             class="form-control">

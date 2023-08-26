@@ -29,8 +29,8 @@
                                 </h3>
                                 <div class="card-tools">
                                     <form action="{{ route('quiz.index') }}" method="GET" class="d-flex ms-3">
-                                        <input type="text" name="search" class="form-control"
-                                            placeholder="Search" value="{{isset($search) ? $search : ''}}">
+                                        <input type="text" name="search" class="form-control" placeholder="Search"
+                                            value="{{ request('search') }}">
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-default" style="margin-right: 13px;">
                                                 <i class="fas fa-search"></i>
@@ -161,7 +161,7 @@
                                                                     <div class="col-sm-12">
 
                                                                         <div class="form-group">
-                                                                            <label>Textarea</label>
+                                                                            <label>Description</label>
                                                                             <textarea class="form-control" name="description" rows="3">{{ $item->description }}</textarea>
                                                                         </div>
                                                                     </div>
@@ -228,7 +228,7 @@
 
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label>Textarea</label>
+                                        <label>Description</label>
                                         <textarea class="form-control" name="description" rows="3" placeholder="Enter ..."></textarea>
                                     </div>
                                 </div>

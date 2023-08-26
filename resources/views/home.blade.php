@@ -16,21 +16,31 @@
 
             <div class="row">
                 <div class="col-lg-3 col-6">
-
-                    <div class="small-box bg-info">
-                        <div class="inner">
+                    <div class="small-box" style="background-color: #351c75ff !important">
+                        <div class="inner text-white">
+                            <h3>{{ App\Models\User::count() }}</h3>
+                            <p>Admins</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-add"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <a href="{{ route('quiz.index') }}" class="small-box" style="background-color: #343b7cff !important">
+                        <div class="inner text-white">
                             <h3>{{ Harishdurga\LaravelQuiz\Models\Quiz::count() }}</h3>
-                            <p>Quizs</p>
+                            <p>Quizzes</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                    </div>
+                    </a>
                 </div>
 
                 <div class="col-lg-3 col-6">
 
-                    <div class="small-box bg-success">
+                    <div class="small-box" style="background-color: #ccccccff !important">
                         <div class="inner">
                             <h3>{{ Harishdurga\LaravelQuiz\Models\Question::count() }}</h3>
                             <p>Questions</p>
@@ -44,22 +54,8 @@
 
                 <div class="col-lg-3 col-6">
 
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>{{ App\Models\User::count() }}</h3>
-                            <p>Admins</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-6">
-
-                    <div class="small-box bg-danger">
-                        <div class="inner">
+                    <a href="{{ route('admin.answer') }}" class="small-box" style="background-color: #cfe2f3ff !important">
+                        <div class="inner text-dark">
                             <h3>{{ App\Models\Answer::count() }}</h3>
                             <p>Answers</p>
                         </div>
@@ -67,7 +63,7 @@
                             <i class="ion ion-pie-graph"></i>
                         </div>
 
-                    </div>
+                    </a>
                 </div>
 
             </div>

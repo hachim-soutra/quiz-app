@@ -24,9 +24,9 @@ class QuizController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
-        $data = Quiz::with('questions')->latest()
-        ->where('name','like',"%{$search}%")
-        ->paginate(10);
+        $data = Quiz::with('questions')->withCount('questions')->latest()
+            ->where('name', 'like', "%{$search}%")
+            ->paginate(10);
         return view('admin.quiz.index', compact('data'));
     }
 
@@ -43,38 +43,52 @@ class QuizController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->hasFile('image'))
-        {
+        if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extention = $file->getClientOriginalExtension();
-            $filename = time().'.'.$extention;
-            $file->move('images/',$filename);
+            $filename = time() . '.' . $extention;
+            $file->move('images/', $filename);
         }
-
-        $quiz = Quiz::create([
+        Quiz::create([
             'name' => $request->name,
             'description' => $request->description,
             'slug' => Str::slug($request->name),
             'image' => $filename,
             'is_published' => 1,
         ]);
-
-
-        // $quiz->save();
-
-        return redirect()->back()->with('status', 'Blog Post Form Data Has Been inserted');
+        return redirect()->back()->with('status', 'Your quiz has been added');
     }
 
     public function duplicateQuiz(string $id, Request $request)
     {
-        $existed_quiz = Quiz::findOrFail($id);
-        Quiz::create([
-            'name' => $existed_quiz->name,
-            'description' => $existed_quiz->description,
-            'slug' => Str::slug($existed_quiz->name),
-            'image' => $existed_quiz->image
+        $existedQuiz = Quiz::findOrFail($id);
+        $quiz = Quiz::create([
+            'name' => $existedQuiz->name,
+            'description' => $existedQuiz->description,
+            'slug' => Str::slug($existedQuiz->name),
+            'image' => $existedQuiz->image
         ]);
+        $existedQuiz->questions->each(function ($que) use ($quiz) {
+            $question = Question::create([
+                'name' => $que->question->name,
+                'question_type_id' => $que->question->question_type_id,
+                'error' => $que->question->error,
+                'is_active' => true
+            ]);
+            QuizQuestion::create([
+                'quiz_id' => $quiz->id,
+                'question_id' => $question->id,
+            ]);
 
+            $que->question->options->each(function ($option) use ($question) {
+                QuestionOption::create([
+                    'question_id' => $question->id,
+                    'name' => $option->name,
+                    'is_correct' => $option->is_correct,
+                    'value' => $option->value,
+                ]);
+            });
+        });
         return redirect()->back()->with('status', 'quiz Has Been duplicated');
     }
 
@@ -103,14 +117,23 @@ class QuizController extends Controller
         $question_exist = Question::findOrFail($qst_id);
         $question = Question::create([
             'name' => $question_exist->name,
-            'question_type_id' => $question_exist->type,
+            'question_type_id' => $question_exist->question_type_id,
             'error' => $question_exist->error,
             'is_active' => true
         ]);
         QuizQuestion::create([
             'quiz_id' => $quiz->id,
-            'question_id' => $question_exist->id,
+            'question_id' => $question->id,
         ]);
+
+        $question_exist->options->each(function ($option) use ($question) {
+            QuestionOption::create([
+                'question_id' => $question->id,
+                'name' => $option->name,
+                'is_correct' => $option->is_correct,
+                'value' => $option->value,
+            ]);
+        });
         return redirect()->back()->with('status', 'Question Has Been duplicated');
     }
 
@@ -226,23 +249,22 @@ class QuizController extends Controller
     {
         $quiz = Quiz::whereSlug($id)->firstOrFail();
 
-        if($request->hasFile('image'))
-        {
-            $destination = 'images/'.$quiz->image;
-            if(File::exists($destination)){
+        if ($request->hasFile('image')) {
+            $destination = 'images/' . $quiz->image;
+            if (File::exists($destination)) {
                 File::delete($destination);
             }
             $file = $request->file('image');
-            $extention = $file->getClientOriginalExtension();
-            $filename = time().'.'.$extention;
-            $file->move('images/',$filename);
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move('images/', $filename);
         }
 
         $quiz->update([
             'name' => $request->name,
             'description' => $request->description,
             'slug' => Str::slug($request->name),
-            'image' => $filename,
+            'image' => $request->hasFile('image') ? $filename : $quiz->image,
         ]);
 
         return redirect()->back()->with('status', 'Quiz updated Successfully');

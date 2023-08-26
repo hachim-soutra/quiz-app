@@ -10,15 +10,29 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@100;200;300;400;500;600;700;800;900&family=Inter&family=Montserrat:wght@300;500&family=Quicksand:wght@300;700&display=swap"
+        rel="stylesheet">
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <style>
+        * {
+            font-family: 'Gothic A1', sans-serif;
+            font-family: 'Inter', sans-serif;
+            font-family: 'Montserrat', sans-serif;
+            font-family: 'Quicksand', sans-serif;
+        }
+
         .cover {
             height: 300px;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         .profil {

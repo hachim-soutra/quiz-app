@@ -10,7 +10,8 @@
                     <form method="POST"
                         action="{{ route('quiz.store-answer', ['id' => $answer->id, 'question_id' => $question->id]) }}">
                         <div class="question bg-white border-bottom quiz-info">
-                            <img src="{{ asset('images/logo.png') }}" alt="" width="100%" class="cover">
+                            <img src="{{ asset('images/' . $answer->quiz->image) }}" alt="" width="100%"
+                                class="cover">
                             <img src="{{ asset('images/logo.png') }}" alt="" width="300px" class="profil">
                             <div class="d-flex flex-column justify-content-between px-2 user-info">
                                 <h2>{{ $answer->quiz->name }}</h2>
