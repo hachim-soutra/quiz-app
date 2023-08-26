@@ -14,20 +14,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@100;200;300;400;500;600;700;800;900&family=Inter&family=Montserrat:wght@300;500&family=Quicksand:wght@300;700&display=swap"
-        rel="stylesheet">
+
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <style>
-        * {
-            font-family: 'Gothic A1', sans-serif;
-            font-family: 'Inter', sans-serif;
-            font-family: 'Montserrat', sans-serif;
-            font-family: 'Quicksand', sans-serif;
+        `@font-face {
+            font-family: CenturyGothic;
+            src: url('/assets/fonts/CenturyGothic.tff');
+        }
+
+        ` * {
+            font-family: 'CenturyGothic', sans-serif;
         }
 
         .cover {
@@ -40,15 +40,10 @@
             width: 150px;
             border-radius: 50%;
             object-fit: contain;
-            top: -75px;
+            margin-top: -75px;
             position: relative;
             border: 2px solid black;
             margin-left: 1rem;
-        }
-
-        .quiz-info {
-            position: relative;
-            height: 450px;
         }
 
         .user-info {

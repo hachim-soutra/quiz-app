@@ -3,17 +3,18 @@
 @section('content')
     <div class="d-flex justify-content-center row w-100 m-0">
         <img src="{{ asset('images/' . $quiz->image) }}" alt="" width="100%" class="cover border-bottom">
+
         <div class="col-md-10 col-lg-10">
+            <img src="{{ asset('images/logo.png') }}" alt="" width="300px" class="profil">
+
             <div class="">
                 <form method="POST" action="{{ route('quiz.create-answer', ['id' => $quiz->id]) }}">
-                    <div class="question bg-white border-bottom quiz-info">
-                        <img src="{{ asset('images/logo.png') }}" alt="" width="300px" class="profil">
-                    </div>
-                    <div class="d-flex flex-column justify-content-between px-2 user-info">
+
+                    <div class="d-flex flex-column justify-content-between px-2">
                         <h2>{{ $quiz->name }}</h2>
                         <p>{{ $quiz->description }}</p>
                     </div>
-                    <div class="question bg-white p-3 border-bottom">
+                    <div class="question bg-white p-3">
                         <table width="100%">
                             <tr>
                                 <td>
