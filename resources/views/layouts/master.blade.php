@@ -33,6 +33,7 @@
         .cover {
             height: auto;
             object-fit: cover;
+            max-height: 60vh;
         }
 
         .profil {
@@ -69,6 +70,7 @@
             font-size: 19px;
             text-align: center;
         }
+
         .bg-success-1 {
             background-color: #c2e8b3f7 !important;
         }

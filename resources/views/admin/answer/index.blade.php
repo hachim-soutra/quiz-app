@@ -28,7 +28,7 @@
                                     <div class="input-group input-group-sm" style="width: 150px;">
                                         <form action="{{ route('admin.answer') }}" method="GET" class="d-flex">
                                             <input type="text" name="search" class="form-control float-right"
-                                                placeholder="Search" value="{{isset($search) ? $search : ''}}">
+                                                placeholder="Search" value="{{ isset($search) ? $search : '' }}">
                                             <div class="input-group-append">
                                                 <button type="submit" class="btn btn-default">
                                                     <i class="fas fa-search"></i>
@@ -54,7 +54,7 @@
                                 <tbody>
                                     @foreach ($answers as $answer)
                                         <tr>
-                                            <td>{{ $answer->quiz->name }}</td>
+                                            <td>{{ $answer->quiz?->name }}</td>
                                             <td>{{ $answer->email }}</td>
                                             <td>{{ $answer->score }}</td>
                                             <td>{{ $answer->created_at }}</td>
@@ -67,7 +67,7 @@
 
                             </table>
                             <div class="d-flex align-items-center justify-content-end p-5">
-                                    {{$answers->links()}}
+                                {{ $answers->links() }}
                             </div>
                         </div>
 
