@@ -21,7 +21,8 @@
                     and fast way</p>
 
                 <img src="{{ asset('assets/images/Group171.svg') }}" alt="" width="50%">
-
+                <a target="_blank" href="{{ route('home') }}" class="btn btn-success">
+                    Acces now</a>
             </div>
         </div>
 </body>

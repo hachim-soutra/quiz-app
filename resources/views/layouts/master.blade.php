@@ -33,7 +33,7 @@
         .cover {
             height: auto;
             object-fit: cover;
-            max-height: 60vh;
+            max-height: 33vh;
         }
 
         .profil {
