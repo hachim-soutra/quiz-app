@@ -69,7 +69,7 @@
                                                         width="70px" class="rounded"></td>
 
                                                 <td>
-                                                    <a href="{{ route('quiz', ['slug' => $item->slug]) }}"
+                                                    <a target="_blank" href="{{ route('quiz', ['slug' => $item->slug]) }}"
                                                         class="btn btn-success">
                                                         <i class="fas fa-eye"></i>
                                                         Show</a>
