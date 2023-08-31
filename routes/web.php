@@ -29,7 +29,7 @@ Route::get('/', function () {
 Route::get('/quiz/{slug}', function ($slug) {
     $quiz = Quiz::whereSlug($slug)->firstOrFail();
     return view('quiz')->with(["quiz" => $quiz]);
-});
+})->name('quiz');
 
 Route::get('/answer/{token}', function ($token) {
     $answer = Answer::whereToken($token)->firstOrFail();

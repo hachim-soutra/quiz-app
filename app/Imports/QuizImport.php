@@ -4,10 +4,11 @@ namespace App\Imports;
 
 use Harishdurga\LaravelQuiz\Models\Quiz;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Str;
 
-class QuizImport implements ToModel, WithStartRow
+class QuizImport implements ToModel, WithStartRow, WithCustomCsvSettings
 {
     /**
      * @return int
@@ -15,6 +16,14 @@ class QuizImport implements ToModel, WithStartRow
     public function startRow(): int
     {
         return 2;
+    }
+
+    public function getCsvSettings(): array
+    {
+        return [
+            'input_encoding' => 'ISO-8859-1',
+            'delimiter' => ";"
+        ];
     }
 
     /**

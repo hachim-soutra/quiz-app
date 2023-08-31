@@ -69,6 +69,10 @@
                                                         width="70px" class="rounded"></td>
 
                                                 <td>
+                                                    <a href="{{ route('quiz', ['slug' => $item->slug]) }}"
+                                                        class="btn btn-success">
+                                                        <i class="fas fa-eye"></i>
+                                                        Show</a>
                                                     <a href="{{ route('quiz.show', ['quiz' => $item]) }}"
                                                         class="btn btn-success">
                                                         <i class="fas fa-eye"></i>
