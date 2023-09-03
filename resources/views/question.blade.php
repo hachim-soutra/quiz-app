@@ -39,7 +39,11 @@
                                                     <td>
                                                         <input required type="radio"
                                                             name="question[{{ $question->id }}][{{ $optionl->id }}]"
-                                                            value="{{ $option->value }}">
+                                                            value="{{ $option->value }}"
+                                                            class="@error('question[{{ $question->id }}][{{ $optionl->id }}] ') is-invalid @enderror">
+                                                        @error('question[{{ $question->id }}][{{ $optionl->id }}]')
+                                                            <div class="alert alert-danger">{{ $message }}</div>
+                                                        @enderror
                                                     </td>
                                                 @endforeach
                                             </tr>
@@ -48,7 +52,7 @@
                                 </table>
                             @else
                                 @foreach ($question->options as $option)
-                                    <div class="ans ml-2">
+                                    <div class="ans ml-2 lh-lg">
                                         <label class="radio">
                                             <input
                                                 type="{{ $question->question_type && $question->question_type->name === 'one answer' ? 'radio' : 'checkbox' }}"

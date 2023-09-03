@@ -11,7 +11,7 @@ class Answer extends Model
 {
     use HasFactory;
 
-    protected $fillable  = ['answers', 'email', 'score', 'token', 'quiz_id'];
+    protected $fillable  = ['answers', 'email', 'score', 'token', 'quiz_id','nbr_of_correct'];
 
     protected $casts = [
         'answers' => 'array'

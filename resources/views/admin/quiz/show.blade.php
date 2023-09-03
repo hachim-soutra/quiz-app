@@ -72,7 +72,7 @@
                                 <form method="POST" action="{{ route('questions.import', ['id' => $quiz->id]) }}"
                                     enctype="multipart/form-data">
                                     <div class="row">
-                                        <div class="col-sm-10">
+                                        <div class="col-sm-8">
                                             @csrf
                                             <div class="form-group">
                                                 <label>File</label>
@@ -87,9 +87,18 @@
                                             <label style="opacity: 0">xx</label>
                                             <button type="submit" class="btn btn-primary form-control">Import</button>
                                         </div>
+
                                     </div>
                                 </form>
                             </div>
+                            <form action="{{route('quiz.delete-all', ['id' => $quiz->id])}}" method="POST">
+                                @csrf
+                                <div class="col-sm-2">
+                                    <label style="opacity: 0">xx</label>
+                                    <button type="submit" class="btn btn-danger form-control">Remove All</button>
+                                </div>
+                            </form>
+
                         </div>
                     </div>
                     <div class="card-body table-responsive p-3 bg-white">
@@ -158,7 +167,7 @@
                                                                     <button type="button" class="btn btn-default mr-3"
                                                                         data-dismiss="modal">Close</button>
                                                                     <button type="submit"
-                                                                        class="btn btn-primary">Supprimez</button>
+                                                                        class="btn btn-primary">Delete</button>
                                                                 </div>
                                                             </div>
                                                         </form>
