@@ -179,7 +179,8 @@ class QuizController extends Controller
 
     public function storeQuestion(int $id, int $question_id, Request $request)
     {
-        $validated = $request->validate([
+
+        $request->validate([
             'question' => 'required',
         ]);
 
@@ -240,14 +241,12 @@ class QuizController extends Controller
     {
         $quiz = Quiz::whereId($id)->firstOrFail();
         $quiz->questions()->each(function ($question) {
-            QuestionOption::where('question_id',$question->id)->delete();
+            $question->options()->delete();
+            $question->quiz_questions()->delete();
             $question->delete();
         });
 
-        Question::whereHas("quiz_questions", function ($q) use ($id) {
-            $q->where("quiz_id", $id);
-        })->delete();
-        return redirect()->back();
+        return redirect()->back()->with('status', 'the questions have been deleted');
     }
 
     public function show(string $id)
