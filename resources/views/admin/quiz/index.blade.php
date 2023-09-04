@@ -123,7 +123,7 @@
                                                                         <button type="button" class="btn btn-default mr-3"
                                                                             data-dismiss="modal">Close</button>
                                                                         <button type="submit"
-                                                                            class="btn btn-primary">Supprimez</button>
+                                                                            class="btn btn-primary">Delete</button>
                                                                     </div>
                                                                 </div>
                                                             </form>

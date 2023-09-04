@@ -22,8 +22,11 @@
 
                                 </td>
                                 <td>
-                                    <input type="email" id="email" name="email" class="form-control">
-
+                                    <input type="email" id="email" name="email"
+                                        class="@error('email') is-invalid @enderror form-control">
+                                    @error('email')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </td>
                             </tr>
                         </table>

@@ -21,7 +21,8 @@
                     @endif
                     <p class="fw-bold">Score :
                         <span
-                            class="{{ $answer->score > 75 ? 'text-success' : 'text-danger' }}">{{ $answer->score }}%</span>
+                            class="{{ $answer->score > 75 ? 'text-success' : 'text-danger' }}">{{ $answer->score }}%
+                         correct ({{$answer->nbr_of_correct}} / {{count($answer->answers)}})</span>
                     </p>
                 </div>
 

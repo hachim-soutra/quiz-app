@@ -18,6 +18,7 @@
                             <h2 class="text-danger">Q.</h2>
                             <h3 class="mt-1 ml-2">{{ $question->name }}</h3>
                         </div>
+
                         @if ($question->question_type)
                             @if ($question->question_type->name === 'row answers')
                                 <table width="100%">
@@ -29,6 +30,7 @@
                                             @endforeach
                                         </tr>
                                     </thead>
+
                                     <tbody>
                                         @foreach ($question->options as $optionl)
                                             <tr>
@@ -39,7 +41,9 @@
                                                     <td>
                                                         <input required type="radio"
                                                             name="question[{{ $question->id }}][{{ $optionl->id }}]"
-                                                            value="{{ $option->value }}">
+                                                            value="{{ $option->value }}"
+                                                            class="@error('question') is-invalid @enderror">
+
                                                     </td>
                                                 @endforeach
                                             </tr>
@@ -48,17 +52,25 @@
                                 </table>
                             @else
                                 @foreach ($question->options as $option)
-                                    <div class="ans ml-2">
+                                    <div class="ans ml-2 lh-lg">
                                         <label class="radio">
                                             <input
                                                 type="{{ $question->question_type && $question->question_type->name === 'one answer' ? 'radio' : 'checkbox' }}"
-                                                name="question[]" value="{{ $option->id }}">
+                                                name="question[]" value="{{ $option->id }}"
+                                                class="@error('question') is-invalid @enderror">
+
                                             <span>{{ $option->name }}</span>
                                         </label>
                                     </div>
                                 @endforeach
                             @endif
                         @endif
+                        <div class="text-danger">
+                            @foreach ($errors->all() as $error)
+                                {{ $error }}<br />
+                            @endforeach
+                            
+                        </div>
 
                     </div>
                     <div class="d-flex flex-row justify-content-end align-items-center p-3 bg-white">

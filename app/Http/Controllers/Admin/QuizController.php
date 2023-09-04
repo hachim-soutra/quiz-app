@@ -157,6 +157,10 @@ class QuizController extends Controller
 
     public function createAnswer(string $id, Request $request)
     {
+        $validated = $request->validate([
+            'email' => 'required',
+        ]);
+
         $token = Str::random(16);
         $answer = Answer::create([
             "quiz_id" => $id,
@@ -175,6 +179,11 @@ class QuizController extends Controller
 
     public function storeQuestion(int $id, int $question_id, Request $request)
     {
+
+        $request->validate([
+            'question' => 'required',
+        ]);
+
         $answer = Answer::findOrFail($id);
         $questions = $answer->answers;
         $questions[$question_id] = isset($request->question[$question_id]) ? $request->question[$question_id] : $request->question;
@@ -204,7 +213,8 @@ class QuizController extends Controller
         }
         $answer->update([
             "answers" => $questions,
-            "score" => $answer->answers ? $correct * 100 / count($answer->answers) : 0
+            "score" => $answer->answers ? $correct * 100 / count($answer->answers) : 0,
+            "nbr_of_correct" => $correct
         ]);
         $questionL = Question::whereHas("quiz_questions", function ($q) use ($answer) {
             $q->where("quiz_id", $answer->quiz_id);
@@ -215,7 +225,7 @@ class QuizController extends Controller
         if ($questionL) {
             return redirect()->route('questions', ['token' => $answer->token, 'id' => $questionL->id]);
         } else {
-            return redirect()->route('answer', ['token' => $answer->token]);
+            return redirect()->route('answer', ['token' => $answer->token ]);
         }
     }
 
@@ -225,6 +235,18 @@ class QuizController extends Controller
         $question->delete();
         $question->quiz_questions()->delete();
         return redirect()->back();
+    }
+
+    public function removeAllQuestions(string $id)
+    {
+        $quiz = Quiz::whereId($id)->firstOrFail();
+        $quiz->questions()->each(function ($question) {
+            $question->options()->delete();
+            $question->quiz_questions()->delete();
+            $question->delete();
+        });
+
+        return redirect()->back()->with('status', 'the questions have been deleted');
     }
 
     public function show(string $id)

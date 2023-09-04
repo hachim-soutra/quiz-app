@@ -69,27 +69,45 @@
                                     </div>
                                 </form>
                                 <hr>
-                                <form method="POST" action="{{ route('questions.import', ['id' => $quiz->id]) }}"
-                                    enctype="multipart/form-data">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            @csrf
-                                            <div class="form-group">
-                                                <label>File</label>
-                                                <input type="file" name="file" class="form-control"
-                                                    placeholder="Upload ...">
-                                                <a href="{{ url('/excel/questions.xlsx') }}">excel exmeple file</a>
+                                <div class="col-lg-12 d-flex">
+                                    <div class="col-lg-10">
+                                        <form method="POST" action="{{ route('questions.import', ['id' => $quiz->id]) }}"
+                                            enctype="multipart/form-data">
+                                            <div class="row">
+                                                <div class="col-sm-10">
+                                                    @csrf
+                                                    <div class="form-group">
+                                                        <label>File</label>
+                                                        <input type="file" name="file" class="form-control"
+                                                            placeholder="Upload ...">
+                                                        <a href="{{ url('/excel/questions.xlsx') }}">excel exmeple file</a>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="col-sm-2">
+                                                    <label style="opacity: 0">xx</label>
+                                                    <button type="submit" class="btn btn-primary form-control">Import</button>
+                                                </div>
+
                                             </div>
+                                        </form>
 
-                                        </div>
-
-                                        <div class="col-sm-2">
-                                            <label style="opacity: 0">xx</label>
-                                            <button type="submit" class="btn btn-primary form-control">Import</button>
-                                        </div>
                                     </div>
-                                </form>
+                                    <div class="col-lg-2">
+                                        <form action="{{route('quiz.delete-all', ['id' => $quiz->id])}}" method="POST">
+                                            @csrf
+                                            <div class="col-sm-12">
+                                                <label style="opacity: 0">xx</label>
+                                                <button type="submit" class="btn btn-danger form-control">Remove All</button>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+
                             </div>
+
                         </div>
                     </div>
                     <div class="card-body table-responsive p-3 bg-white">
@@ -158,7 +176,7 @@
                                                                     <button type="button" class="btn btn-default mr-3"
                                                                         data-dismiss="modal">Close</button>
                                                                     <button type="submit"
-                                                                        class="btn btn-primary">Supprimez</button>
+                                                                        class="btn btn-primary">Delete</button>
                                                                 </div>
                                                             </div>
                                                         </form>
