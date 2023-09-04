@@ -3,7 +3,7 @@
     <body class="hold-transition login-page">
         <div class="login-box">
             <div class="login-logo">
-                <a href="{{ url('/home') }}"><img src="{{asset('images/logo.png')}}" alt=""></a>
+                <a href="{{ url('/home') }}"><img src="{{ asset('images/logo.png') }}" width="100%" alt=""></a>
             </div>
 
             <!-- /.login-logo -->
@@ -12,34 +12,37 @@
                     <p class="login-box-msg">You forgot your password? Here you can easily retrieve a new password.</p>
 
                     @if (session('status'))
-                    <div class="alert alert-success">
-                        {{ session('status') }}
-                    </div>
+                        <div class="alert alert-success">
+                            {{ session('status') }}
+                        </div>
                     @endif
 
                     <form action="{{ route('password.email') }}" method="post">
                         @csrf
 
                         <div class="input-group mb-3">
-                            <input type="email" name="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="Email">
+                            <input type="email" name="email"
+                                class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                                placeholder="Email">
                             <div class="input-group-append">
                                 <div class="input-group-text"><span class="fas fa-envelope"></span></div>
                             </div>
                             @if ($errors->has('email'))
-                            <span class="error invalid-feedback">{{ $errors->first('email') }}</span>
+                                <span class="error invalid-feedback">{{ $errors->first('email') }}</span>
                             @endif
                         </div>
 
                         <div class="row">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary btn-block">Send Password Reset Link</button>
+                                <button type="submit" class="btn btn-primary btn-block">Send Password Reset
+                                    Link</button>
                             </div>
                             <!-- /.col -->
                         </div>
                     </form>
 
                     <p class="mt-3 mb-1">
-                        <a href="{{ route("login") }}">Login</a>
+                        <a href="{{ route('login') }}">Login</a>
                     </p>
 
                 </div>

@@ -22,14 +22,14 @@
     <section>
         <div class="container">
             <div class="d-flex flex-column align-items-center p-5">
-                <img src="{{ asset('images/logo.png') }}" alt="">
+                <img src="{{ asset('images/logo.png') }}" alt="" width="100%">
                 <p class="text-bold text-center h1 font">Welcome to pminlife online quiz application</p>
                 <p class="pb-5 text-center h5 font">Take assesment tests in very
                     reliable
                     and fast way</p>
 
                 <img src="{{ asset('assets/images/Group171.svg') }}" alt="" width="50%">
-                <a target="_blank" href="{{ route('home') }}" class="btn btn-success">
+                <a target="_blank" href="{{ route('home') }}" class="btn btn-success mt-5 px-5">
                     Acces now</a>
             </div>
         </div>

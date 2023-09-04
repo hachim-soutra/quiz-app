@@ -3,7 +3,7 @@
     <body class="hold-transition login-page">
         <div class="login-box">
             <div class="login-logo">
-                <a href="{{ url('/home') }}"><img src="{{asset('images/logo.png')}}" alt=""></a>
+                <a href="{{ url('/home') }}"><img src="{{ asset('images/logo.png') }}" width="100%" alt=""></a>
             </div>
             <!-- /.login-logo -->
 
@@ -27,7 +27,7 @@
                         </div>
 
                         <div class="input-group mb-3">
-                            <input type="password" name="password" placeholder="Password"
+                            <input type="password" name="password" placeholder="Password" id="myInput"
                                 class="form-control @error('password') is-invalid @enderror">
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -40,13 +40,14 @@
 
                         </div>
 
-                        <div class="row">
+                        <div class="row align-items-center">
                             <div class="col-8">
                                 <div class="icheck-primary">
-                                    <input type="checkbox" id="remember">
-                                    <label for="remember">Remember Me</label>
+                                    <input type="checkbox" id="showpass" onclick="myFunction()">
+                                    <label for="showpass">Show Password</label>
                                 </div>
                             </div>
+
 
                             <div class="col-4">
                                 <button type="submit" class="btn btn-primary btn-block">Sign In</button>
@@ -66,4 +67,14 @@
         </div>
         <!-- /.login-box -->
     </body>
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myInput");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
 </x-laravel-ui-adminlte::adminlte-layout>
