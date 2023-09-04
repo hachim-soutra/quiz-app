@@ -8,6 +8,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Quiz App</title>
+    <link href="https://fonts.cdnfonts.com/css/century-gothic-paneuropean" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Century Gothic Paneuropean', sans-serif;
+
+        }
+    </style>
 </head>
 
 <body>
@@ -15,8 +23,8 @@
         <div class="container">
             <div class="d-flex flex-column align-items-center p-5">
                 <img src="{{ asset('images/logo.png') }}" alt="">
-                <p class="text-bold text-center h1">Welcome to pminlife online quiz application</p>
-                <p class="pb-5 text-center h5">Take assesment tests in very
+                <p class="text-bold text-center h1 font">Welcome to pminlife online quiz application</p>
+                <p class="pb-5 text-center h5 font">Take assesment tests in very
                     reliable
                     and fast way</p>
 
