@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.cdnfonts.com/css/century-gothic-paneuropean" rel="stylesheet">
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
 
@@ -26,10 +26,21 @@
 
         }
 
+        h1 {
+            font-weight: 900;
+        }
+
+        h2 {
+            font-weight: 700;
+        }
+
+        h3 {
+            font-weight: 500;
+        }
+
         .cover {
-            height: auto;
             object-fit: cover;
-            max-height: 33vh;
+            height: 33vh;
         }
 
         .profil {

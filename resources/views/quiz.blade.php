@@ -2,8 +2,12 @@
 
 @section('content')
     <div class="d-flex justify-content-center row w-100 m-0">
-        <img src="{{ asset('images/' . $quiz->image) }}" alt="" width="100%" class="cover border-bottom p-0">
 
+        @if ($quiz->image === 'blank.png')
+            <div class="cover p-0"></div>
+        @else
+            <img src="{{ asset('images/' . $quiz->image) }}" alt="" width="100%" class="cover border-bottom p-0">
+        @endif
         <div class="col-md-10 col-lg-10">
             <img src="{{ asset('images/logo.png') }}" alt="" width="300px" class="profil">
 
@@ -19,13 +23,12 @@
                             <tr>
                                 <td>
                                     <label for="email">email :</label>
-
                                 </td>
                                 <td>
                                     <input type="email" id="email" name="email"
                                         class="@error('email') is-invalid @enderror form-control">
                                     @error('email')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </td>
                             </tr>

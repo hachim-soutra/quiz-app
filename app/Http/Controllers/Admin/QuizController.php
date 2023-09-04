@@ -53,7 +53,7 @@ class QuizController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'slug' => Str::slug($request->name),
-            'image' => $filename,
+            'image' => $request->hasFile('image') ? $filename : "blank.png",
             'is_published' => 1,
         ]);
         return redirect()->back()->with('status', 'Your quiz has been added');
@@ -172,7 +172,7 @@ class QuizController extends Controller
 
         $question = Question::whereHas("quiz_questions", function ($q) use ($id) {
             $q->where("quiz_id", $id);
-        })->whereNull('deleted_at')->first();
+        })->whereNull('deleted_at')->firstOrFail();
 
         return redirect()->route('questions', ['token' => $token, 'id' => $question->id]);
     }
@@ -225,7 +225,7 @@ class QuizController extends Controller
         if ($questionL) {
             return redirect()->route('questions', ['token' => $answer->token, 'id' => $questionL->id]);
         } else {
-            return redirect()->route('answer', ['token' => $answer->token ]);
+            return redirect()->route('answer', ['token' => $answer->token]);
         }
     }
 
@@ -241,8 +241,8 @@ class QuizController extends Controller
     {
         $quiz = Quiz::whereId($id)->firstOrFail();
         $quiz->questions()->each(function ($question) {
-            $question->options()->delete();
-            $question->quiz_questions()->delete();
+            $question->question->options()->delete();
+            $question->question()->delete();
             $question->delete();
         });
 
@@ -304,12 +304,18 @@ class QuizController extends Controller
 
     public function import(Request $request)
     {
+        $request->validate([
+            'file' => 'required',
+        ]);
         Excel::import(new QuizImport, $request->file);
         return redirect()->back()->with('status', 'Quiz Imported Successfully');
     }
 
     public function questionsImport(Request $request, $id)
     {
+        $request->validate([
+            'file' => 'required',
+        ]);
         Excel::import(new QuestionImport($id), $request->file);
         return redirect()->back()->with('status', 'Questions Imported Successfully');
     }

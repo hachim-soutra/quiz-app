@@ -62,7 +62,7 @@
                                         <div class="col-sm-7">
                                             <div class="form-group">
                                                 <label>Comment if wrong answer</label>
-                                                <input type="text" name="error" class="form-control"
+                                                <input type="text" name="error" class="form-control "
                                                     placeholder="Enter ...">
                                             </div>
                                         </div>
@@ -78,8 +78,12 @@
                                                     @csrf
                                                     <div class="form-group">
                                                         <label>File</label>
-                                                        <input type="file" name="file" class="form-control"
+                                                        <input type="file" name="file"
+                                                            class="form-control @error('file') is-invalid @enderror"
                                                             placeholder="Upload ...">
+                                                        @error('file')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
                                                         <a href="{{ url('/excel/questions.xlsx') }}">excel exmeple file</a>
                                                     </div>
 
@@ -87,7 +91,8 @@
 
                                                 <div class="col-sm-2">
                                                     <label style="opacity: 0">xx</label>
-                                                    <button type="submit" class="btn btn-primary form-control">Import</button>
+                                                    <button type="submit"
+                                                        class="btn btn-primary form-control">Import</button>
                                                 </div>
 
                                             </div>
@@ -95,11 +100,12 @@
 
                                     </div>
                                     <div class="col-lg-2">
-                                        <form action="{{route('quiz.delete-all', ['id' => $quiz->id])}}" method="POST">
+                                        <form action="{{ route('quiz.delete-all', ['id' => $quiz->id]) }}" method="POST">
                                             @csrf
                                             <div class="col-sm-12">
                                                 <label style="opacity: 0">xx</label>
-                                                <button type="submit" class="btn btn-danger form-control">Remove All</button>
+                                                <button type="submit" class="btn btn-danger form-control">Remove
+                                                    All</button>
                                             </div>
                                         </form>
 
