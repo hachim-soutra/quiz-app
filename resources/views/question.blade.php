@@ -55,6 +55,7 @@
                                     <div class="ans ml-2 lh-lg">
                                         <label class="radio">
                                             <input
+                                                {{ isset($answer->answers[$question->id]) && in_array($option->id, $answer->answers[$question->id]) ? 'checked' : '' }}
                                                 type="{{ $question->question_type && $question->question_type->name === 'one answer' ? 'radio' : 'checkbox' }}"
                                                 name="question[]" value="{{ $option->id }}"
                                                 class="@error('question') is-invalid @enderror">
@@ -69,11 +70,17 @@
                             @foreach ($errors->all() as $error)
                                 {{ $error }}<br />
                             @endforeach
-                            
+
                         </div>
 
                     </div>
-                    <div class="d-flex flex-row justify-content-end align-items-center p-3 bg-white">
+                    <div class="d-flex flex-row justify-content-end align-items-center p-3 bg-white gap-5">
+                        @if ($questionPreview)
+                            <a href="{{ route('questions', ['token' => $answer->token, 'id' => $questionPreview->id]) }}"
+                                class="btn btn-primary border-primary align-items-center btn-primary"
+                                type="submit">Previeus<i class="fa fa-angle-right ml-2"></i>
+                            </a>
+                        @endif
                         <button class="btn btn-primary border-success align-items-center btn-success" type="submit">Next<i
                                 class="fa fa-angle-right ml-2"></i>
                         </button>

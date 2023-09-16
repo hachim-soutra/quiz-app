@@ -39,7 +39,12 @@ Route::get('/answer/{token}', function ($token) {
 Route::get('/questions/{token}/{id}', function ($token, $id) {
     $answer = Answer::with("quiz")->whereToken($token)->firstOrFail();
     $question = Question::findOrFail($id);
-    return view('question')->with(["answer" => $answer, "question" => $question]);
+    $questionPreview = Question::whereHas("quiz_questions", function ($q) use ($answer) {
+        $q->where("quiz_id", $answer->quiz_id);
+    })->whereNull('deleted_at')
+        ->where("id", '<', $id)
+        ->first();
+    return view('question')->with(["answer" => $answer, "question" => $question, "questionPreview" => $questionPreview]);
 })->name('questions');
 
 Auth::routes();

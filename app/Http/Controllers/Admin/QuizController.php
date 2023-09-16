@@ -180,10 +180,6 @@ class QuizController extends Controller
     public function storeQuestion(int $id, int $question_id, Request $request)
     {
 
-        $request->validate([
-            'question' => 'required',
-        ]);
-
         $answer = Answer::findOrFail($id);
         $questions = $answer->answers;
         $questions[$question_id] = isset($request->question[$question_id]) ? $request->question[$question_id] : $request->question;
@@ -191,7 +187,7 @@ class QuizController extends Controller
         if ($questions) {
             foreach ($questions as $key => $value) {
                 $question = Question::find($key);
-                if ($question->question_type->name === 'one answer' && in_array($value[0], $question->options()->where('is_correct', 1)->pluck('id')->toArray())) {
+                if (isset($value[0]) && $question->question_type->name === 'one answer' && in_array($value[0], $question->options()->where('is_correct', 1)->pluck('id')->toArray())) {
                     $correct++;
                 }
 
@@ -222,9 +218,17 @@ class QuizController extends Controller
             ->where("id", '>', $question_id)
             ->first();
 
+
+
         if ($questionL) {
             return redirect()->route('questions', ['token' => $answer->token, 'id' => $questionL->id]);
         } else {
+            $arr = array_filter($answer->answers, function ($item) {
+                return !$item;
+            });
+            if (count($arr) > 0) {
+                return redirect()->route('questions', ['token' => $answer->token, 'id' => array_keys($arr)[0]]);
+            }
             return redirect()->route('answer', ['token' => $answer->token]);
         }
     }
