@@ -1,5 +1,10 @@
 <x-laravel-ui-adminlte::adminlte-layout>
+    <style>
+        * {
+            font-family: 'Century Gothic Paneuropean', sans-serif !important;
 
+        }
+    </style>
 
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">

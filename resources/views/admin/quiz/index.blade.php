@@ -49,14 +49,14 @@
                             </div>
 
                             <div class="card-body table-responsive p-0">
-                                <table class="table table-hover text-nowrap">
+                                <table class="table">
                                     <thead>
                                         <tr>
                                             <th>Title</th>
                                             <th>Description</th>
                                             <th>Questions</th>
                                             <th>Image</th>
-                                            <th>Action</th>
+                                            <th colspan="5">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -73,11 +73,14 @@
                                                         class="btn btn-success">
                                                         <i class="fas fa-eye"></i>
                                                         Show</a>
+                                                </td>
+                                                <td>
                                                     <a href="{{ route('quiz.show', ['quiz' => $item]) }}"
                                                         class="btn btn-success">
                                                         <i class="fas fa-eye"></i>
                                                         Questions</a>
-
+                                                </td>
+                                                <td>
                                                     <form method="POST"
                                                         action="{{ route('quiz.duplicate-quiz', ['id' => $item->id]) }}"
                                                         class="d-inline-block">
@@ -87,12 +90,14 @@
                                                             Duplicate
                                                         </button>
                                                     </form>
-
+                                                </td>
+                                                <td>
 
                                                     <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
                                                         class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
 
-
+                                                </td>
+                                                <td>
                                                     <a data-toggle="modal" data-target="#modal-delete-{{ $item->id }}"
                                                         class="btn btn-danger">
                                                         <i class="fas fa-trash"></i> Delete

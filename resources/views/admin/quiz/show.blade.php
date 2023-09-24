@@ -117,23 +117,23 @@
                         </div>
                     </div>
                     <div class="card-body table-responsive p-3 bg-white">
-                        <table class="table table-hover text-nowrap">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th>Title</th>
                                     <th>Type</th>
                                     <th>Answers</th>
                                     <th>Comment if wrong answer</th>
-                                    <th>Action</th>
+                                    <th colspan="4">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($quiz->questions as $item)
                                     <tr>
-                                        <td>{{ Str::limit($item->question->name, 20) }}</td>
+                                        <td>{{ $item->question->name }}</td>
                                         <td>{{ $item->question->question_type?->name }}</td>
                                         <td>{{ count($item->question->options) }}</td>
-                                        <td>{{ Str::limit($item->question->error, 20) }}</td>
+                                        <td>{{ $item->question->error }}</td>
                                         <td>
                                             <a href="{{ route('question.show', ['id' => $item->question->id]) }}"
                                                 class="btn btn-success">

@@ -29,7 +29,11 @@
                     and fast way</p>
 
                 <img src="{{ asset('assets/images/Group171.svg') }}" alt="" width="50%">
-                <a target="_blank" href="{{ route('home') }}" class="btn btn-success mt-5 px-5">
+                <a target="_blank" href="{{ route('home') }}" class="btn btn-success mt-5"
+                    style="background-color: #343b7cff;    padding: 0.8rem 5rem;
+    border-radius: 0.5rem;
+    font-size: 1.3rem;
+    font-weight: 700;">
                     Acces now</a>
             </div>
         </div>
