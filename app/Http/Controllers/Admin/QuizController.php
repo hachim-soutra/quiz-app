@@ -166,7 +166,7 @@ class QuizController extends Controller
             "quiz_id" => $id,
             "token" => $token,
             "answers" => [],
-            "email" => $request->email,
+            "email" => $request->email ?? "",
         ]);
 
         $question = Question::whereHas("quiz_questions", function ($q) use ($id) {
