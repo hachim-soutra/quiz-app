@@ -56,7 +56,7 @@
                                         <tr>
                                             <td>{{ $answer->quiz?->name }}</td>
                                             <td>{{ $answer->email }}</td>
-                                            <td>{{ $answer->score }}%</td>
+                                            <td>{{ round($answer->score, 2) }}%</td>
                                             <td>{{ $answer->created_at }}</td>
                                             <td><a href="{{ route('answer', ['token' => $answer->token]) }}"
                                                     class="btn btn-primary">

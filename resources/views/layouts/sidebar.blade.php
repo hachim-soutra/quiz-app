@@ -1,5 +1,5 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <a href="{{ route('home') }}" class="brand-link" style="padding: 1.81rem 0.5rem;">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #cfe2f3ff">
+    <a href="{{ route('home') }}" class="brand-link" style="padding: 1.81rem 0.5rem;border: none">
         <img src="{{ asset('images/logo.png') }}" alt="AdminLTE Logo" class="w-100">
     </a>
 

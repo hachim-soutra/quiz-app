@@ -55,8 +55,7 @@
                                             <th>Title</th>
                                             <th>Description</th>
                                             <th>Questions</th>
-                                            <th>Image</th>
-                                            <th colspan="5">Action</th>
+                                            <th colspan="4">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -64,22 +63,18 @@
                                             <tr>
                                                 <td>{{ $item->name }}</td>
                                                 <td>{{ $item->description }}</td>
-                                                <td>{{ $item->questions_count }}</td>
-                                                <td><img src="{{ asset('images/' . $item->image) }}" alt=""
-                                                        width="70px" class="rounded"></td>
+                                                <td>
+                                                    <a href="{{ route('quiz.show', ['quiz' => $item]) }}">
 
+                                                        {{ $item->questions_count }}</a>
+                                                </td>
                                                 <td>
                                                     <a target="_blank" href="{{ route('quiz', ['slug' => $item->slug]) }}"
                                                         class="btn btn-success">
                                                         <i class="fas fa-eye"></i>
                                                         Show</a>
                                                 </td>
-                                                <td>
-                                                    <a href="{{ route('quiz.show', ['quiz' => $item]) }}"
-                                                        class="btn btn-success">
-                                                        <i class="fas fa-eye"></i>
-                                                        Questions</a>
-                                                </td>
+
                                                 <td>
                                                     <form method="POST"
                                                         action="{{ route('quiz.duplicate-quiz', ['id' => $item->id]) }}"
@@ -276,7 +271,7 @@
                                 <div class="col-sm-12">
                                     @csrf
                                     <div class="form-group">
-                                        <label>File</label>
+                                        <label>Csv</label>
                                         <input type="file" name="file" class="form-control"
                                             placeholder="Upload ...">
                                         <a href="{{ url('/excel/quiz.xlsx') }}">excel exmeple file</a>

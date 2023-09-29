@@ -22,18 +22,19 @@
     <section>
         <div class="container">
             <div class="d-flex flex-column align-items-center p-5">
-                <img src="{{ asset('images/logo.png') }}" alt="" width="100%">
-                <p class="text-bold text-center h1 font">Welcome to pminlife online quiz application</p>
-                <p class="pb-5 text-center h5 font">Take assesment tests in very
+                <img src="{{ asset('images/logo.png') }}" alt="" height="120px">
+                <p class="text-bold text-center h2 font">Welcome to pminlife online quiz application</p>
+                <p class="pb-3 text-center h5 font">Take assesment tests in very
                     reliable
                     and fast way</p>
 
-                <img src="{{ asset('assets/images/Group171.svg') }}" alt="" width="50%">
+                <img src="{{ asset('assets/images/Group171.svg') }}" alt="" height="30%">
                 <a target="_blank" href="{{ route('home') }}" class="btn btn-success mt-5"
-                    style="background-color: #343b7cff;    padding: 0.8rem 5rem;
-    border-radius: 0.5rem;
-    font-size: 1.3rem;
-    font-weight: 700;">
+                    style="background-color: #343b7cff;
+                        padding: 0.6rem 4rem;
+                        border-radius: 0.5rem;
+                        font-size: 1.3rem;
+                        font-weight: 700;">
                     Acces now</a>
             </div>
         </div>

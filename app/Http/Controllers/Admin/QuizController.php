@@ -157,17 +157,16 @@ class QuizController extends Controller
 
     public function createAnswer(string $id, Request $request)
     {
-        $validated = $request->validate([
-            'email' => 'required',
-        ]);
+        // $validated = $request->validate([
+        //     'email' => 'required',
+        // ]);
 
         $token = Str::random(16);
-        $answer = Answer::create([
+        Answer::create([
             "quiz_id" => $id,
             "token" => $token,
             "answers" => [],
             "email" => $request->email,
-            "score" => 0
         ]);
 
         $question = Question::whereHas("quiz_questions", function ($q) use ($id) {
@@ -209,7 +208,6 @@ class QuizController extends Controller
         }
         $answer->update([
             "answers" => $questions,
-            "score" => $answer->answers ? $correct * 100 / count($answer->answers) : 0,
             "nbr_of_correct" => $correct
         ]);
         $questionL = Question::whereHas("quiz_questions", function ($q) use ($answer) {
@@ -217,9 +215,6 @@ class QuizController extends Controller
         })->whereNull('deleted_at')
             ->where("id", '>', $question_id)
             ->first();
-
-
-
         if ($questionL) {
             return redirect()->route('questions', ['token' => $answer->token, 'id' => $questionL->id]);
         } else {

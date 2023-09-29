@@ -13,7 +13,6 @@
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('quiz.index') }}">Quiz</a></li>
-                            <li class="breadcrumb-item active"> {{ $quiz->name }}</li>
                         </ol>
                     </div>
                 </div>
@@ -77,7 +76,7 @@
                                                 <div class="col-sm-10">
                                                     @csrf
                                                     <div class="form-group">
-                                                        <label>File</label>
+                                                        <label>Csv</label>
                                                         <input type="file" name="file"
                                                             class="form-control @error('file') is-invalid @enderror"
                                                             placeholder="Upload ...">
@@ -116,7 +115,7 @@
 
                         </div>
                     </div>
-                    <div class="card-body table-responsive p-3 bg-white">
+                    <div class="card-body  p-3 bg-white">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -124,7 +123,7 @@
                                     <th>Type</th>
                                     <th>Answers</th>
                                     <th>Comment if wrong answer</th>
-                                    <th colspan="4">Action</th>
+                                    <th colspan="3">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -132,14 +131,16 @@
                                     <tr>
                                         <td>{{ $item->question->name }}</td>
                                         <td>{{ $item->question->question_type?->name }}</td>
-                                        <td>{{ count($item->question->options) }}</td>
-                                        <td>{{ $item->question->error }}</td>
                                         <td>
                                             <a href="{{ route('question.show', ['id' => $item->question->id]) }}"
-                                                class="btn btn-success">
-                                                <i class="fas fa-eye fa-lg"></i>
-                                                Options
+                                                class=" text-nowrap">
+                                                <i class="fas fa-eye"></i>
+                                                {{ count($item->question->options) }} answers
                                             </a>
+                                        </td>
+                                        <td>{{ $item->question->error }}</td>
+                                        <td>
+
                                             <form method="POST"
                                                 action="{{ route('quiz.duplicate-question', ['id' => $quiz->id, 'qst_id' => $item->question->id]) }}"
                                                 class="d-inline-block">
@@ -149,11 +150,13 @@
                                                     Duplicate
                                                 </button>
                                             </form>
-
+                                        </td>
+                                        <td>
 
                                             <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
                                                 class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
-
+                                        </td>
+                                        <td>
                                             <a data-toggle="modal" data-target="#modal-delete-{{ $item->id }}"
                                                 class="btn btn-danger">
                                                 <i class="fas fa-trash"></i> Delete

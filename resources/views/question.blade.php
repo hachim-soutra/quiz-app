@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-center row w-100 m-0">
         <img src="{{ asset('images/' . $answer->quiz->image) }}" alt="" width="100%" class="cover border-bottom p-0">
         <div class="col-md-10 col-lg-10">
-            <img src="{{ asset('images/logo.png') }}" alt="" width="300px" class="profil">
+            <img src="{{ asset('images/logo-question.jpg') }}" alt="" width="300px" class="profil">
             <div class="ms-5 mt-5">
                 <form method="POST"
                     action="{{ route('quiz.store-answer', ['id' => $answer->id, 'question_id' => $question->id]) }}">
@@ -15,7 +15,7 @@
                     @csrf
                     <div class="question bg-white p-3">
                         <div class="d-flex flex-row align-items-center question-title">
-                            <h2 class="text-danger">Q.</h2>
+
                             <h3 class="mt-1 ml-2">{{ $question->name }}</h3>
                         </div>
 
@@ -78,7 +78,7 @@
                         @if ($questionPreview)
                             <a href="{{ route('questions', ['token' => $answer->token, 'id' => $questionPreview->id]) }}"
                                 class="btn btn-primary border-primary align-items-center btn-primary"
-                                type="submit">Previeus<i class="fa fa-angle-right ml-2"></i>
+                                type="submit">Previous<i class="fa fa-angle-right ml-2"></i>
                             </a>
                         @endif
                         <button class="btn btn-primary border-success align-items-center btn-success" type="submit">Next<i

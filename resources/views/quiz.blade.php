@@ -9,7 +9,7 @@
             <img src="{{ asset('images/' . $quiz->image) }}" alt="" width="100%" class="cover border-bottom p-0">
         @endif
         <div class="col-md-10 col-lg-10">
-            <img src="{{ asset('images/logo.png') }}" alt="" width="300px" class="profil">
+            <img src="{{ asset('images/logo-question.jpg') }}" alt="" width="300px" class="profil">
 
             <div class="ms-5 mt-5">
                 <form method="POST" action="{{ route('quiz.create-answer', ['id' => $quiz->id]) }}">

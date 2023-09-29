@@ -4,25 +4,29 @@
     <div class="d-flex justify-content-center row w-100 m-0">
         <img src="{{ asset('images/' . $answer->quiz->image) }}" alt="" width="100%" class="cover border-bottom p-0">
         <div class="col-md-10 col-lg-10">
-            <img src="{{ asset('images/logo.png') }}" alt="" width="300px" class="profil">
+            <img src="{{ asset('images/logo-question.jpg') }}" alt="" width="300px" class="profil">
             <div class="">
                 <div class="d-flex flex-column align-items-center justify-content-between px-2 mb-5">
-                    <h2 class="text-deco">User email : {{ $answer->email }}</h2>
+                    @if ($answer->email)
+                        <h2 class="text-deco">User email : {{ $answer->email }}</h2>
+                    @endif
                     @if ($answer->score < 75)
                         <p class="text-review">
-                            Thank you for completing the quiz, unfortunatly your score is below target 😟, which is 75%
-                            of correct answers, here below a quick summarize of your assessment
+                            Thank you for completing the quiz, unfortunately your score is below target 😟, which is 75% of
+                            correct answers.<br />
+                            Here below a quick summary of your assessment
                         </p>
                     @else
                         <p class="text-review">
                             Thank you for completing the quiz, Well done 👍 your score is above target, which is 75% of
-                            correct answers, here below a quick summarize of your assessment
+                            correct answers.<br />
+                            Here below a quick summary of your assessment
                         </p>
                     @endif
                     <p class="fw-bold">Score :
                         <span
-                            class="{{ $answer->score > 75 ? 'text-success' : 'text-danger' }}">{{ $answer->score }}%
-                         correct ({{$answer->nbr_of_correct}} / {{count($answer->answers)}})</span>
+                            class="{{ $answer->score > 75 ? 'text-success' : 'text-danger' }}">{{ round($answer->score, 2) }}%
+                            correct ({{ $answer->nbr_of_correct }} / {{ count($answer->answers) }})</span>
                     </p>
                 </div>
 
