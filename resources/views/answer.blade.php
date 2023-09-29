@@ -53,7 +53,7 @@
                 </div> --}}
 
                 @foreach ($answer->quiz->questions as $question)
-                    @if ($question->question)
+                    @if ($question->question && isset($answer->answers[$question->question->id]))
                         <div class="question bg-white p-3 border-bottom">
                             <div class="d-flex flex-row align-items-center question-title">
                                 <h2 class="text-danger">Q.</h2>
