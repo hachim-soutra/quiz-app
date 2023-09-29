@@ -100,15 +100,17 @@
                                 @endif
                             @else
                                 @foreach ($question->question->options as $option)
-                                    <div class="ans ml-2">
+                                    @isset($answer->answers[$question->question->id])
+                                        <div class="ans ml-2">
 
-                                        <label
-                                            class="radio {{ in_array($option->id, $answer->answers[$question->question->id]) && $option->is_correct == 0 ? 'text-danger' : '' }} {{ $option->is_correct == 1 ? 'text-success' : '' }} ">
-                                            <input type="radio" name="question[{{ $option->id }}]" value="1"
-                                                {{ in_array($option->id, $answer->answers[$question->question->id]) ? 'checked' : '' }}>
-                                            <span>{{ $option->name }}</span>
-                                        </label>
-                                    </div>
+                                            <label
+                                                class="radio {{ in_array($option->id, $answer->answers[$question->question->id]) && $option->is_correct == 0 ? 'text-danger' : '' }} {{ $option->is_correct == 1 ? 'text-success' : '' }} ">
+                                                <input type="radio" name="question[{{ $option->id }}]" value="1"
+                                                    {{ in_array($option->id, $answer->answers[$question->question->id]) ? 'checked' : '' }}>
+                                                <span>{{ $option->name }}</span>
+                                            </label>
+                                        </div>
+                                    @endisset ()
                                 @endforeach
                                 @if (count(array_diff(
                                             $answer->answers[$question->question->id],
