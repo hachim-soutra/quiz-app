@@ -71,22 +71,25 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($question->question->options as $optionl)
-                                            <tr
-                                                class="{{ $answer->answers[$question->question->id][$optionl->id] === $optionl->value ? 'bg-success-1' : 'bg-danger-1' }}">
-                                                @foreach ($question->question->options as $k => $option)
-                                                    @if ($loop->first)
-                                                        <td>{{ $optionl->value }}</td>
-                                                    @endif
-                                                    <td>
-                                                        <input required type="radio"
-                                                            {{ $answer->answers[$question->question->id][$optionl->id] == $option->value ? 'checked' : '' }}
-                                                            name="question[{{ $question->question->id }}][{{ $optionl->id }}]"
-                                                            value="{{ $optionl->value }}">
+                                            @if (isset($answer->answers[$question->question->id][$optionl->id]))
 
-                                                    </td>
-                                                @endforeach
-                                            </tr>
-                                        @endforeach
+                                                <tr
+                                                    class="{{ $answer->answers[$question->question->id][$optionl->id] === $optionl->value ? 'bg-success-1' : 'bg-danger-1' }}">
+                                                    @foreach ($question->question->options as $k => $option)
+                                                        @if ($loop->first)
+                                                            <td>{{ $optionl->value }}</td>
+                                                        @endif
+                                                        <td>
+                                                            <input required type="radio"
+                                                                {{ $answer->answers[$question->question->id][$optionl->id] == $option->value ? 'checked' : '' }}
+                                                                name="question[{{ $question->question->id }}][{{ $optionl->id }}]"
+                                                                value="{{ $optionl->value }}">
+
+                                                        </td>
+                                                    @endforeach
+                                                </tr>
+                                                @endif
+                                            @endforeach
                                     </tbody>
                                 </table>
                                 @if (count(array_diff(
