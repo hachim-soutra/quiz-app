@@ -112,15 +112,17 @@
                                         </div>
                                     @endisset ()
                                 @endforeach
-                                @if (count(array_diff(
-                                            $answer->answers[$question->question->id],
-                                            $question->question->options()->where('is_correct', 1)->pluck('id')->toArray())) > 0)
-                                    <br>
-                                    <strong class="text-danger ms-3">
-                                        {{ $question->question->error }}
-                                    </strong>
-                                    <br>
-                                @endif
+                                @isset($answer->answers[$question->question->id])
+                                    @if (count(array_diff(
+                                                $answer->answers[$question->question->id],
+                                                $question->question->options()->where('is_correct', 1)->pluck('id')->toArray())) > 0)
+                                        <br>
+                                        <strong class="text-danger ms-3">
+                                            {{ $question->question->error }}
+                                        </strong>
+                                        <br>
+                                    @endif
+                                @endisset
                             @endif
 
                         </div>
