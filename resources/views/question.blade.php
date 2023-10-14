@@ -14,9 +14,12 @@
 
                     @csrf
                     <div class="question bg-white p-3">
-                        <div class="d-flex flex-row align-items-center question-title">
-
-                            <h3 class="mt-1 ml-2">{{ $question->name }}</h3>
+                        <div class="d-flex flex-row align-items-start question-title flex-column">
+                            <h3 class="mt-1 ml-2 d-block">{{ $question->name }}</h3>
+                            @if ($question->question_type && $question->question_type->name === 'multiple answer')
+                                <small class="text-danger">multiple answers possible</small>
+                                <br>
+                            @endif
                         </div>
 
                         @if ($question->question_type)
