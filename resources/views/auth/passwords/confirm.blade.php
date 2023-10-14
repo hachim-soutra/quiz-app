@@ -1,4 +1,17 @@
 <x-laravel-ui-adminlte::adminlte-layout>
+    <style>
+        * {
+            font-family: 'Century Gothic Paneuropean', sans-serif !important;
+        }
+
+        .fa-classic,
+        .fa-regular,
+        .fa-solid,
+        .far,
+        .fas {
+            font-family: "Font Awesome 6 Free" !important;
+        }
+    </style>
 
     <body class="hold-transition login-page">
         <div class="login-box">
@@ -14,12 +27,14 @@
                         @csrf
 
                         <div class="input-group mb-3">
-                            <input type="password" name="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="Password" required autocomplete="current-password">
+                            <input type="password" name="password"
+                                class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
+                                placeholder="Password" required autocomplete="current-password">
                             <div class="input-group-append">
                                 <div class="input-group-text"><span class="fas fa-lock"></span></div>
                             </div>
                             @if ($errors->has('password'))
-                            <span class="error invalid-feedback">{{ $errors->first('password') }}</span>
+                                <span class="error invalid-feedback">{{ $errors->first('password') }}</span>
                             @endif
                         </div>
 

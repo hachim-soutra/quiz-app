@@ -29,34 +29,11 @@
                             correct ({{ $answer->nbr_of_correct }} / {{ count($answer->answers) }})</span>
                     </p>
                 </div>
-
                 @csrf
-                {{-- <div class="question bg-white p-3">
-                    <div class="d-flex flex-column justify-content-between align-items-center">
-                        <h2>User email : {{ $answer->email }}</h2>
-                        @if ($answer->score < 75)
-                            <p class="text-review">
-                                Thank you for completing the quiz, unfortunatly your score is below target 😟, which is 75%
-                                of correct answers, here below a quick summarize of your assessment
-                            </p>
-                        @else
-                            <p class="text-review">
-                                Thank you for completing the quiz, Well done 👍 your score is above target, which is 75% of
-                                correct answers, here below a quick summarize of your assessment
-                            </p>
-                        @endif
-                        <p class="fw-bold">Score :
-                            <span
-                                class="{{ $answer->score > 75 ? 'text-success' : 'text-danger' }}">{{ $answer->score }}%</span>
-                        </p>
-                    </div>
-                </div> --}}
-
                 @foreach ($answer->quiz->questions as $question)
                     @if ($question->question && isset($answer->answers[$question->question->id]))
                         <div class="question bg-white p-3 border-bottom">
                             <div class="d-flex flex-row align-items-center question-title">
-                                <h2 class="text-danger">Q.</h2>
                                 <h3 class="mt-1 ml-2">{{ $question->question->name }}</h3>
                             </div>
                             @if ($question->question->question_type->name === 'row answers')
@@ -72,7 +49,6 @@
                                     <tbody>
                                         @foreach ($question->question->options as $optionl)
                                             @if (isset($answer->answers[$question->question->id][$optionl->id]))
-
                                                 <tr
                                                     class="{{ $answer->answers[$question->question->id][$optionl->id] === $optionl->value ? 'bg-success-1' : 'bg-danger-1' }}">
                                                     @foreach ($question->question->options as $k => $option)
@@ -88,8 +64,8 @@
                                                         </td>
                                                     @endforeach
                                                 </tr>
-                                                @endif
-                                            @endforeach
+                                            @endif
+                                        @endforeach
                                     </tbody>
                                 </table>
                                 @if (count(array_diff(
@@ -118,7 +94,10 @@
                                 @isset($answer->answers[$question->question->id])
                                     @if (count(array_diff(
                                                 $answer->answers[$question->question->id],
-                                                $question->question->options()->where('is_correct', 1)->pluck('id')->toArray())) > 0)
+                                                $question->question->options()->where('is_correct', 1)->pluck('id')->toArray())) > 0 ||
+                                            count(array_diff(
+                                                    $question->question->options()->where('is_correct', 1)->pluck('id')->toArray(),
+                                                    $answer->answers[$question->question->id])) > 0)
                                         <br>
                                         <strong class="text-danger ms-3">
                                             {{ $question->question->error }}

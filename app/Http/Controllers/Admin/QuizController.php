@@ -167,6 +167,7 @@ class QuizController extends Controller
             "token" => $token,
             "answers" => [],
             "email" => $request->email ?? "",
+            "score" => 0
         ]);
 
         $question = Question::whereHas("quiz_questions", function ($q) use ($id) {
@@ -190,7 +191,10 @@ class QuizController extends Controller
                     $correct++;
                 }
 
-                if ($question->question_type->name === 'multiple answer' && count(array_diff($value, $question->options()->where('is_correct', 1)->pluck('id')->toArray())) == 0) {
+                if (
+                    $question->question_type->name === 'multiple answer' &&
+                    (count(array_diff($value, $question->options()->where('is_correct', 1)->pluck('id')->toArray())) == 0 && count(array_diff($question->options()->where('is_correct', 1)->pluck('id')->toArray(), $value)) == 0)
+                ) {
                     $correct++;
                 }
 

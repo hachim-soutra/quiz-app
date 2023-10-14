@@ -1,4 +1,17 @@
 <x-laravel-ui-adminlte::adminlte-layout>
+    <style>
+        * {
+            font-family: 'Century Gothic Paneuropean', sans-serif !important;
+        }
+
+        .fa-classic,
+        .fa-regular,
+        .fa-solid,
+        .far,
+        .fas {
+            font-family: "Font Awesome 6 Free" !important;
+        }
+    </style>
 
     <body class="hold-transition register-page">
         <div class="register-box">

@@ -85,6 +85,30 @@
         .bg-danger-1 {
             background-color: #ff00004d !important;
         }
+
+        .text-danger {
+            color: red !important;
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            appearance: none;
+            background-color: #fff;
+            margin: 0;
+            font: inherit;
+            color: currentColor;
+            width: 1.15em;
+            height: 1.15em;
+            border: 1px solid currentColor;
+        }
+
+        input[type="checkbox"]:checked,
+        input[type="radio"]:checked {
+            background: url("http://cdn1.iconfinder.com/data/icons/onebit/PNG/onebit_34.png") no-repeat left center;
+            background-size: 20px;
+            padding-left: 25px;
+            border: none;
+        }
     </style>
 </head>
 
