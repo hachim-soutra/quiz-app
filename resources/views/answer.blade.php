@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="d-flex justify-content-center row w-100 m-0">
+    <div class="d-flex justify-content-center row w-100 m-0" id="answer">
         <img src="{{ asset('images/' . $answer->quiz->image) }}" alt="" width="100%" class="cover border-bottom p-0">
         <div class="col-md-10 col-lg-10">
             <img src="{{ asset('images/logo-question.jpg') }}" alt="" width="300px" class="profil">
@@ -77,6 +77,8 @@
                                         {{ $question->question->error }}
                                     </strong>
                                     <br>
+                                @else
+                                    ccccccccccc
                                 @endif
                             @else
                                 @foreach ($question->question->options as $option)

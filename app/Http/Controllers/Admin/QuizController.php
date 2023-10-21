@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helper\Helper;
 use App\Http\Controllers\Controller;
 use App\Imports\QuestionImport;
 use App\Imports\QuizImport;
@@ -199,8 +200,10 @@ class QuizController extends Controller
                 }
 
                 if (
-                    $question->question_type->name === 'row answers' &&
-                    (count(array_diff($value, $question->options()->pluck('value')->toArray())) == 0 && count(array_diff($question->options()->pluck('value')->toArray(), $value)) == 0)
+                    $question->question_type->name === 'row answers' && Helper::compareArray(
+                        $question->question->options()->pluck('value')->toArray(),
+                        array_values($answer->answers[$question->question->id])
+                    )
                 ) {
                     $correct++;
                 }

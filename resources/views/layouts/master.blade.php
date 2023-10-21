@@ -110,6 +110,11 @@
             border: none;
             filter: brightness(0);
         }
+
+        #answer input[type="checkbox"]:checked,
+        input[type="radio"]:checked {
+            filter: brightness(1);
+        }
     </style>
 </head>
 
