@@ -32,11 +32,11 @@ Route::get('/quiz/{slug}', function ($slug) {
 })->name('quiz');
 
 Route::get('/answer/{token}', function ($token) {
-    $answer = Answer::whereToken($token)->with(['quiz', 'quiz.questions'])->firstOrFail();
+    $answer = Answer::whereToken($token)->with(['quiz', 'quiz.questions', 'quiz.questions.question', 'quiz.questions.question.question_type'])->firstOrFail();
     $correct = 0;
     foreach ($answer->quiz->questions as $question) {
-        if ($question && $question->question_type) {
-            if ($question->question_type->name === 'row answers') {
+        if ($question && $question->question && $question->question->question_type) {
+            if ($question->question->question_type->name === 'row answers') {
                 if (
                     count(array_diff(
                         $question->question->options()->pluck('value')->toArray(),
