@@ -68,7 +68,8 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                @if (Helper::compareArray(
+                                @if (
+                                    !Helper::compareArray(
                                         $question->question->options()->pluck('value')->toArray(),
                                         array_values($answer->answers[$question->question->id])))
                                     <br>
