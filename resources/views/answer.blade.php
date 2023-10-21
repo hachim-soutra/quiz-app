@@ -68,23 +68,15 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                @if (count(array_diff(
-                                            $question->question->options()->pluck('value')->toArray(),
-                                            array_values($answer->answers[$question->question->id]))) > 0 ||
-                                        count(array_diff(array_values($answer->answers[$question->question->id]),
-                                                $question->question->options()->pluck('value')->toArray())) > 0)
+                                @if (Helper::compareArray(
+                                        $question->question->options()->pluck('value')->toArray(),
+                                        array_values($answer->answers[$question->question->id])))
                                     <br>
                                     <strong class="text-danger ms-3">
                                         {{ $question->question->error }}
                                     </strong>
                                     <br>
                                 @endif
-                                @dd(
-                                    Helper::compareArray(
-                                        $question->question->options()->pluck('value')->toArray(),
-                                        array_values($answer->answers[$question->question->id]),
-                                    )
-                                )
                             @else
                                 @foreach ($question->question->options as $option)
                                     @isset($answer->answers[$question->question->id])
