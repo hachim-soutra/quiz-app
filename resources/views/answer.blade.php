@@ -68,7 +68,6 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                @dd($question->question->options, $answer->answers[$question->question->id])
                                 @if (!Helper::compareArray($answer->answers[$question->question->id]))
                                     <br>
                                     <strong class="text-danger ms-3">
