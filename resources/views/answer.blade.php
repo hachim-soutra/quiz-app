@@ -70,7 +70,7 @@
                                 </table>
                                 @dd(
                                     $question->question->options()->pluck('value', 'question_id')->toArray(),
-                                    $answer->answers[$question->question->id]
+                                    $answer->answers
                                 )
                                 @if (
                                     !Helper::compareArray(
