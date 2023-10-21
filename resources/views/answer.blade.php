@@ -69,7 +69,8 @@
                                     </tbody>
                                 </table>
                                 @dd(
-                                    $question->question->options()->pluck('question_id', 'value')->toArray()
+                                    $question->question->options()->pluck('value', 'question_id')->toArray(),
+                                    $answer->answers[$question->question->id]
                                 )
                                 @if (
                                     !Helper::compareArray(
