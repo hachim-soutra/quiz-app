@@ -68,10 +68,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                @dd(
-                                    $question->question->options()->pluck('value', 'question_id')->toArray(),
-                                    $answer->answers
-                                )
+                                @dd($question->question->options(), $answer->answers)
                                 @if (
                                     !Helper::compareArray(
                                         $question->question->options()->pluck('question_id', 'value')->toArray(),
