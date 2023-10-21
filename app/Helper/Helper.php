@@ -6,7 +6,7 @@ use Harishdurga\LaravelQuiz\Models\QuestionOption;
 
 class Helper
 {
-    public function compareArray($array1)
+    public static function compareArray($array1)
     {
         foreach ($array1 as $key => $value) {
             if (!QuestionOption::where("id", $key)->where("value", $value)->exists()) {
