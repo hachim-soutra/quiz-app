@@ -203,7 +203,6 @@ class QuizController extends Controller
                     $question->question_type->name === 'row answers' && Helper::compareArray(
                         $answer->answers[$question->question->id]
                     )
-
                 ) {
                     $correct++;
                 }

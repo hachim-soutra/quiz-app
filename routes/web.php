@@ -1,5 +1,6 @@
 <?php
 
+use App\Helper\Helper;
 use App\Http\Controllers\Admin\QuizController;
 use App\Models\Answer;
 use Harishdurga\LaravelQuiz\Models\Question;
@@ -38,14 +39,7 @@ Route::get('/answer/{token}', function ($token) {
         if ($question && $question->question && $question->question->question_type) {
             if ($question->question->question_type->name === 'row answers') {
                 if (
-                    count(array_diff(
-                        $question->question->options()->pluck('value')->toArray(),
-                        array_values($answer->answers[$question->question->id])
-                    )) == 0 &&
-                    count(array_diff(
-                        array_values($answer->answers[$question->question->id]),
-                        $question->question->options()->pluck('value')->toArray()
-                    )) === 0
+                    $question->question_type->name === 'row answers' && Helper::compareArray($answer->answers[$question->question->id])
                 ) {
                     $correct++;
                 }
