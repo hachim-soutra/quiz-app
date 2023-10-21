@@ -80,8 +80,10 @@
                                     <br>
                                 @endif
                                 @dd(
-                                    $question->question->options()->pluck('value')->toArray(),
-                                    array_values($answer->answers[$question->question->id])
+                                    Helper::compareArray(
+                                        $question->question->options()->pluck('value')->toArray(),
+                                        array_values($answer->answers[$question->question->id]),
+                                    )
                                 )
                             @else
                                 @foreach ($question->question->options as $option)
