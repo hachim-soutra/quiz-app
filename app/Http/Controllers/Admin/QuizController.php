@@ -198,15 +198,11 @@ class QuizController extends Controller
                     $correct++;
                 }
 
-                if ($question->question_type->name === 'row answers') {
+                if (
+                    $question->question_type->name === 'row answers' &&
+                    (count(array_diff($value, $question->options()->pluck('value')->toArray())) == 0 && count(array_diff($question->options()->pluck('value')->toArray(), $value)) == 0)
+                ) {
                     $correct++;
-
-                    foreach ($question->options as $option) {
-                        if ($value[$option->id] !== $option->value) {
-                            $correct--;
-                            break;
-                        }
-                    }
                 }
             }
         }

@@ -70,7 +70,9 @@
                                 </table>
                                 @if (count(array_diff(
                                             $question->question->options()->pluck('value')->toArray(),
-                                            array_values($answer->answers[$question->question->id]))) > 0)
+                                            array_values($answer->answers[$question->question->id]))) > 0 ||
+                                        count(array_diff(array_values($answer->answers[$question->question->id]),
+                                                $question->question->options()->pluck('value')->toArray())) > 0)
                                     <br>
                                     <strong class="text-danger ms-3">
                                         {{ $question->question->error }}

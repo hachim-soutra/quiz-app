@@ -108,6 +108,7 @@
             background-size: 20px;
             padding-left: 25px;
             border: none;
+            filter: brightness(0);
         }
     </style>
 </head>

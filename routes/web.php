@@ -32,7 +32,42 @@ Route::get('/quiz/{slug}', function ($slug) {
 })->name('quiz');
 
 Route::get('/answer/{token}', function ($token) {
-    $answer = Answer::whereToken($token)->firstOrFail();
+    $answer = Answer::whereToken($token)->with(['quiz', 'quiz.questions'])->firstOrFail();
+    $correct = 0;
+    foreach ($answer->quiz->questions as $question) {
+        if ($question && $question->question_type) {
+            if ($question->question_type->name === 'row answers') {
+                if (
+                    count(array_diff(
+                        $question->question->options()->pluck('value')->toArray(),
+                        array_values($answer->answers[$question->question->id])
+                    )) == 0 &&
+                    count(array_diff(
+                        array_values($answer->answers[$question->question->id]),
+                        $question->question->options()->pluck('value')->toArray()
+                    )) === 0
+                ) {
+                    $correct++;
+                }
+            } else {
+                if (
+                    count(array_diff(
+                        $question->question->options()->where('is_correct', 1)->pluck('id')->toArray(),
+                        array_values($answer->answers[$question->question->id])
+                    )) == 0 &&
+                    count(array_diff(
+                        array_values($answer->answers[$question->question->id]),
+                        $question->question->options()->where('is_correct', 1)->pluck('id')->toArray()
+                    )) === 0
+                ) {
+                    $correct++;
+                }
+            }
+        }
+    }
+    $answer->update([
+        "nbr_of_correct" => $correct
+    ]);
     return view('answer')->with(["answer" => $answer]);
 })->name('answer');
 
