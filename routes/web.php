@@ -39,7 +39,7 @@ Route::get('/answer/{token}', function ($token) {
         if ($question && $question->question && $question->question->question_type) {
             if ($question->question->question_type->name === 'row answers') {
                 if (
-                    $question->question_type->name === 'row answers' && Helper::compareArray($answer->answers[$question->question->id])
+                    $question->question->question_type->name === 'row answers' && Helper::compareArray($answer->answers[$question->question->id])
                 ) {
                     $correct++;
                 }
