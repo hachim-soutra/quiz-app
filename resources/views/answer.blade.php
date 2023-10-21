@@ -77,8 +77,6 @@
                                         {{ $question->question->error }}
                                     </strong>
                                     <br>
-                                @else
-                                    ccccccccccc
                                 @endif
                             @else
                                 @foreach ($question->question->options as $option)
