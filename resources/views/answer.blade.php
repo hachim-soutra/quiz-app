@@ -70,8 +70,8 @@
                                 </table>
                                 @if (
                                     !Helper::compareArray(
-                                        $question->question->options()->pluck('value')->toArray(),
-                                        array_values($answer->answers[$question->question->id])))
+                                        $question->question->options()->pluck('question_id', 'value')->toArray(),
+                                        $answer->answers[$question->question->id]))
                                     <br>
                                     <strong class="text-danger ms-3">
                                         {{ $question->question->error }}
