@@ -201,9 +201,9 @@ class QuizController extends Controller
 
                 if (
                     $question->question_type->name === 'row answers' && Helper::compareArray(
-                        $question->question->options()->pluck('value')->toArray(),
-                        array_values($answer->answers[$question->question->id])
+                        $answer->answers[$question->question->id]
                     )
+
                 ) {
                     $correct++;
                 }

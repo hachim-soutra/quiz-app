@@ -2,21 +2,17 @@
 
 namespace App\Helper;
 
+use Harishdurga\LaravelQuiz\Models\QuestionOption;
+
 class Helper
 {
-    public function compareArray($array1, $array2)
+    public function compareArray($array1)
     {
-        foreach ($array1 as $arr) {
-            if (!in_array($arr, $array2)) {
+        foreach ($array1 as $key => $value) {
+            if (!QuestionOption::where("id", $key)->where("value", $value)->exists()) {
                 return false;
             }
         }
-        foreach ($array2 as $arr) {
-            if (!in_array($arr, $array1)) {
-                return false;
-            }
-        }
-        dd($array1, $array2);
         return true;
     }
 }
