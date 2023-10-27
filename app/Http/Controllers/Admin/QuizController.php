@@ -184,33 +184,8 @@ class QuizController extends Controller
         $answer = Answer::findOrFail($id);
         $questions = $answer->answers;
         $questions[$question_id] = isset($request->question[$question_id]) ? $request->question[$question_id] : $request->question;
-        $correct = 0;
-        if ($questions) {
-            foreach ($questions as $key => $value) {
-                $question = Question::find($key);
-                if (isset($value[0]) && $question->question_type->name === 'one answer' && in_array($value[0], $question->options()->where('is_correct', 1)->pluck('id')->toArray())) {
-                    $correct++;
-                }
-
-                if (
-                    $question->question_type->name === 'multiple answer' &&
-                    (count(array_diff($value, $question->options()->where('is_correct', 1)->pluck('id')->toArray())) == 0 && count(array_diff($question->options()->where('is_correct', 1)->pluck('id')->toArray(), $value)) == 0)
-                ) {
-                    $correct++;
-                }
-
-                if (
-                    $question->question_type->name === 'row answers' && Helper::compareArray(
-                        $answer->answers[$question->question->id]
-                    )
-                ) {
-                    $correct++;
-                }
-            }
-        }
         $answer->update([
-            "answers" => $questions,
-            "nbr_of_correct" => $correct
+            "answers" => $questions
         ]);
         $questionL = Question::whereHas("quiz_questions", function ($q) use ($answer) {
             $q->where("quiz_id", $answer->quiz_id);

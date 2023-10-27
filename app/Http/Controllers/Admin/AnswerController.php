@@ -18,7 +18,7 @@ class AnswerController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $answers = Answer::with('quiz')->latest()
+        $answers = Answer::whereNotNull('nbr_of_correct')->with('quiz')->latest()
             ->Where('email', 'LIKE', "%{$search}%")
             ->orWhereHas('quiz', function ($q) use ($search) {
                 $q->where('name', 'LIKE', "%{$search}%");
