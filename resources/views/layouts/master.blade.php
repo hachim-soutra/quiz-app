@@ -112,7 +112,7 @@
         }
 
         #answer input[type="checkbox"]:checked,
-        input[type="radio"]:checked {
+        #answer input[type="radio"]:checked {
             filter: brightness(1);
         }
     </style>
