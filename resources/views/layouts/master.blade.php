@@ -104,7 +104,7 @@
 
         input[type="checkbox"]:checked,
         input[type="radio"]:checked {
-            background: url("http://cdn1.iconfinder.com/data/icons/onebit/PNG/onebit_34.png") no-repeat left center;
+            background: url("{{ url('check.png') }}") no-repeat left center;
             background-size: 20px;
             padding-left: 25px;
             border: none;
@@ -114,6 +114,16 @@
         #answer input[type="checkbox"]:checked,
         #answer input[type="radio"]:checked {
             filter: brightness(1);
+        }
+
+        #answer .bg-danger-1 input[type="radio"]:checked,
+        #answer .text-danger input[type="checkbox"]:checked,
+        #answer .text-danger input[type="radio"]:checked {
+            filter: brightness(1) !important;
+            background: url("{{ url('check-red.png') }}") no-repeat left center !important;
+            background-size: 20px !important;
+            padding-left: 25px !important;
+            border: none !important;
         }
     </style>
 </head>

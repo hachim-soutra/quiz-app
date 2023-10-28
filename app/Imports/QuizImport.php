@@ -22,7 +22,7 @@ class QuizImport implements ToModel, WithStartRow, WithCustomCsvSettings
     {
         return [
             'input_encoding' => 'ISO-8859-1',
-            'delimiter' => ";"
+            'delimiter' => ","
         ];
     }
 

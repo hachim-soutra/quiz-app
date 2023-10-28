@@ -7,10 +7,11 @@ use Harishdurga\LaravelQuiz\Models\QuestionOption;
 use Harishdurga\LaravelQuiz\Models\Quiz;
 use Harishdurga\LaravelQuiz\Models\QuizQuestion;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Str;
 
-class QuestionImport implements ToModel, WithStartRow
+class QuestionImport implements ToModel, WithStartRow, WithCustomCsvSettings
 {
     public $id;
 
@@ -25,6 +26,14 @@ class QuestionImport implements ToModel, WithStartRow
     public function startRow(): int
     {
         return 2;
+    }
+
+    public function getCsvSettings(): array
+    {
+        return [
+            'input_encoding' => 'ISO-8859-1',
+            'delimiter' => ","
+        ];
     }
 
     /**

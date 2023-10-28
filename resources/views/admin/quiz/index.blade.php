@@ -274,7 +274,7 @@
                                         <label>Csv</label>
                                         <input type="file" name="file" class="form-control"
                                             placeholder="Upload ...">
-                                        <a href="{{ url('/excel/quiz.xlsx') }}">excel exmeple file</a>
+                                        <a href="{{ url('/excel/quiz.csv') }}">excel example file</a>
                                     </div>
 
                                 </div>

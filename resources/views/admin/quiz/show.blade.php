@@ -83,7 +83,7 @@
                                                         @error('file')
                                                             <div class="text-danger">{{ $message }}</div>
                                                         @enderror
-                                                        <a href="{{ url('/excel/questions.xlsx') }}">excel exmeple file</a>
+                                                        <a href="{{ url('/excel/questions.csv') }}">excel example file</a>
                                                     </div>
 
                                                 </div>

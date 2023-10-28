@@ -45,6 +45,7 @@
                                                         <input required type="radio"
                                                             name="question[{{ $question->id }}][{{ $optionl->id }}]"
                                                             value="{{ $option->value }}"
+                                                            {{ isset($answer->answers[$question->id]) && $option->value == $answer->answers[$question->id][$optionl->id] ? 'checked' : '' }}
                                                             class="@error('question') is-invalid @enderror">
 
                                                     </td>

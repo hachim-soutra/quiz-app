@@ -56,7 +56,7 @@
                                                             <td>{{ $optionl->value }}</td>
                                                         @endif
                                                         <td>
-                                                            <input required type="radio"
+                                                            <input disabled required type="radio"
                                                                 {{ $answer->answers[$question->question->id][$optionl->id] == $option->value ? 'checked' : '' }}
                                                                 name="question[{{ $question->question->id }}][{{ $optionl->id }}]"
                                                                 value="{{ $optionl->value }}">
@@ -82,7 +82,8 @@
 
                                             <label
                                                 class="radio {{ in_array($option->id, $answer->answers[$question->question->id]) && $option->is_correct == 0 ? 'text-danger' : '' }} {{ $option->is_correct == 1 ? 'text-success' : '' }} ">
-                                                <input type="radio" name="question[{{ $option->id }}]" value="1"
+                                                <input disabled type="radio" name="question[{{ $option->id }}]"
+                                                    value="1"
                                                     {{ in_array($option->id, $answer->answers[$question->question->id]) ? 'checked' : '' }}>
                                                 <span>{{ $option->name }}</span>
                                             </label>
