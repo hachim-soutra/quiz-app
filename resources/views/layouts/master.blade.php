@@ -125,6 +125,14 @@
             padding-left: 25px !important;
             border: none !important;
         }
+
+        .question-title h3 {
+            font-size: 24px !important;
+        }
+
+        .question span {
+            font-size: 16px !important;
+        }
     </style>
 </head>
 

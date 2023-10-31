@@ -39,12 +39,14 @@ Route::get('/answer/{token}', function ($token) {
         if ($question && $question->question && $question->question->question_type) {
             if ($question->question->question_type->name === 'row answers') {
                 if (
-                    $question->question->question_type->name === 'row answers' && Helper::compareArray($answer->answers[$question->question->id])
+                    isset($answer->answers[$question->question->id]) &&
+                    Helper::compareArray($answer->answers[$question->question->id])
                 ) {
                     $correct++;
                 }
             } else {
                 if (
+                    isset($answer->answers[$question->question->id]) &&
                     count(array_diff(
                         $question->question->options()->where('is_correct', 1)->pluck('id')->toArray(),
                         array_values($answer->answers[$question->question->id])

@@ -6,10 +6,10 @@
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Quiz : {{ $quiz->name }}</h1>
+                    <div class="col-6 col-md-8 col-lg-9">
+                        <h1>Quiz : {!! Str::limit($quiz->name, 20, '...') !!}</h1>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-6 col-md-4 col-lg-3">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('quiz.index') }}">Quiz</a></li>
@@ -35,8 +35,7 @@
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label>Type</label>
-
-                                                <select name="type" id="type" class="form-control">
+                                                <select name="type" id="type" class="form-control" required>
                                                     <option value="" disabled selected></option>
                                                     @foreach ($types as $type)
                                                         <option value="{{ $type->id }}">{{ $type->name }}</option>
@@ -47,7 +46,7 @@
                                         <div class="col-sm-7">
                                             <div class="form-group">
                                                 <label>Title</label>
-                                                <input type="text" name="name" class="form-control"
+                                                <input type="text" name="name" class="form-control" required
                                                     placeholder="Enter ...">
                                             </div>
                                         </div>
@@ -115,7 +114,7 @@
 
                         </div>
                     </div>
-                    <div class="card-body  p-3 bg-white">
+                    <div class="card-body p-3 bg-white">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -129,7 +128,7 @@
                             <tbody>
                                 @foreach ($quiz->questions as $item)
                                     <tr>
-                                        <td>{{ $item->question->name }}</td>
+                                        <td>{!! Str::limit($item->question->name, 70, '...') !!}</td>
                                         <td>{{ $item->question->question_type?->name }}</td>
                                         <td>
                                             <a href="{{ route('question.show', ['id' => $item->question->id]) }}"
@@ -138,7 +137,7 @@
                                                 {{ count($item->question->options) }} answers
                                             </a>
                                         </td>
-                                        <td>{{ $item->question->error }}</td>
+                                        <td>{!! Str::limit($item->question->error, 70, '...') !!}</td>
                                         <td>
 
                                             <form method="POST"
@@ -152,7 +151,6 @@
                                             </form>
                                         </td>
                                         <td>
-
                                             <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
                                                 class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
                                         </td>
@@ -216,9 +214,7 @@
                                                                     @method('PUT')
                                                                     <div class="form-group">
                                                                         <label>Answer</label>
-                                                                        <input type="text" name="name"
-                                                                            value="{{ $item->question->name }}"
-                                                                            class="form-control">
+                                                                        <textarea class="form-control" name="name" cols="30" rows="5">{{ $item->question->name }}</textarea>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label>Type</label>
@@ -236,9 +232,7 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label>Comment if wrong answer</label>
-                                                                        <input type="text" name="error"
-                                                                            value="{{ $item->question->error }}"
-                                                                            class="form-control">
+                                                                        <textarea class="form-control" name="error" cols="30" rows="5">{{ $item->question->error }}</textarea>
                                                                     </div>
                                                                 </div>
 

@@ -6,10 +6,10 @@
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>{{ $question->name }}</h1>
+                    <div class="col-6 col-md-8 col-lg-9">
+                        <h1>{!! Str::limit($question->name, 120, ' ...') !!}</h1>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-6 col-md-4 col-lg-3">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('quiz.index') }}">Quiz</a></li>
@@ -55,7 +55,7 @@
                                             <div class="col-sm-5">
                                                 @csrf
                                                 <div class="form-group">
-                                                    <label>Value</label>
+                                                    <label>Response</label>
                                                     <input type="text" name="value" class="form-control"
                                                         placeholder="Enter ...">
                                                 </div>
@@ -70,19 +70,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body table-responsive p-3 bg-white">
-                        <table class="table table-hover text-nowrap">
+                    <div class="card-body p-3 bg-white">
+                        <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Option</th>
-                                    <th>{{ $question->question_type->name === 'row answers' ? 'Value' : 'Correct' }}</th>
+                                    <th>Answer</th>
+                                    <th>{{ $question->question_type->name === 'row answers' ? 'Response' : 'Correct' }}</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($question->options as $item)
                                     <tr>
-                                        <td>{{ $item->name }}</td>
+                                        <td>{!! Str::limit($item->name, 100, '...') !!}</td>
                                         @if ($question->question_type->name !== 'row answers')
                                             <td>{{ $item->is_correct ? 'Yes' : 'NO' }}</td>
                                         @else
@@ -151,9 +151,7 @@
                                                                     @method('PUT')
                                                                     <div class="form-group">
                                                                         <label>Answer</label>
-                                                                        <input type="text" name="name"
-                                                                            value="{{ $item->name }}"
-                                                                            class="form-control">
+                                                                        <textarea name="name" class="form-control" cols="30" rows="3">{{ $item->name }}</textarea>
                                                                     </div>
                                                                     @if ($question->question_type->name !== 'row answers')
                                                                         <div class="form-group">

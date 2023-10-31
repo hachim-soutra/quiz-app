@@ -61,8 +61,8 @@
                                     <tbody>
                                         @foreach ($data as $item)
                                             <tr>
-                                                <td>{{ $item->name }}</td>
-                                                <td>{{ $item->description }}</td>
+                                                <td title="{{ $item->name }}">{!! Str::limit($item->name, 70, '...') !!}</td>
+                                                <td title="{{ $item->description }}">{!! Str::limit($item->description, 70, '...') !!}</td>
                                                 <td>
                                                     <a href="{{ route('quiz.show', ['quiz' => $item]) }}">
 
@@ -155,10 +155,9 @@
                                                                         @method('PUT')
                                                                         <div class="form-group">
                                                                             <label>Text</label>
-                                                                            <input type="text" name="name"
-                                                                                value="{{ $item->name }}"
-                                                                                class="form-control"
-                                                                                placeholder="Enter ...">
+                                                                            <textarea class="form-control" name="name" rows="3">
+                                                                                {{ $item->name }}
+                                                                            </textarea>
                                                                         </div>
                                                                     </div>
 
@@ -225,8 +224,7 @@
                                     @csrf
                                     <div class="form-group">
                                         <label>Text</label>
-                                        <input type="text" name="name" class="form-control"
-                                            placeholder="Enter ...">
+                                        <textarea class="form-control" name="name" rows="3"></textarea>
                                     </div>
                                 </div>
 

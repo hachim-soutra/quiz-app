@@ -98,6 +98,9 @@ class QuizController extends Controller
      */
     public function addQuestion(string $id, Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+        ]);
         $quiz = Quiz::whereId($id)->firstOrFail();
         $question = Question::create([
             'name' => $request->name,
