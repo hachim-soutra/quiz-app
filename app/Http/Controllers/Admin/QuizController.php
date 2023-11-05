@@ -96,6 +96,15 @@ class QuizController extends Controller
     /**
      * Display the specified resource.
      */
+    public function removeQuestionImage(string $id)
+    {
+        $question = Question::whereId($id)->firstOrFail();
+        $question->update([
+            'image' => null
+        ]);
+        return redirect()->back()->with('status', 'Question image Has Been deleted');
+    }
+
     public function addQuestion(string $id, Request $request)
     {
         $request->validate([

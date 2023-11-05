@@ -37,7 +37,7 @@
                                 <h3 class="mt-1 ml-2">{{ $question->question->name }}</h3>
                             </div>
                             @if ($question->question->image)
-                                <img src="{{ asset('images/question/' . $question->question->image) }}" width="100%"
+                                <img src="{{ asset('images/question/' . $question->question->image) }}" width="40%"
                                     height="auto" class="mt-3 rounded" alt="imgg">
                                 <br>
                                 <br>

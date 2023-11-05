@@ -129,7 +129,7 @@
                                     <th>Type</th>
                                     <th>Answers</th>
                                     <th>Comment if wrong answer</th>
-                                    <th colspan="3">Action</th>
+                                    <th colspan="4">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -157,6 +157,7 @@
                                                 </button>
                                             </form>
                                         </td>
+
                                         <td>
                                             <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
                                                 class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
@@ -166,6 +167,18 @@
                                                 class="btn btn-danger">
                                                 <i class="fas fa-trash"></i> Delete
                                             </a>
+                                        </td>
+                                        <td>
+                                            @if ($item->question->image)
+                                                <form method="POST"
+                                                    action="{{ route('quiz.remove-question-img', ['id' => $item->question->id]) }}"
+                                                    class="d-inline-block">
+                                                    @csrf
+                                                    <button class="btn btn-secondary">
+                                                        Remove image
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </td>
                                         <div class="modal fade" id="modal-delete-{{ $item->id }}" aria-modal="true"
                                             role="dialog">

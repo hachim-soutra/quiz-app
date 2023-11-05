@@ -21,7 +21,7 @@
                                 <br>
                             @endif
                             @if ($question->image)
-                                <img src="{{ asset('images/question/' . $question->image) }}" width="100%" height="auto"
+                                <img src="{{ asset('images/question/' . $question->image) }}" width="40%" height="auto"
                                     class="mt-3 rounded" alt="imgg">
                                 <br>
                                 <br>
