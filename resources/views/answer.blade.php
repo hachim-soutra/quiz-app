@@ -36,6 +36,12 @@
                             <div class="d-flex flex-row align-items-center question-title">
                                 <h3 class="mt-1 ml-2">{{ $question->question->name }}</h3>
                             </div>
+                            @if ($question->question->image)
+                                <img src="{{ asset('images/question/' . $question->question->image) }}" width="100%"
+                                    height="auto" class="mt-3 rounded" alt="imgg">
+                                <br>
+                                <br>
+                            @endif
                             @if ($question->question->question_type->name === 'row answers')
                                 <table width="100%">
                                     <thead>
@@ -105,11 +111,9 @@
                                     @endif
                                 @endisset
                             @endif
-
                         </div>
                     @endif
                 @endforeach
-
             </div>
         </div>
     </div>

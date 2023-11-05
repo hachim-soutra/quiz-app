@@ -101,11 +101,18 @@ class QuizController extends Controller
         $request->validate([
             'name' => 'required',
         ]);
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extention = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extention;
+            $file->move('images/question', $filename);
+        }
         $quiz = Quiz::whereId($id)->firstOrFail();
         $question = Question::create([
             'name' => $request->name,
             'question_type_id' => $request->type,
             'error' => $request->error,
+            'image' => $request->hasFile('image') ? $filename : null,
             'is_active' => true
         ]);
         QuizQuestion::create([
@@ -123,6 +130,7 @@ class QuizController extends Controller
             'name' => $question_exist->name,
             'question_type_id' => $question_exist->question_type_id,
             'error' => $question_exist->error,
+            'image' => $question_exist->image,
             'is_active' => true
         ]);
         QuizQuestion::create([
@@ -144,11 +152,22 @@ class QuizController extends Controller
     public function updateQuestion(string $id, Request $request)
     {
         $question = Question::findOrFail($id);
+        if ($request->hasFile('image')) {
+            $destination = 'images/' . $question->image;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move('images/question', $filename);
+        }
         $question->update([
             'name' => $request->name,
             'question_type_id' => $request->type,
             'error' => $request->error,
-            'is_active' => true
+            'is_active' => true,
+            'image' => $request->hasFile('image') ? $filename : $question->image,
         ]);
         return redirect()->back()->with('status', 'Question Has Been updated');
     }

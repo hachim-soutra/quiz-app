@@ -29,7 +29,8 @@
                                 </h3>
                             </div>
                             <div class="card-body">
-                                <form method="POST" action="{{ route('quiz.add-question', ['id' => $quiz->id]) }}">
+                                <form method="POST" action="{{ route('quiz.add-question', ['id' => $quiz->id]) }}"
+                                    enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
                                         <div class="col-sm-3">
@@ -57,11 +58,17 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-7">
+                                        <div class="col-md-7">
                                             <div class="form-group">
                                                 <label>Comment if wrong answer</label>
                                                 <input type="text" name="error" class="form-control "
                                                     placeholder="Enter ...">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>upload image</label>
+                                                <input name="image" type="file" class="form-control">
                                             </div>
                                         </div>
                                     </div>
@@ -206,16 +213,12 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form method="POST"
+                                                        <form method="POST" enctype="multipart/form-data"
                                                             action="{{ route('quiz.update-question', ['id' => $item->question->id]) }}">
                                                             <div class="row">
                                                                 <div class="col-sm-12">
                                                                     @csrf
                                                                     @method('PUT')
-                                                                    <div class="form-group">
-                                                                        <label>Answer</label>
-                                                                        <textarea class="form-control" name="name" cols="30" rows="5">{{ $item->question->name }}</textarea>
-                                                                    </div>
                                                                     <div class="form-group">
                                                                         <label>Type</label>
 
@@ -231,8 +234,22 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="form-group">
+                                                                        <label>Answer</label>
+                                                                        <textarea class="form-control" name="name" cols="30" rows="5">{{ $item->question->name }}</textarea>
+                                                                    </div>
+
+                                                                    <div class="form-group">
                                                                         <label>Comment if wrong answer</label>
                                                                         <textarea class="form-control" name="error" cols="30" rows="5">{{ $item->question->error }}</textarea>
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label>upload image</label>
+                                                                        <input type="file" class="form-control"
+                                                                            name="image">
+                                                                        <img src="{{ asset('images/question/' . $item->image) }}"
+                                                                            width="150" class="mt-3 rounded"
+                                                                            alt="imgg">
                                                                     </div>
                                                                 </div>
 

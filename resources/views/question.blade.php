@@ -20,6 +20,12 @@
                                 <small class="text-danger">multiple answers possible</small>
                                 <br>
                             @endif
+                            @if ($question->image)
+                                <img src="{{ asset('images/question/' . $question->image) }}" width="100%" height="auto"
+                                    class="mt-3 rounded" alt="imgg">
+                                <br>
+                                <br>
+                            @endif
                         </div>
 
                         @if ($question->question_type)
