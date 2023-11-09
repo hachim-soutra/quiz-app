@@ -36,10 +36,9 @@
                                                 <i class="fas fa-search"></i>
                                             </button>
                                     </form>
-                                    <button type="button" class="btn btn-success" data-toggle="modal"
-                                        data-target="#modal-default" style="margin-right: 13px;">
+                                    <a href="{{route('quiz.add')}}" type="button" class="btn btn-success" style="margin-right: 13px;">
                                         Add
-                                    </button>
+                                    </a>
 
                                     <button type="button" class="btn btn-success" data-toggle="modal"
                                         data-target="#modal-import">
@@ -212,63 +211,7 @@
                 </div>
             </div>
         </section>
-        <div class="modal fade" id="modal-default" aria-modal="true" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Add quiz</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="POST" action="{{ route('quiz.store') }}" enctype="multipart/form-data">
-                            <div class="row">
-                                @csrf
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <label>Text</label>
-                                        <textarea class="form-control" required name="name" rows="3"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <label>Description</label>
-                                        <textarea class="form-control" name="description" rows="3" placeholder="Enter ..."></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <label>upload image</label>
-                                        <input class="form-control" name="image" type="file">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="name">Select timer</label>
-                                        <input type="time" name="quiz_time" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="name">Warning select timer</label>
-                                        <input type="time" name="quiz_time_remind" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="col-12 d-flex justify-content-end gap-5">
-                                    <button type="button" class="btn btn-default mr-3"
-                                        data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Add</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
 
-                </div>
-
-            </div>
-
-        </div>
         <div class="modal fade" id="modal-import" aria-modal="true" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">

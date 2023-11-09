@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Helper\Helper;
 use App\Http\Controllers\Controller;
 use App\Imports\QuestionImport;
 use App\Imports\QuizImport;
@@ -36,7 +35,7 @@ class QuizController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.quiz.create');
     }
 
     /**
@@ -44,6 +43,12 @@ class QuizController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i',
+            'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i|before:quiz_time',
+        ]);
+
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extention = $file->getClientOriginalExtension();
@@ -59,7 +64,7 @@ class QuizController extends Controller
             'image' => $request->hasFile('image') ? $filename : "blank.png",
             'is_published' => 1,
         ]);
-        return redirect()->back()->with('status', 'Your quiz has been added');
+        return redirect()->route('quiz.index')->with('status', 'Your quiz has been added');
     }
 
     public function duplicateQuiz(string $id, Request $request)
