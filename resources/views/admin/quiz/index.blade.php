@@ -55,6 +55,7 @@
                                             <th>Title</th>
                                             <th>Description</th>
                                             <th>Questions</th>
+                                            <th>Timer</th>
                                             <th colspan="4">Action</th>
                                         </tr>
                                     </thead>
@@ -67,6 +68,9 @@
                                                     <a href="{{ route('quiz.show', ['quiz' => $item]) }}">
 
                                                         {{ $item->questions_count }}</a>
+                                                </td>
+                                                <td>
+                                                    {{ $item->quiz_time }}
                                                 </td>
                                                 <td>
                                                     <a target="_blank" href="{{ route('quiz', ['slug' => $item->slug]) }}"
@@ -220,14 +224,13 @@
                     <div class="modal-body">
                         <form method="POST" action="{{ route('quiz.store') }}" enctype="multipart/form-data">
                             <div class="row">
+                                @csrf
                                 <div class="col-sm-12">
-                                    @csrf
                                     <div class="form-group">
                                         <label>Text</label>
-                                        <textarea class="form-control" name="name" rows="3"></textarea>
+                                        <textarea class="form-control" required name="name" rows="3"></textarea>
                                     </div>
                                 </div>
-
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <label>Description</label>
@@ -238,6 +241,18 @@
                                     <div class="form-group">
                                         <label>upload image</label>
                                         <input class="form-control" name="image" type="file">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="name">Select timer</label>
+                                        <input type="time" name="quiz_time" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="name">Warning select timer</label>
+                                        <input type="time" name="quiz_time_remind" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="col-12 d-flex justify-content-end gap-5">

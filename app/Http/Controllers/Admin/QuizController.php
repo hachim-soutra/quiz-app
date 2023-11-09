@@ -53,6 +53,8 @@ class QuizController extends Controller
         Quiz::create([
             'name' => $request->name,
             'description' => $request->description,
+            'quiz_time' => $request->quiz_time,
+            'quiz_time_remind' => $request->quiz_time_remind,
             'slug' => Str::slug($request->name),
             'image' => $request->hasFile('image') ? $filename : "blank.png",
             'is_published' => 1,
