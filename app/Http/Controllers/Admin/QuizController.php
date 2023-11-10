@@ -273,9 +273,9 @@ class QuizController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Quiz $quiz)
     {
-        //
+        return view('admin.quiz.updateQuiz')->with(['item' => $quiz]);;
     }
 
     /**
@@ -283,6 +283,11 @@ class QuizController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            'name' => 'required',
+            'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i',
+            'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i|before:quiz_time',
+        ]);
         $quiz = Quiz::whereSlug($id)->firstOrFail();
 
         if ($request->hasFile('image')) {
@@ -299,6 +304,8 @@ class QuizController extends Controller
         $quiz->update([
             'name' => $request->name,
             'description' => $request->description,
+            'quiz_time' => $request->quiz_time,
+            'quiz_time_remind' => $request->quiz_time_remind,
             'slug' => Str::slug($request->name),
             'image' => $request->hasFile('image') ? $filename : $quiz->image,
         ]);
@@ -314,6 +321,15 @@ class QuizController extends Controller
         $quiz = Quiz::whereSlug($id)->firstOrFail();
         $quiz->delete();
         return redirect()->back()->with('status', 'Quiz deleted Successfully');
+    }
+
+    public function removeTimer(string $id)
+    {
+        $quiz = Quiz::find($id);
+        $quiz->quiz_time = null;
+        $quiz->quiz_time_remind = null;
+        $quiz->save();
+        return redirect()->back()->with('status', 'Timer deleted Successfully');
     }
 
     public function import(Request $request)
