@@ -86,9 +86,9 @@ Route::post('/quiz/create-answer/{id}', [QuizController::class, 'createAnswer'])
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/answer', [App\Http\Controllers\Admin\AnswerController::class, 'index'])->name('admin.answer');
-
     Route::get('/add-quiz', [QuizController::class, 'create'])->name('quiz.add');
     Route::post('/quiz/import', [QuizController::class, 'import'])->name('quiz.import');
+    Route::get('/quiz/timer/{id}', [QuizController::class, 'removeTimer'])->name('quiz.timer');
     Route::get('/questions/show/{id}', [QuizController::class, 'questionsShow'])->name('question.show');
     Route::post('/questions/import/{id}', [QuizController::class, 'questionsImport'])->name('questions.import');
 

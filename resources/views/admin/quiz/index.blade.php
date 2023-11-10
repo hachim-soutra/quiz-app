@@ -36,7 +36,8 @@
                                                 <i class="fas fa-search"></i>
                                             </button>
                                     </form>
-                                    <a href="{{route('quiz.add')}}" type="button" class="btn btn-success" style="margin-right: 13px;">
+                                    <a href="{{ route('quiz.add') }}" type="button" class="btn btn-success"
+                                        style="margin-right: 13px;">
                                         Add
                                     </a>
 
@@ -91,7 +92,7 @@
                                                 </td>
                                                 <td>
 
-                                                    <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
+                                                    <a href="{{ route('quiz.edit', ['quiz' => $item ]) }}"
                                                         class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
 
                                                 </td>
@@ -127,66 +128,6 @@
                                                                             data-dismiss="modal">Close</button>
                                                                         <button type="submit"
                                                                             class="btn btn-primary">Delete</button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-                                            <div class="modal fade" id="modal-update-{{ $item->id }}" aria-modal="true"
-                                                role="dialog">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">Update quiz</h4>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">×</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form method="POST"
-                                                                action="{{ route('quiz.update', ['quiz' => $item]) }}"
-                                                                enctype="multipart/form-data">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12">
-                                                                        @csrf
-                                                                        @method('PUT')
-                                                                        <div class="form-group">
-                                                                            <label>Text</label>
-                                                                            <textarea class="form-control" name="name" rows="3">
-                                                                                {{ $item->name }}
-                                                                            </textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="col-sm-12">
-
-                                                                        <div class="form-group">
-                                                                            <label>Description</label>
-                                                                            <textarea class="form-control" name="description" rows="3">{{ $item->description }}</textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-sm-12">
-
-                                                                        <div class="form-group">
-                                                                            <label>upload image</label>
-                                                                            <input type="file" class="form-control"
-                                                                                name="image">
-                                                                            <img src="{{ asset('images/' . $item->image) }}"
-                                                                                width="150" class="mt-3 rounded">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-12 d-flex justify-content-end gap-5">
-                                                                        <button type="button"
-                                                                            class="btn btn-default mr-3"
-                                                                            data-dismiss="modal">Close</button>
-                                                                        <button type="submit"
-                                                                            class="btn btn-primary">Update</button>
                                                                     </div>
                                                                 </div>
                                                             </form>
