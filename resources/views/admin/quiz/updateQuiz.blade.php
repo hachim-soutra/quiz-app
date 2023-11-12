@@ -30,7 +30,7 @@
                         </div>
                         <div class="card-body">
                             <form method="POST"
-                            action="{{ route('quiz.update', ['quiz' => $item]) }}"
+                            action="{{ route('quiz.update', ['quiz' => $item->id]) }}"
                             enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
@@ -38,14 +38,13 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <label for="">Quiz type</label>
-                                        <select name="quiz_type" id="quiz_type" value={{$item->quiz_type}}
+                                        <select name="quiz_type" id="quiz_type"
                                             class="form-control @error('quiz_type') is-invalid @enderror">
-                                            {{-- <option value=""></option> --}}
-                                            <option value="1" {{ old('quiz_type') == '1' ? 'selected' : '' }}>
+                                            <option value="1" {{ (old('quiz_type') ? $item->quiz_type : old('quiz_type')) == '1' ? 'selected' : '' }}>
                                                 simple quiz</option>
-                                            <option value="2" {{ old('quiz_type') == '2' ? 'selected' : '' }}>
+                                            <option value="2" {{ (old('quiz_type') ? $item-> quiz_type : old('quiz_type')) == '2' ? 'selected' : '' }}>
                                                 test quiz</option>
-                                            <option value="3" {{ old('quiz_type') == '3' ? 'selected' : '' }}>
+                                            <option value="3" {{ (old('quiz_type') ? $item-> quiz_type : old('quiz_type')) == '3' ? 'selected' : '' }}>
                                                 simuler quiz</option>
                                         </select>
                                         @error('quiz_type')
@@ -57,9 +56,7 @@
                                     <div class="form-group">
                                         <label>Text <span
                                                 class="text-danger">*</span></label>
-                                        <textarea class="form-control @error('name') is-invalid @enderror" name="name" rows="3">
-                                            {{ $item->name }}
-                                        </textarea>
+                                        <textarea class="form-control @error('name') is-invalid @enderror" name="name" rows="3">{{ old('name') ? old('name') : $item->name }}</textarea>
                                         @error('name')
                                             <div class="text-danger">{{ $message }}
                                             </div>

@@ -288,14 +288,14 @@ class QuizController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id)
     {
         $request->validate([
             'name' => 'required',
             'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i',
             'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i|before:quiz_time',
         ]);
-        $quiz = Quiz::whereSlug($id)->firstOrFail();
+        $quiz = Quiz::findOrFail($id);
 
         if ($request->hasFile('image')) {
             $destination = 'images/' . $quiz->image;
