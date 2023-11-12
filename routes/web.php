@@ -83,7 +83,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/quiz/add-question/{id}/{question_id}', [QuizController::class, 'storeQuestion'])->name('quiz.store-answer');
 Route::post('/quiz/create-answer/{id}', [QuizController::class, 'createAnswer'])->name('quiz.create-answer');
-
+Route::get('/quiz/expired/{token}', [QuizController::class, 'quizExpired'])->name('quiz.expired');
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/answer', [App\Http\Controllers\Admin\AnswerController::class, 'index'])->name('admin.answer');
     Route::get('/add-quiz', [QuizController::class, 'create'])->name('quiz.add');

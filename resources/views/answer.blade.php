@@ -31,7 +31,7 @@
                 </div>
                 @csrf
                 @foreach ($answer->quiz->questions as $question)
-                    @if ($question->question && isset($answer->answers[$question->question->id]))
+                    @if ($question->question)
                         <div class="question bg-white p-3 border-bottom">
                             <div class="d-flex flex-row align-items-center question-title">
                                 <h3 class="mt-1 ml-2">{{ $question->question->name }}</h3>
@@ -83,33 +83,29 @@
                                 @endif
                             @else
                                 @foreach ($question->question->options as $option)
-                                    @isset($answer->answers[$question->question->id])
-                                        <div class="ans ml-2">
-
-                                            <label
-                                                class="radio {{ in_array($option->id, $answer->answers[$question->question->id]) && $option->is_correct == 0 ? 'text-danger' : '' }} {{ $option->is_correct == 1 ? 'text-success' : '' }} ">
-                                                <input disabled type="radio" name="question[{{ $option->id }}]"
-                                                    value="1"
-                                                    {{ in_array($option->id, $answer->answers[$question->question->id]) ? 'checked' : '' }}>
-                                                <span>{{ $option->name }}</span>
-                                            </label>
-                                        </div>
-                                    @endisset ()
+                                    <div class="ans ml-2">
+                                        <label
+                                            class="radio {{ isset($answer->answers[$question->question->id]) && in_array($option->id, $answer->answers[$question->question->id]) && $option->is_correct == 0 ? 'text-danger' : '' }} {{ $option->is_correct == 1 ? 'text-success' : '' }} ">
+                                            <input disabled type="radio" name="question[{{ $option->id }}]"
+                                                value="1"
+                                                {{ isset($answer->answers[$question->question->id]) && in_array($option->id, $answer->answers[$question->question->id]) ? 'checked' : '' }}>
+                                            <span>{{ $option->name }}</span>
+                                        </label>
+                                    </div>
                                 @endforeach
-                                @isset($answer->answers[$question->question->id])
-                                    @if (count(array_diff(
+                                @if (isset($answer->answers[$question->question->id]) &&
+                                        (count(array_diff(
                                                 $answer->answers[$question->question->id],
                                                 $question->question->options()->where('is_correct', 1)->pluck('id')->toArray())) > 0 ||
                                             count(array_diff(
                                                     $question->question->options()->where('is_correct', 1)->pluck('id')->toArray(),
-                                                    $answer->answers[$question->question->id])) > 0)
-                                        <br>
-                                        <strong class="text-danger ms-3">
-                                            {{ $question->question->error }}
-                                        </strong>
-                                        <br>
-                                    @endif
-                                @endisset
+                                                    $answer->answers[$question->question->id])) > 0))
+                                    <br>
+                                    <strong class="text-danger ms-3">
+                                        {{ $question->question->error }}
+                                    </strong>
+                                    <br>
+                                @endif
                             @endif
                         </div>
                     @endif

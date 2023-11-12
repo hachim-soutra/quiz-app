@@ -201,29 +201,32 @@ class QuizController extends Controller
         // ]);
 
         $token = Str::random(16);
+        $quiz = Quiz::findOrFail($id);
         Answer::create([
             "quiz_id" => $id,
             "token" => $token,
             "answers" => [],
             "email" => $request->email ?? "",
-            "score" => 0
+            "score" => 0,
+            "timer" => $quiz->quiz_time->format('H:i')
         ]);
 
         $question = Question::whereHas("quiz_questions", function ($q) use ($id) {
             $q->where("quiz_id", $id);
-        })->whereNull('deleted_at')->firstOrFail();
+        })->whereNull('deleted_at')
+            ->firstOrFail();
 
         return redirect()->route('questions', ['token' => $token, 'id' => $question->id]);
     }
 
     public function storeQuestion(int $id, int $question_id, Request $request)
     {
-
         $answer = Answer::findOrFail($id);
         $questions = $answer->answers;
         $questions[$question_id] = isset($request->question[$question_id]) ? $request->question[$question_id] : $request->question;
         $answer->update([
-            "answers" => $questions
+            "answers" => $questions,
+            "timer" => $request->timer,
         ]);
         $questionL = Question::whereHas("quiz_questions", function ($q) use ($answer) {
             $q->where("quiz_id", $answer->quiz_id);
@@ -275,7 +278,7 @@ class QuizController extends Controller
      */
     public function edit(Quiz $quiz)
     {
-        return view('admin.quiz.updateQuiz')->with(['item' => $quiz]);;
+        return view('admin.quiz.updateQuiz')->with(['item' => $quiz]);
     }
 
     /**
@@ -388,5 +391,20 @@ class QuizController extends Controller
         $question = QuestionOption::whereId($id)->firstOrFail();
         $question->delete();
         return redirect()->back()->with('status', 'Answer has been deleted');
+    }
+
+    public function quizExpired(string $token)
+    {
+        $answer = Answer::whereToken($token)->with(['quiz', 'quiz.questions', 'quiz.questions.question', 'quiz.questions.question.question_type'])->firstOrFail();
+        $questions = $answer->answers;
+        foreach ($answer->quiz->questions as $question) {
+            if (!isset($questions[$question->question_id])) {
+                $questions[$question->id] = null;
+            }
+        }
+        $answer->update([
+            "answers" => $questions
+        ]);
+        return redirect()->route('answer', ['token' => $answer->token]);
     }
 }

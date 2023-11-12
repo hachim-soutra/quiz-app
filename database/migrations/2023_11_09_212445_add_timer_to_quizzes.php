@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('quizzes', function (Blueprint $table) {
-            $table->time('timer')->nullable();
+            $table->time('break_time')->nullable();
             $table->time('quiz_time')->nullable();
             $table->time('quiz_time_remind')->nullable();
             $table->string('quiz_time_status')->nullable();
@@ -25,9 +25,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('quizzes', function (Blueprint $table) {
-            $table->dropColumn('timer');
+            $table->dropColumn('break_time');
             $table->dropColumn('quiz_time');
-            $table->dropColumn('quiz_time_stop');
             $table->dropColumn('quiz_time_remind');
             $table->dropColumn('quiz_time_status');
         });

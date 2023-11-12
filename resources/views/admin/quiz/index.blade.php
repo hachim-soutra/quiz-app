@@ -70,7 +70,7 @@
                                                         {{ $item->questions_count }}</a>
                                                 </td>
                                                 <td>
-                                                    {{ $item->quiz_time }}
+                                                    {{ $item->quiz_time?->format('H:i') }}
                                                 </td>
                                                 <td>
                                                     <a target="_blank" href="{{ route('quiz', ['slug' => $item->slug]) }}"
@@ -92,7 +92,7 @@
                                                 </td>
                                                 <td>
 
-                                                    <a href="{{ route('quiz.edit', ['quiz' => $item ]) }}"
+                                                    <a href="{{ route('quiz.edit', ['quiz' => $item]) }}"
                                                         class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
 
                                                 </td>

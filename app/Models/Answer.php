@@ -11,10 +11,11 @@ class Answer extends Model
 {
     use HasFactory;
 
-    protected $fillable  = ['answers', 'email', 'token', 'quiz_id', 'nbr_of_correct'];
+    protected $guarded  = [];
 
     protected $casts = [
-        'answers' => 'array'
+        'answers' => 'array',
+        'quiz_time' => 'datetime'
     ];
 
     public function quiz()
