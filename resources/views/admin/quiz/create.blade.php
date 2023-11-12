@@ -32,6 +32,23 @@
                                 <form method="POST" action="{{ route('quiz.store') }}" enctype="multipart/form-data">
                                     <div class="row">
                                         @csrf
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label for="">Quiz type</label>
+                                                <select name="quiz_type" id="quiz_type"
+                                                    class="form-control @error('quiz_type') is-invalid @enderror">
+                                                    <option value="1" {{ old('quiz_type') == '1' ? 'selected' : '' }}>
+                                                        simple quiz</option>
+                                                    <option value="2" {{ old('quiz_type') == '2' ? 'selected' : '' }}>
+                                                        test quiz</option>
+                                                    <option value="3" {{ old('quiz_type') == '3' ? 'selected' : '' }}>
+                                                        simuler quiz</option>
+                                                </select>
+                                                @error('quiz_type')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
 
                                         <div class="col-sm-12">
                                             <div class="form-group">
@@ -54,7 +71,7 @@
                                                 <input class="form-control" name="image" type="file">
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-6  quiz_time_group">
                                             <div class="form-group">
                                                 <label for="name">Select timer</label>
                                                 <input type="time" name="quiz_time" value="{{ old('quiz_time') }}"
@@ -64,13 +81,35 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-6  quiz_time_group">
                                             <div class="form-group">
                                                 <label for="name">Warning select timer</label>
                                                 <input type="time" name="quiz_time_remind"
                                                     value="{{ old('quiz_time_remind') }}"
                                                     class="form-control @error('quiz_time_remind') is-invalid @enderror" />
                                                 @error('quiz_time_remind')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 quiz_break_grp">
+                                            <div class="form-group">
+                                                <label for="">number of questions before break</label>
+                                                <input type="number"
+                                                    class="form-control @error('nbr_questions_sequance') is-invalid @enderror"
+                                                    name="nbr_questions_sequance"
+                                                    value="{{ old('nbr_questions_sequance') }}">
+                                                @error('nbr_questions_sequance')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 quiz_break_grp">
+                                            <div class="form-group">
+                                                <label for="">Define break</label>
+                                                <input type="time" name="break_time" value="{{ old('break_time') }}"
+                                                    class="form-control @error('break_time') is-invalid @enderror">
+                                                @error('break_time')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
@@ -90,4 +129,27 @@
             </div>
         </section>
     </div>
+@endsection
+@section('js')
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            function quizShow() {
+                if ($('#quiz_type').val() == 1) {
+                    $('.quiz_time_group').hide();
+                    $('.quiz_break_grp').hide();
+                } else if ($('#quiz_type').val() == 2) {
+                    $('.quiz_time_group').show();
+                    $('.quiz_break_grp').hide();
+                } else if ($('#quiz_type').val() == 3) {
+                    $('.quiz_time_group').show();
+                    $('.quiz_break_grp').show();
+                }
+            }
+            quizShow();
+            $('#quiz_type').on('change', function() {
+                quizShow();
+            });
+        });
+    </script>
 @endsection

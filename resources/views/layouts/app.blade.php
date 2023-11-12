@@ -84,5 +84,6 @@
 
 
         </div>
+        @yield('js')
     </body>
 </x-laravel-ui-adminlte::adminlte-layout>

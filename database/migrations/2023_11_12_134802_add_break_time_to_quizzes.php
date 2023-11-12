@@ -12,10 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('quizzes', function (Blueprint $table) {
-            $table->time('quiz_time')->nullable();
-            $table->time('quiz_time_remind')->nullable();
-            $table->string('quiz_type')->default(1);
-            $table->integer('nbr_questions_sequance')->nullable();
+            $table->time('break_time')->nullable();
         });
     }
 
@@ -25,10 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('quizzes', function (Blueprint $table) {
-            $table->dropColumn('quiz_time');
-            $table->dropColumn('quiz_time_remind');
-            $table->dropColumn('quiz_type');
-            $table->dropColumn('nbr_questions_sequance');
+            $table->dropColumn('break_time');
         });
     }
 };

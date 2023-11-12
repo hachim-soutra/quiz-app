@@ -32,10 +32,28 @@
                             <form method="POST"
                             action="{{ route('quiz.update', ['quiz' => $item]) }}"
                             enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
                             <div class="row">
                                 <div class="col-sm-12">
-                                    @csrf
-                                    @method('PUT')
+                                    <div class="form-group">
+                                        <label for="">Quiz type</label>
+                                        <select name="quiz_type" id="quiz_type" value={{$item->quiz_type}}
+                                            class="form-control @error('quiz_type') is-invalid @enderror">
+                                            {{-- <option value=""></option> --}}
+                                            <option value="1" {{ old('quiz_type') == '1' ? 'selected' : '' }}>
+                                                simple quiz</option>
+                                            <option value="2" {{ old('quiz_type') == '2' ? 'selected' : '' }}>
+                                                test quiz</option>
+                                            <option value="3" {{ old('quiz_type') == '3' ? 'selected' : '' }}>
+                                                simuler quiz</option>
+                                        </select>
+                                        @error('quiz_type')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <label>Text <span
                                                 class="text-danger">*</span></label>

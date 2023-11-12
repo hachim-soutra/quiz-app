@@ -45,8 +45,11 @@ class QuizController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'quiz_type' => 'required',
             'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i',
             'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i|before:quiz_time',
+            'nbr_questions_sequance' => 'required_if:quiz_type,==,3',
+            'break_time' => 'required_if:quiz_type,==,3'
         ]);
 
         if ($request->hasFile('image')) {
@@ -56,6 +59,7 @@ class QuizController extends Controller
             $file->move('images/', $filename);
         }
         Quiz::create([
+            'quiz_type' => $request->quiz_type,
             'name' => $request->name,
             'description' => $request->description,
             'quiz_time' => $request->quiz_time,
@@ -64,7 +68,7 @@ class QuizController extends Controller
             'image' => $request->hasFile('image') ? $filename : "blank.png",
             'is_published' => 1,
         ]);
-        return redirect()->route('quiz.index')->with('status', 'Your quiz has been added');
+        return redirect()->route('quiz.index')->withInput()->with('status', 'Your quiz has been added');
     }
 
     public function duplicateQuiz(string $id, Request $request)
@@ -305,6 +309,7 @@ class QuizController extends Controller
         }
 
         $quiz->update([
+            'quiz_type' => $request->quiz_type,
             'name' => $request->name,
             'description' => $request->description,
             'quiz_time' => $request->quiz_time,
