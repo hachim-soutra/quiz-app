@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Imports\QuestionImport;
 use App\Imports\QuizImport;
 use App\Models\Answer;
+use Carbon\Carbon;
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
 use Harishdurga\LaravelQuiz\Models\QuestionType;
@@ -64,6 +65,8 @@ class QuizController extends Controller
             'description' => $request->description,
             'quiz_time' => $request->quiz_time,
             'quiz_time_remind' => $request->quiz_time_remind,
+            'nbr_questions_sequance' => $request->nbr_questions_sequance,
+            'break_time' => $request->break_time,
             'slug' => Str::slug($request->name),
             'image' => $request->hasFile('image') ? $filename : "blank.png",
             'is_published' => 1,
@@ -212,7 +215,7 @@ class QuizController extends Controller
             "answers" => [],
             "email" => $request->email ?? "",
             "score" => 0,
-            "timer" => $quiz->quiz_time->format('H:i')
+            "timer" => Carbon::parse($quiz->quiz_time)->format('H:i')
         ]);
 
         $question = Question::whereHas("quiz_questions", function ($q) use ($id) {
@@ -292,11 +295,13 @@ class QuizController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'quiz_type' => 'required',
             'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i',
             'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i|before:quiz_time',
+            'nbr_questions_sequance' => 'required_if:quiz_type,==,3',
+            'break_time' => 'required_if:quiz_type,==,3'
         ]);
         $quiz = Quiz::findOrFail($id);
-
         if ($request->hasFile('image')) {
             $destination = 'images/' . $quiz->image;
             if (File::exists($destination)) {
@@ -316,6 +321,10 @@ class QuizController extends Controller
             'quiz_time_remind' => $request->quiz_time_remind,
             'slug' => Str::slug($request->name),
             'image' => $request->hasFile('image') ? $filename : $quiz->image,
+            'quiz_time' => $request->quiz_time,
+            'quiz_time_remind' => $request->quiz_time_remind,
+            'nbr_questions_sequance' => $request->nbr_questions_sequance,
+            'break_time' => $request->break_time,
         ]);
 
         return redirect()->back()->with('status', 'Quiz updated Successfully');

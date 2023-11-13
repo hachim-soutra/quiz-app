@@ -6,7 +6,7 @@
             <img src="{{ asset('images/logo-question.jpg') }}" alt="" width="300px" class="profil">
             <div class="mt-3">
 
-                @if (request()->query('break'))
+                @if ($break)
                     <div class="d-flex flex-column justify-content-between px-2">
                         <h2 class="text-deco">Take break</h2>
                         <p class="sous-title">xxxxxxxx</p>
@@ -22,7 +22,7 @@
                         @csrf
                         <div class="question bg-white my-3">
                             <div class="d-flex flex-row align-items-start question-title flex-column">
-                                @if ($answer->timer && !request()->query('break'))
+                                @if ($answer->timer && !$break)
                                     <div class="my-2"
                                         style="
                                             display: flex;
@@ -150,7 +150,7 @@
     <script>
         window.onload = function() {
             var timer2 = "{{ $answer->timer }}";
-            var breakQuestion = "{{ request()->query('break') }}";
+            var breakQuestion = "{{ $break }}";
             var timerReminer = "{{ $answer->quiz->quiz_time_remind }}";
             if (timer2 && !breakQuestion) {
 
