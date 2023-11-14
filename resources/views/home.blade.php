@@ -67,44 +67,7 @@
                 </div>
 
             </div>
-            <div class="row justify-content-center mt-5">
-                    <div class="h-auto" style="width:600px;">
-                        <canvas id="myChart" ></canvas>
-                    </div>
-            </div>
 
         </div>
     </section>
-@endsection
-@section('js')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-    <script>
-        var xValues = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'];
-        var yValues = [55, 49, 44, 24, 15];
-        var barColors = [
-            "#6f42c1",
-            "#00aba9",
-            "#2b5797",
-            "#e8c3b9",
-            "#fd7e14"
-        ];
-        const ctx = document.getElementById('myChart');
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: xValues,
-                datasets: [{
-                    backgroundColor: barColors,
-                    data: yValues,
-                    borderWidth: 10
-                }]
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: "xsqnxjsqnxjqsnxjs"
-                }
-            }
-        });
-    </script>
 @endsection
