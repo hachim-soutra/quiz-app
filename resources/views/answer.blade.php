@@ -54,23 +54,21 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($question->question->options as $optionl)
-                                            @if (isset($answer->answers[$question->question->id][$optionl->id]))
-                                                <tr
-                                                    class="{{ $answer->answers[$question->question->id][$optionl->id] === $optionl->value ? 'bg-success-1' : 'bg-danger-1' }}">
-                                                    @foreach ($question->question->options as $k => $option)
-                                                        @if ($loop->first)
-                                                            <td>{{ $optionl->value }}</td>
-                                                        @endif
-                                                        <td>
-                                                            <input disabled required type="radio"
-                                                                {{ $answer->answers[$question->question->id][$optionl->id] == $option->value ? 'checked' : '' }}
-                                                                name="question[{{ $question->question->id }}][{{ $optionl->id }}]"
-                                                                value="{{ $optionl->value }}">
+                                            <tr
+                                                class="{{ isset($answer->answers[$question->question->id][$optionl->id]) && $answer->answers[$question->question->id][$optionl->id] === $optionl->value ? 'bg-success-1' : 'bg-danger-1' }}">
+                                                @foreach ($question->question->options as $k => $option)
+                                                    @if ($loop->first)
+                                                        <td>{{ $optionl->value }}</td>
+                                                    @endif
+                                                    <td>
+                                                        <input disabled required type="radio"
+                                                            {{ isset($answer->answers[$question->question->id][$optionl->id]) && $answer->answers[$question->question->id][$optionl->id] == $option->value ? 'checked' : '' }}
+                                                            name="question[{{ $question->question->id }}][{{ $optionl->id }}]"
+                                                            value="{{ $optionl->value }}">
 
-                                                        </td>
-                                                    @endforeach
-                                                </tr>
-                                            @endif
+                                                    </td>
+                                                @endforeach
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                 </table>

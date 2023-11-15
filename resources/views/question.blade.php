@@ -10,6 +10,7 @@
                     <div class="d-flex flex-column justify-content-between px-2">
                         <h2 class="text-deco">Take break</h2>
                         <p class="sous-title">xxxxxxxx</p>
+                        <div class="countdown"></div>
                     </div>
                 @else
                     <form method="POST"
@@ -152,6 +153,8 @@
             var timer2 = "{{ $answer->timer }}";
             var breakQuestion = "{{ $break }}";
             var timerReminer = "{{ $answer->quiz->quiz_time_remind }}";
+            var timerBreak = "{{ $answer->quiz->break_time }}";
+
             if (timer2 && !breakQuestion) {
 
                 function countdown() {
@@ -164,7 +167,8 @@
                     --seconds;
                     hours = (hours > 0 && minutes == 0) ? --hours : hours;
                     minutes = (seconds < 0) ? --minutes : minutes;
-                    if (hours < 0 && minutes < 0) {
+                    console.log(hours, minutes, seconds);
+                    if (hours == 0 && minutes == 0 && seconds == 0) {
                         clearInterval(interval);
                         window.location = "{{ route('quiz.expired', ['token' => $answer->token]) }}";
                     } else {
@@ -191,6 +195,34 @@
                     $('#stop-modal').modal('hide');
                     interval = setInterval(countdown, 1000);
                 });
+            }
+
+            if (breakQuestion) {
+                function countdown() {
+                    var timer = timerBreak.split(':');
+                    var hours = parseInt(timer[0], 10);
+                    var minutes = parseInt(timer[1], 10);
+                    var seconds = parseInt(timer[2], 10);
+                    --seconds;
+                    hours = (hours > 0 && minutes == 0) ? --hours : hours;
+                    minutes = (seconds < 0) ? --minutes : minutes;
+                    if (hours + minutes + seconds == 0) {
+
+                        clearInterval(interval);
+                        window.location =
+                            "{{ route('questions', ['token' => $answer->token, 'id' => $question->id, 'pass' => true]) }}";
+                    } else {
+
+                        seconds = (seconds < 0) ? 59 : seconds;
+                        seconds = (seconds < 10) ? '0' + seconds : seconds;
+                        minutes = (minutes < 0) ? 59 : minutes;
+                        minutes = (minutes < 10) ? '0' + minutes : minutes;
+                        $('.countdown').html(hours + ':' + minutes + ':' + seconds);
+                        timerBreak = hours + ':' + minutes + ':' + seconds;
+                        $('#timer').val(timerBreak);
+                    }
+                }
+                var interval = setInterval(countdown, 1000);
             }
         }
     </script>

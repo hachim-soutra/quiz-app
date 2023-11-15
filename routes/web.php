@@ -67,9 +67,8 @@ Route::get('/answer/{token}', function ($token) {
     return view('answer')->with(["answer" => $answer]);
 })->name('answer');
 
-Route::get('/questions/{token}/{id}', function ($token, $id) {
+Route::get('/questions/{token}/{id}/{pass?}', function ($token, $id, $pass = null) {
     $answer = Answer::with("quiz")->whereToken($token)->firstOrFail();
-
     $question = Question::findOrFail($id);
     $questionPreview = Question::whereHas("quiz_questions", function ($q) use ($answer) {
         $q->where("quiz_id", $answer->quiz_id);
@@ -77,7 +76,7 @@ Route::get('/questions/{token}/{id}', function ($token, $id) {
         ->where("id", '<', $id)
         ->first();
     $break = false;
-    if ($answer->quiz->nbr_questions_sequance && $answer->quiz->quiz_type == 3 && count($answer->answers) % $answer->quiz->nbr_questions_sequance == 0) {
+    if (!$pass && $answer->quiz->nbr_questions_sequance && $answer->quiz->quiz_type == 3 && count($answer->answers) % $answer->quiz->nbr_questions_sequance == 0 && count($answer->answers) > 0) {
         $break = true;
     }
     return view('question')->with(["answer" => $answer, "question" => $question, "questionPreview" => $questionPreview, "break" => $break]);

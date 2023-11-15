@@ -70,7 +70,7 @@
                                                         {{ $item->questions_count }}</a>
                                                 </td>
                                                 <td>
-                                                    {{-- {{ $item->quiz_time?->format('H:i') }} --}}
+                                                    {{ $item->quiz_time?->format('H:i') }}
                                                 </td>
                                                 <td>
                                                     <a target="_blank" href="{{ route('quiz', ['slug' => $item->slug]) }}"
