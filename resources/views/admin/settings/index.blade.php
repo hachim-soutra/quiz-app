@@ -43,7 +43,8 @@
                                         @foreach ($settings as $item)
                                             <tr>
                                                 <td>{{ $item->name }}</td>
-                                                <td>{{ $item->value }}</td>
+                                                <td><img src="{{ asset('images/' . $item->value) }}" width="150"
+                                                        height="auto" class="mt-3 rounded"></td>
                                                 <td>
                                                     <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
                                                         class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
@@ -64,18 +65,12 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <form method="POST"
-                                                                action="{{ route('settings.update', ['setting' => $item]) }}">
+                                                                action="{{ route('settings.update', ['setting' => $item]) }}"
+                                                                enctype="multipart/form-data">
                                                                 <div class="row">
                                                                     @csrf
                                                                     @method('put')
-                                                                    <div class="col-sm-12">
-                                                                        <div class="form-group">
-                                                                            <label for="">Name</label>
-                                                                            <input type="text" name="name"
-                                                                                value="{{ old('name') ? old('name') : $item->name }}"
-                                                                                class="form-control">
-                                                                        </div>
-                                                                    </div>
+
                                                                     <div class="col-sm-12">
                                                                         <div class="form-group">
                                                                             <label for="">Image</label>

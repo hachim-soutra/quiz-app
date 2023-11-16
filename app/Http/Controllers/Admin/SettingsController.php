@@ -13,11 +13,13 @@ class SettingsController extends Controller
     {
         $settings = Settings::all();
         return view('admin.settings.index', compact('settings'));
-
     }
-   
+
     public function update(Request $request, Settings $setting)
     {
+        $request->validate([
+            "value" => "required"
+        ]);
         if ($request->hasFile('value')) {
             $destination = 'images/' . $setting->value;
             if (File::exists($destination)) {
@@ -29,10 +31,8 @@ class SettingsController extends Controller
             $file->move('images/', $filename);
         }
         $setting->update([
-            'name' => $request->name,
             'value' => $request->hasFile('value') ? $filename : $setting->value,
         ]);
         return redirect()->back()->with('status', 'Setting Has Been updated');
     }
-    
 }

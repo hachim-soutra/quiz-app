@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-center row w-100 m-0">
         <img src="{{ asset('images/' . $answer->quiz->image) }}" alt="" width="100%" class="cover border-bottom p-0">
         <div class="col-md-10 col-lg-10">
-            <img src="{{ asset('images/logo-question.jpg') }}" alt="" width="300px" class="profil">
+            <img src="{{ asset('images/' . $logo->value) }}" alt="" width="300px" class="profil">
             <div class="mt-3">
 
                 @if ($break)
