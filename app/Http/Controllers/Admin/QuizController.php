@@ -236,7 +236,7 @@ class QuizController extends Controller
         $questions[$question_id] = isset($request->question[$question_id]) ? $request->question[$question_id] : $request->question;
         $answer->update([
             "answers" => $questions,
-            "timer" => $answer->quiz->timer ? $request->timer : null,
+            "timer" => $answer->quiz->quiz_time ? $request->timer : null,
         ]);
         $questionL = Question::whereHas("quiz_questions", function ($q) use ($answer) {
             $q->where("quiz_id", $answer->quiz_id);
