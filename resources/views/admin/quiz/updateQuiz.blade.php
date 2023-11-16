@@ -99,7 +99,7 @@
                                                 <label for="">Warning select
                                                     timer</label>
                                                 <input type="time" name="quiz_time_remind"
-                                                    value="{{ old('quiz_time_remind') ? old('quiz_time_remind') : $item->quiz_time_remind?->format('H:i') }}"
+                                                    value="{{ old('quiz_time_remind') ? old('quiz_time_remind') : $item->quiz_time_remind }}"
                                                     class="form-control @error('quiz_time_remind') is-invalid @enderror" />
                                                 @error('quiz_time_remind')
                                                     <div class="text-danger">{{ $message }}
@@ -113,7 +113,7 @@
                                                 <input type="number"
                                                     class="form-control @error('nbr_questions_sequance') is-invalid @enderror"
                                                     name="nbr_questions_sequance"
-                                                    value="{{ old('nbr_questions_sequance') ? old('nbr_questions_sequance') : $item->nbr_questions_sequance?->format('H:i') }}">
+                                                    value="{{ old('nbr_questions_sequance') ? old('nbr_questions_sequance') : $item->nbr_questions_sequance }}">
                                                 @error('nbr_questions_sequance')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
@@ -123,7 +123,7 @@
                                             <div class="form-group">
                                                 <label for="">Define break</label>
                                                 <input type="time" name="break_time"
-                                                    value="{{ old('break_time') ? old('break_time') : $item->break_time?->format('H:i') }}"
+                                                    value="{{ old('break_time') ? old('break_time') : $item->break_time }}"
                                                     class="form-control @error('break_time') is-invalid @enderror">
                                                 @error('break_time')
                                                     <div class="text-danger">{{ $message }}</div>
