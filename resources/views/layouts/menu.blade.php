@@ -17,3 +17,8 @@
         <p>Answers</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('categorie.index') }}" class="nav-link text-dark {{ Request::is('categorie.index') ? 'active' : '' }}">
+        <p>Categories</p>
+    </a>
+</li>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Helper\Helper;
+use App\Http\Controllers\Admin\QuestionsCategorizationController;
 use App\Http\Controllers\Admin\QuizController;
 use App\Models\Answer;
 use Harishdurga\LaravelQuiz\Models\Question;
@@ -104,4 +105,5 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::put('/quiz/update-option/{id}', [QuizController::class, 'updateOption'])->name('quiz.update-option');
     Route::post('/quiz/delete-option/{id}', [QuizController::class, 'removeOption'])->name('quiz.delete-option');
     Route::resource("quiz", QuizController::class);
+    Route::resource("categorie", QuestionsCategorizationController::class);
 });

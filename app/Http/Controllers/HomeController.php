@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Harishdurga\LaravelQuiz\Models\QuestionsCategorization;
+use Harishdurga\LaravelQuiz\Models\Quiz;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +25,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $categories = QuestionsCategorization::all();
+        $xValues = [];
+        foreach($categories as $categorie)
+        {
+            $xValues[] = $categorie->name;
+            $barColors[] = $categorie->color;
+            $yValues[] = $categorie->questions->count();
+        }
+         
+            return view('home', compact('xValues','yValues','barColors'));
     }
 }
