@@ -55,7 +55,6 @@
                                             <th>Title</th>
                                             <th>Description</th>
                                             <th>Questions</th>
-                                            <th>Timer</th>
                                             <th colspan="4">Action</th>
                                         </tr>
                                     </thead>
@@ -69,9 +68,7 @@
 
                                                         {{ $item->questions_count }}</a>
                                                 </td>
-                                                <td>
-                                                    {{ $item->quiz_time }}
-                                                </td>
+
                                                 <td>
                                                     <a target="_blank" href="{{ route('quiz', ['slug' => $item->slug]) }}"
                                                         class="btn btn-success">
