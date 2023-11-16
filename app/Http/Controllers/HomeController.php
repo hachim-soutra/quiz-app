@@ -27,13 +27,14 @@ class HomeController extends Controller
     {
         $categories = QuestionsCategorization::all();
         $xValues = [];
-        foreach($categories as $categorie)
-        {
+        $yValues = [];
+        $barColors = [];
+        foreach ($categories as $categorie) {
             $xValues[] = $categorie->name;
             $barColors[] = $categorie->color;
             $yValues[] = $categorie->questions->count();
         }
-         
-            return view('home', compact('xValues','yValues','barColors'));
+
+        return view('home', compact('xValues', 'yValues', 'barColors'));
     }
 }
