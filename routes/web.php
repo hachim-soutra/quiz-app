@@ -3,7 +3,9 @@
 use App\Helper\Helper;
 use App\Http\Controllers\Admin\QuestionsCategorizationController;
 use App\Http\Controllers\Admin\QuizController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Models\Answer;
+use App\Models\Settings;
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
 use Harishdurga\LaravelQuiz\Models\QuestionType;
@@ -30,7 +32,8 @@ Route::get('/', function () {
 
 Route::get('/quiz/{slug}', function ($slug) {
     $quiz = Quiz::whereSlug($slug)->firstOrFail();
-    return view('quiz')->with(["quiz" => $quiz]);
+    $logo = Settings::where("name", "logo")->first();
+    return view('quiz')->with(["quiz" => $quiz, "logo" => $logo]);
 })->name('quiz');
 
 Route::get('/answer/{token}', function ($token) {
@@ -65,7 +68,8 @@ Route::get('/answer/{token}', function ($token) {
     $answer->update([
         "nbr_of_correct" => $correct
     ]);
-    return view('answer')->with(["answer" => $answer]);
+    $logo = Settings::where("name", "logo")->first();
+    return view('answer')->with(["answer" => $answer, "logo" => $logo]);
 })->name('answer');
 
 Route::get('/questions/{token}/{id}/{pass?}', function ($token, $id, $pass = null) {
@@ -80,7 +84,8 @@ Route::get('/questions/{token}/{id}/{pass?}', function ($token, $id, $pass = nul
     if (!$pass && $answer->quiz->nbr_questions_sequance && $answer->quiz->quiz_type == 3 && count($answer->answers) % $answer->quiz->nbr_questions_sequance == 0 && count($answer->answers) > 0) {
         $break = true;
     }
-    return view('question')->with(["answer" => $answer, "question" => $question, "questionPreview" => $questionPreview, "break" => $break]);
+    $logo = Settings::where("name", "logo")->first();
+    return view('question')->with(["answer" => $answer, "question" => $question, "questionPreview" => $questionPreview, "break" => $break, "logo" => $logo]);
 })->name('questions');
 
 Auth::routes();
@@ -110,4 +115,5 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('/quiz/delete-option/{id}', [QuizController::class, 'removeOption'])->name('quiz.delete-option');
     Route::resource("quiz", QuizController::class);
     Route::resource("categorie", QuestionsCategorizationController::class);
+    Route::resource("settings", SettingsController::class);
 });

@@ -22,3 +22,8 @@
         <p>Categories</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('settings.index') }}" class="nav-link text-dark {{ Request::is('settings.index') ? 'active' : '' }}">
+        <p>Settings</p>
+    </a>
+</li>
