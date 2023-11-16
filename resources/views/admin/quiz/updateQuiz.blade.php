@@ -87,7 +87,7 @@
                                                 <label>Select timer</label>
                                                 <input type="time" name="quiz_time"
                                                     class="form-control @error('quiz_time') is-invalid @enderror"
-                                                    value="{{ old('quiz_time') ? old('quiz_time') : $item->quiz_time?->format('H:i') }}">
+                                                    value="{{ old('quiz_time') ? old('quiz_time') : $item->quiz_time }}">
                                                 @error('quiz_time')
                                                     <div class="text-danger">{{ $message }}
                                                     </div>
