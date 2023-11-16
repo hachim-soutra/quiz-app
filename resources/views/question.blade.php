@@ -23,7 +23,7 @@
                         @csrf
                         <div class="question bg-white my-3">
                             <div class="d-flex flex-row align-items-start question-title flex-column">
-                                @if ($answer->timer && !$break)
+                                @if ($answer->timer)
                                     <div class="my-2"
                                         style="
                                             display: flex;

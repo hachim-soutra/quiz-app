@@ -215,7 +215,7 @@ class QuizController extends Controller
             "answers" => [],
             "email" => $request->email ?? "",
             "score" => 0,
-            "timer" => Carbon::parse($quiz->quiz_time)->format('H:i')
+            "timer" => $quiz->quiz_time ? Carbon::parse($quiz->quiz_time)->format('H:i') : null
         ]);
 
         $question = Question::whereHas("quiz_questions", function ($q) use ($id) {
@@ -233,7 +233,7 @@ class QuizController extends Controller
         $questions[$question_id] = isset($request->question[$question_id]) ? $request->question[$question_id] : $request->question;
         $answer->update([
             "answers" => $questions,
-            "timer" => $request->timer,
+            "timer" => $answer->quiz->timer ? $request->timer : null,
         ]);
         $questionL = Question::whereHas("quiz_questions", function ($q) use ($answer) {
             $q->where("quiz_id", $answer->quiz_id);
