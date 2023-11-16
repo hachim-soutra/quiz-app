@@ -76,13 +76,13 @@
                                 <tr>
                                     <th>Answer</th>
                                     <th>{{ $question->question_type->name === 'row answers' ? 'Response' : 'Correct' }}</th>
-                                    <th>Action</th>
+                                    <th colspan="2">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($question->options as $item)
                                     <tr>
-                                        <td>{!! Str::limit($item->name, 100, '...') !!}</td>
+                                        <td title="{{ $item->name }}">{!! Str::limit($item->name, 100, '...') !!}</td>
                                         @if ($question->question_type->name !== 'row answers')
                                             <td>{{ $item->is_correct ? 'Yes' : 'NO' }}</td>
                                         @else
@@ -91,7 +91,8 @@
                                         <td>
                                             <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
                                                 class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
-
+                                        </td>
+                                        <td>
                                             <a data-toggle="modal" data-target="#modal-delete-{{ $item->id }}"
                                                 class="btn btn-danger">
                                                 <i class="fas fa-trash"></i> Delete
