@@ -67,7 +67,36 @@
                 </div>
 
             </div>
-
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="justify-content-center">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
+@endsection
+@section('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script>
+        const ctx = document.getElementById('myChart');
+
+        new Chart(ctx, {
+            type: "doughnut",
+            data: {
+                labels: @json($xValues),
+                datasets: [{
+                    backgroundColor: @json($barColors),
+                    data: @json($yValues)
+                }]
+            },
+            options: {
+                title: {
+                    display: false,
+                    text: ""
+                }
+            }
+        });
+    </script>
 @endsection

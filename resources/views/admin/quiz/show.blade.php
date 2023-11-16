@@ -58,17 +58,27 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-7">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Comment if wrong answer</label>
                                                 <input type="text" name="error" class="form-control "
                                                     placeholder="Enter ...">
                                             </div>
                                         </div>
-                                        <div class="col-md-5">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>upload image</label>
                                                 <input name="image" type="file" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>categorie</label>
+                                                <select name="categorie" class="form-control">
+                                                    @foreach ($categories as $categorie)
+                                                        <option value="{{ $categorie->id }}" {{ $categorie->id == 1 ? "selected" : ""}}>{{ $categorie->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -127,6 +137,7 @@
                                 <tr>
                                     <th>Title</th>
                                     <th>Type</th>
+                                    <th>Categorie</th>
                                     <th>Answers</th>
                                     <th>Comment if wrong answer</th>
                                     <th colspan="4">Action</th>
@@ -137,6 +148,7 @@
                                     <tr>
                                         <td>{!! Str::limit($item->question->name, 70, '...') !!}</td>
                                         <td>{{ $item->question->question_type?->name }}</td>
+                                        <td>{{ $item->question->questions_categorization?->name }}</td>
                                         <td>
                                             <a href="{{ route('question.show', ['id' => $item->question->id]) }}"
                                                 class=" text-nowrap">
@@ -264,14 +276,24 @@
                                                                             width="150" class="mt-3 rounded"
                                                                             alt="imgg">
                                                                     </div>
+
+                                                                <div class="form-group">
+                                                                    <label>categorie {{$item->categorie_id}}</label>
+                                                                    <select name="categorie" class="form-control">
+                                                                        @foreach ($categories as $categorie)
+                                                                            <option value="{{ $categorie->id }}" {{ $categorie->id == $item->question->categorie_id ? "selected" : ""}}>{{ $categorie->name }}</option>
+                                                                        @endforeach
+                                                                    </select>
                                                                 </div>
+                                                            </div>
+
 
 
                                                                 <div class="col-12 d-flex justify-content-end gap-5">
                                                                     <button type="button" class="btn btn-default mr-3"
                                                                         data-dismiss="modal">Close</button>
                                                                     <button type="submit"
-                                                                        class="btn btn-primary">Add</button>
+                                                                        class="btn btn-primary">Update</button>
                                                                 </div>
                                                             </div>
                                                         </form>

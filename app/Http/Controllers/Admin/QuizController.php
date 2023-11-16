@@ -9,6 +9,7 @@ use App\Models\Answer;
 use Carbon\Carbon;
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
+use Harishdurga\LaravelQuiz\Models\QuestionsCategorization;
 use Harishdurga\LaravelQuiz\Models\QuestionType;
 use Harishdurga\LaravelQuiz\Models\Quiz;
 use Harishdurga\LaravelQuiz\Models\QuizQuestion;
@@ -136,6 +137,7 @@ class QuizController extends Controller
             'question_type_id' => $request->type,
             'error' => $request->error,
             'image' => $request->hasFile('image') ? $filename : null,
+            'categorie_id' => $request->categorie,
             'is_active' => true
         ]);
         QuizQuestion::create([
@@ -189,6 +191,7 @@ class QuizController extends Controller
             'name' => $request->name,
             'question_type_id' => $request->type,
             'error' => $request->error,
+            'categorie_id' => $request->categorie,
             'is_active' => true,
             'image' => $request->hasFile('image') ? $filename : $question->image,
         ]);
@@ -277,7 +280,8 @@ class QuizController extends Controller
     {
         $quiz = Quiz::whereSlug($id)->firstOrFail();
         $types = QuestionType::all();
-        return view('admin.quiz.show')->with(["quiz" => $quiz, "types" => $types]);
+        $categories = QuestionsCategorization::all();
+        return view('admin.quiz.show')->with(["quiz" => $quiz, "types" => $types, "categories" => $categories]);
     }
 
     /**
