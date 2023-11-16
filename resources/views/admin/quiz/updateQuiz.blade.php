@@ -131,8 +131,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12 d-flex justify-content-end gap-5">
-                                            <button type="button" class="btn btn-default mr-3"
-                                                data-dismiss="modal">Close</button>
+                                            <a href="{{ route('quiz.index') }}" class="btn btn-default mr-3">Retour</a>
                                             @if ($item->quiz_time)
                                                 <a href="{{ route('quiz.timer', ['id' => $item->id]) }}" type="submit"
                                                     class="btn btn-danger mr-3">Remove Timer</a>

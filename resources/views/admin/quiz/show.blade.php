@@ -76,7 +76,9 @@
                                                 <label>categorie</label>
                                                 <select name="categorie" class="form-control">
                                                     @foreach ($categories as $categorie)
-                                                        <option value="{{ $categorie->id }}" {{ $categorie->id == 1 ? "selected" : ""}}>{{ $categorie->name }}</option>
+                                                        <option value="{{ $categorie->id }}"
+                                                            {{ $categorie->id == 1 ? 'selected' : '' }}>
+                                                            {{ $categorie->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -146,7 +148,7 @@
                             <tbody>
                                 @foreach ($quiz->questions as $item)
                                     <tr>
-                                        <td>{!! Str::limit($item->question->name, 70, '...') !!}</td>
+                                        <td title="{{ $item->question->name }}">{!! Str::limit($item->question->name, 70, '...') !!}</td>
                                         <td>{{ $item->question->question_type?->name }}</td>
                                         <td>{{ $item->question->questions_categorization?->name }}</td>
                                         <td>
@@ -156,7 +158,7 @@
                                                 {{ count($item->question->options) }} answers
                                             </a>
                                         </td>
-                                        <td>{!! Str::limit($item->question->error, 70, '...') !!}</td>
+                                        <td title="{{ $item->question->error }}">{!! Str::limit($item->question->error, 70, '...') !!}</td>
                                         <td>
 
                                             <form method="POST"
@@ -277,15 +279,17 @@
                                                                             alt="imgg">
                                                                     </div>
 
-                                                                <div class="form-group">
-                                                                    <label>categorie {{$item->categorie_id}}</label>
-                                                                    <select name="categorie" class="form-control">
-                                                                        @foreach ($categories as $categorie)
-                                                                            <option value="{{ $categorie->id }}" {{ $categorie->id == $item->question->categorie_id ? "selected" : ""}}>{{ $categorie->name }}</option>
-                                                                        @endforeach
-                                                                    </select>
+                                                                    <div class="form-group">
+                                                                        <label>categorie {{ $item->categorie_id }}</label>
+                                                                        <select name="categorie" class="form-control">
+                                                                            @foreach ($categories as $categorie)
+                                                                                <option value="{{ $categorie->id }}"
+                                                                                    {{ $categorie->id == $item->question->categorie_id ? 'selected' : '' }}>
+                                                                                    {{ $categorie->name }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
 
 
 
