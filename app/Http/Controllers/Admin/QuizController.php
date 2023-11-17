@@ -9,7 +9,7 @@ use App\Models\Answer;
 use Carbon\Carbon;
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
-use Harishdurga\LaravelQuiz\Models\QuestionsCategorization;
+use App\Models\QuestionsCategorization;
 use Harishdurga\LaravelQuiz\Models\QuestionType;
 use Harishdurga\LaravelQuiz\Models\Quiz;
 use Harishdurga\LaravelQuiz\Models\QuizQuestion;
