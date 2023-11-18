@@ -68,7 +68,6 @@
 
                                                         {{ $item->questions_count }}</a>
                                                 </td>
-
                                                 <td>
                                                     <a target="_blank" href="{{ route('quiz', ['slug' => $item->slug]) }}"
                                                         class="btn btn-success">

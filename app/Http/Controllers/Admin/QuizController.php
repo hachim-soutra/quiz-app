@@ -206,10 +206,6 @@ class QuizController extends Controller
 
     public function createAnswer(string $id, Request $request)
     {
-        // $validated = $request->validate([
-        //     'email' => 'required',
-        // ]);
-
         $token = Str::random(16);
         $quiz = Quiz::findOrFail($id);
         Answer::create([
@@ -221,12 +217,12 @@ class QuizController extends Controller
             "timer" => $quiz->quiz_time ? Carbon::parse($quiz->quiz_time)->format('H:i') : null
         ]);
 
-        $question = Question::whereHas("quiz_questions", function ($q) use ($id) {
-            $q->where("quiz_id", $id);
-        })->whereNull('deleted_at')
-            ->firstOrFail();
-
-        return redirect()->route('questions', ['token' => $token, 'id' => $question->id]);
+        $quizQuestions = QuizQuestion::where("quiz_id", $id)
+            ->whereHas("question", function ($q) {
+                $q->whereNull('deleted_at');
+            })->orderBy('order')
+            ->first();
+        return redirect()->route('questions', ['token' => $token, 'id' => $quizQuestions->question_id]);
     }
 
     public function storeQuestion(int $id, int $question_id, Request $request)

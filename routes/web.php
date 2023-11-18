@@ -2,6 +2,7 @@
 
 use App\Helper\Helper;
 use App\Http\Controllers\Admin\QuestionsCategorizationController;
+use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\QuizController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Models\Answer;
@@ -72,21 +73,9 @@ Route::get('/answer/{token}', function ($token) {
     return view('answer')->with(["answer" => $answer, "logo" => $logo]);
 })->name('answer');
 
-Route::get('/questions/{token}/{id}/{pass?}', function ($token, $id, $pass = null) {
-    $answer = Answer::with("quiz")->whereToken($token)->firstOrFail();
-    $question = Question::findOrFail($id);
-    $questionPreview = Question::whereHas("quiz_questions", function ($q) use ($answer) {
-        $q->where("quiz_id", $answer->quiz_id);
-    })->whereNull('deleted_at')
-        ->where("id", '<', $id)
-        ->first();
-    $break = false;
-    if (!$pass && $answer->quiz->nbr_questions_sequance && $answer->quiz->quiz_type == 3 && count($answer->answers) % $answer->quiz->nbr_questions_sequance == 0 && count($answer->answers) > 0) {
-        $break = true;
-    }
-    $logo = Settings::where("name", "logo")->first();
-    return view('question')->with(["answer" => $answer, "question" => $question, "questionPreview" => $questionPreview, "break" => $break, "logo" => $logo]);
-})->name('questions');
+Route::get('/question/next/{token}/{id}', [App\Http\Controllers\Admin\QuestionController::class, 'next'])->name('question.next');
+Route::get('/question/prev/{token}/{id}', [App\Http\Controllers\Admin\QuestionController::class, 'prev'])->name('question.prev');
+Route::get('/questions/{token}/{id}/{pass?}', [App\Http\Controllers\Admin\QuestionController::class, 'show'])->name('questions');
 
 Auth::routes();
 
@@ -116,4 +105,5 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource("quiz", QuizController::class);
     Route::resource("categorie", QuestionsCategorizationController::class);
     Route::resource("settings", SettingsController::class);
+    Route::get('/question/sort/{id}/{type}', [App\Http\Controllers\Admin\QuestionController::class, 'sort'])->name('question.sort');
 });

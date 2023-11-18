@@ -5,6 +5,7 @@
         <div class="col-md-10 col-lg-10">
             <img src="{{ asset('images/' . $logo->value) }}" alt="" width="300px" class="profil">
             <div class="mt-3">
+                <h1> xxxxxxxxxxxxx{{ $question->quiz_questions[0]->order }}</h1>
 
                 @if ($break)
                     <div class="d-flex flex-column justify-content-between px-2">
@@ -114,10 +115,16 @@
                             </div>
                         </div>
                         <div class="d-flex flex-row justify-content-end align-items-center p-3 bg-white gap-5">
-                            @if ($questionPreview)
-                                <a href="{{ route('questions', ['token' => $answer->token, 'id' => $questionPreview->id]) }}"
-                                    class="btn btn-primary border-primary align-items-center btn-primary"
-                                    type="submit">Previous<i class="fa fa-angle-right ml-2"></i>
+                            <button class="btn btn-primary border-success align-items-center btn-success"
+                                type="button">Mark for review<i class="fa fa-angle-right ml-2"></i>
+                            </button>
+                            <button class="btn btn-primary border-success align-items-center btn-success"
+                                type="button">Ignore<i class="fa fa-angle-right ml-2"></i>
+                            </button>
+                            @if ($question->quiz_questions[0]->order > 1)
+                                <a href="{{ route('question.prev', ['id' => $question->id, 'token' => $answer->token]) }}"
+                                    class="btn btn-primary border-primary align-items-center btn-primary">Previous<i
+                                        class="fa fa-angle-right ml-2"></i>
                                 </a>
                             @endif
                             <button class="btn btn-primary border-success align-items-center btn-success"
