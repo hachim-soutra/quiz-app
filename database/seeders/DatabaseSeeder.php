@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Settings;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,9 +15,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $setting = new Settings();
-        $setting->name = "logo";
-        $setting->value = "";
-        $setting->save();
+        // $setting = new Settings();
+        // $setting->name = "logo";
+        // $setting->value = "";
+        // $setting->save();
+        DB::table('settings')->insert([
+            [
+                'name' => 'logo',
+                'value' => '',
+            ],
+            [
+                'name' => 'home page logo',
+                'value' => '',
+            ]
+            ]);
     }
 }

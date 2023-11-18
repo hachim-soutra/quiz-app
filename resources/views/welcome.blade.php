@@ -22,7 +22,7 @@
     <section>
         <div class="container">
             <div class="d-flex flex-column align-items-center p-5">
-                <img src="{{ asset('images/logo.png') }}" alt="" height="120px">
+                <img src="{{ asset('images/' . $logo_home->value) }}" alt="" height="120px">
                 <p class="text-bold text-center h2 font">Welcome to pminlife online quiz application</p>
                 <p class="pb-3 text-center h5 font">Take assesment tests in very
                     reliable
