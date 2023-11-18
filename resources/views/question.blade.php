@@ -16,7 +16,8 @@
                     <form method="POST"
                         action="{{ route('quiz.store-answer', ['id' => $answer->id, 'question_id' => $question->id]) }}">
                         <div class="d-flex flex-column justify-content-between px-2">
-                            <h2 class="text-deco">{{ $answer->quiz->name }}</h2>
+                            <h2 class="text-deco">
+                                {{ $answer->quiz->name }}</h2>
                             <p class="sous-title">{{ $answer->quiz->description }}</p>
                         </div>
 
@@ -183,6 +184,9 @@
                         timer2 = hours + ':' + minutes + ':' + seconds;
                         $('#timer').val(timer2);
                     }
+                    if (timer2 === "0:0:10") {
+                        $('.countdown').addClass(" zoom-in-out");
+                    }
                 }
 
                 var interval = setInterval(countdown, 1000);
@@ -220,6 +224,9 @@
                         $('.countdown').html(hours + ':' + minutes + ':' + seconds);
                         timerBreak = hours + ':' + minutes + ':' + seconds;
                         $('#timer').val(timerBreak);
+                    }
+                    if (timer2 === "0:0:10") {
+                        $('.countdown').addClass(" zoom-in-out");
                     }
                 }
                 var interval = setInterval(countdown, 1000);

@@ -48,8 +48,8 @@ class QuizController extends Controller
         $request->validate([
             'name' => 'required',
             'quiz_type' => 'required',
-            'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i',
-            'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i|before:quiz_time',
+            'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i:s',
+            'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i:s|before:quiz_time',
             'nbr_questions_sequance' => 'required_if:quiz_type,==,3',
             'break_time' => 'required_if:quiz_type,==,3'
         ]);
@@ -218,7 +218,7 @@ class QuizController extends Controller
             "answers" => [],
             "email" => $request->email ?? "",
             "score" => 0,
-            "timer" => $quiz->quiz_time ? Carbon::parse($quiz->quiz_time)->format('H:i') : null
+            "timer" => $quiz->quiz_time ? Carbon::parse($quiz->quiz_time)->format('H:i:s') : null
         ]);
 
         $question = Question::whereHas("quiz_questions", function ($q) use ($id) {
@@ -300,8 +300,8 @@ class QuizController extends Controller
         $request->validate([
             'name' => 'required',
             'quiz_type' => 'required',
-            'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i',
-            'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i|before:quiz_time',
+            'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i:s',
+            'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i:s|before:quiz_time',
             'nbr_questions_sequance' => 'required_if:quiz_type,==,3',
             'break_time' => 'required_if:quiz_type,==,3'
         ]);
@@ -421,7 +421,8 @@ class QuizController extends Controller
             }
         }
         $answer->update([
-            "answers" => $questions
+            "answers" => $questions,
+            "status" => "Time out"
         ]);
         return redirect()->route('answer', ['token' => $answer->token]);
     }
