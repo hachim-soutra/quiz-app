@@ -42,7 +42,7 @@
                                                 border-radius: 5px;
                                             ">
                                         </div>
-                                        <button class="btn btn btn-primary" type="button" id="stopTimer">Stop</button>
+                                        <button class="btn btn btn-primary" type="button" id="stopTimer">Pause</button>
                                     </div>
                                     <input type="hidden" name="timer" id="timer">
                                 @endif
