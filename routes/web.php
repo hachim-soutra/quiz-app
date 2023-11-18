@@ -28,7 +28,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $logo_home = Settings::where("name","home page logo")->first();
+    return view('welcome')->with(["logo_home" => $logo_home]);
 });
 
 Route::get('/quiz/{slug}', function ($slug) {

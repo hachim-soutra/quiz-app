@@ -18,8 +18,6 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-
-
     <style>
         * {
             font-family: 'Century Gothic Paneuropean', sans-serif;
@@ -132,6 +130,30 @@
 
         .question span {
             font-size: 16px !important;
+        }
+
+        .zoom-in-out {
+            margin: 0 .5rem;
+            animation: zoom-in-zoom-out 1s ease infinite;
+        }
+
+        @keyframes zoom-in-zoom-out {
+            0% {
+                transform: scale(1, 1);
+            }
+
+            50% {
+                transform: scale(1.2, 1.2);
+            }
+
+            100% {
+                transform: scale(1, 1);
+            }
+        }
+
+        .status-text {
+            font-weight: 900;
+            color: red;
         }
     </style>
 </head>
