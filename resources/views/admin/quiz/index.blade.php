@@ -27,14 +27,21 @@
                                 <h3 class="card-title">
                                     Quiz list
                                 </h3>
-                                <div class="card-tools">
+                                <div class="card-tools d-flex">
                                     <form action="{{ route('quiz.index') }}" method="GET" class="d-flex ms-3">
-                                        <input type="text" name="search" class="form-control" placeholder="Search"
+                                        <input type="text" name="search" class="form-control mx-2" placeholder="Search"
                                             value="{{ request('search') }}">
+                                            <select name="folder" class="form-control">
+                                                <option value="" selected></option>
+                                                @foreach ($folders as $folder)
+                                                    <option value="{{$folder->id}}" {{ (request()->folder == $folder->id ? 'selected' : '' )}}>{{$folder->label}}</option>
+                                                @endforeach
+                                            </select>
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-default" style="margin-right: 13px;">
                                                 <i class="fas fa-search"></i>
                                             </button>
+                                        </div>
                                     </form>
                                     <a href="{{ route('quiz.add') }}" type="button" class="btn btn-success"
                                         style="margin-right: 13px;">

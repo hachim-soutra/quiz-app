@@ -52,6 +52,18 @@
 
                                         <div class="col-sm-12">
                                             <div class="form-group">
+                                                <label>Choose folder</label>
+                                                <select name="folder" class="form-control">
+                                                    <option value="" selected></option>
+                                                    @foreach ($folders as $folder)
+                                                        <option value="{{$folder->id}}">{{$folder->label}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
                                                 <label>Text <span class="text-danger">*</span></label>
                                                 <textarea class="form-control @error('name') is-invalid @enderror" name="name">{{ old('name') }}</textarea>
                                                 @error('name')

@@ -27,3 +27,9 @@
         <p>Settings</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('folder.index') }}" class="nav-link text-dark {{ Request::is('folder.index') ? 'active' : '' }}">
+        <i class="fa-regular fa-folder-open"></i>
+        <p>Folders</p>
+    </a>
+</li>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Helper\Helper;
+use App\Http\Controllers\Admin\FolderController;
 use App\Http\Controllers\Admin\QuestionsCategorizationController;
 use App\Http\Controllers\Admin\QuizController;
 use App\Http\Controllers\Admin\SettingsController;
@@ -116,4 +117,5 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource("quiz", QuizController::class);
     Route::resource("categorie", QuestionsCategorizationController::class);
     Route::resource("settings", SettingsController::class);
+    Route::resource("folder", FolderController::class);
 });

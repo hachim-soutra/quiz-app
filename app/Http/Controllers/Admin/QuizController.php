@@ -7,6 +7,7 @@ use App\Imports\QuestionImport;
 use App\Imports\QuizImport;
 use App\Models\Answer;
 use Carbon\Carbon;
+use App\Models\QuizTheme;
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
 use Harishdurga\LaravelQuiz\Models\QuestionsCategorization;
@@ -26,10 +27,23 @@ class QuizController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
-        $data = Quiz::with('questions')->withCount('questions')->latest()
+        $fQuery = $request->folder;
+        $folders = QuizTheme::all();
+        if(empty($fQuery))
+        {
+            $data = Quiz::with('questions')->withCount('questions')->latest()
             ->where('name', 'like', "%{$search}%")
             ->paginate(10);
-        return view('admin.quiz.index', compact('data'));
+        }else {
+            $data = Quiz::with('questions')->withCount('questions')->latest()
+                ->where('name', 'like', "%{$search}%")
+                ->whereHas('folder',function ($q) use ($fQuery) {
+                    $q->where('label','like',"%{$fQuery}%");
+                })
+                ->paginate(10);
+        }
+
+        return view('admin.quiz.index', compact('data','folders'));
     }
 
     /**
@@ -37,7 +51,8 @@ class QuizController extends Controller
      */
     public function create()
     {
-        return view('admin.quiz.create');
+        $folders = QuizTheme::all();
+        return view('admin.quiz.create', compact('folders'));
     }
 
     /**
@@ -64,6 +79,7 @@ class QuizController extends Controller
             'quiz_type' => $request->quiz_type,
             'name' => $request->name,
             'description' => $request->description,
+            'folder_id' => $request->folder,
             'quiz_time' => $request->quiz_time,
             'quiz_time_remind' => $request->quiz_time_remind,
             'nbr_questions_sequance' => $request->nbr_questions_sequance,
@@ -289,7 +305,8 @@ class QuizController extends Controller
      */
     public function edit(Quiz $quiz)
     {
-        return view('admin.quiz.updateQuiz')->with(['item' => $quiz]);
+        $folders = QuizTheme::all();
+        return view('admin.quiz.updateQuiz')->with(['item' => $quiz ,'folders' => $folders]);
     }
 
     /**
@@ -321,6 +338,7 @@ class QuizController extends Controller
             'quiz_type' => $request->quiz_type,
             'name' => $request->name,
             'description' => $request->description,
+            'folder_id' => $request->folder,
             'quiz_time' => $request->quiz_time,
             'quiz_time_remind' => $request->quiz_time_remind,
             'slug' => Str::slug($request->name),
@@ -331,7 +349,7 @@ class QuizController extends Controller
             'break_time' => $request->break_time,
         ]);
 
-        return redirect()->back()->with('status', 'Quiz updated Successfully');
+        return redirect()->route('quiz.index')->with('status', 'Quiz updated Successfully');
     }
 
     /**
