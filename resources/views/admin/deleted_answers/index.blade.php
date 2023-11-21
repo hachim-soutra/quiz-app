@@ -7,12 +7,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Answers</h1>
+                        <h1>Deleted Answers</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Answers</li>
+                            <li class="breadcrumb-item active">Deleted Answers</li>
                         </ol>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                             <div class="card-header">
                                 <div class="card-tools">
                                     <div class="input-group input-group-sm" style="width: 150px;">
-                                        <form action="{{ route('admin.answer') }}" method="GET" class="d-flex">
+                                        <form action="{{ route('answer.deleted-answers') }}" method="GET" class="d-flex">
                                             <input type="text" name="search" class="form-control float-right"
                                                 placeholder="Search" value="{{ isset($search) ? $search : '' }}">
                                             <div class="input-group-append">
@@ -63,6 +63,10 @@
                                                     class="btn btn-primary">
                                                     <i class="fas fa-eye"></i>Show</a></td>
                                                     <td>
+                                                        <a href="{{ route('answer.restore-answer', ['id'=> $answer->id ]) }}"
+                                                            class="btn btn-success">Restore</a>
+                                                    </td>
+                                                    <td>
                                                         <a data-toggle="modal" data-target="#modal-delete-{{ $answer->id }}"
                                                             class="btn btn-danger">Delete</a>
                                                     </td>
@@ -78,15 +82,15 @@
                                                                     </button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <form method="post"
-                                                                        action="{{ route('answer.destroy', ['id' => $answer->id]) }}"
+                                                                    <form method="POST"
+                                                                        action="{{ route('answer.permanent-delete', ['id' => $answer->id]) }}"
                                                                         enctype="multipart/form-data">
                                                                         <div class="row">
-                                                                            @method('DELETE')
                                                                             @csrf
+                                                                            @method('delete')
 
-                                                                            <div class="col-sm-12">
-                                                                                Are you sure you want delete answer's
+                                                                            <div class="col-sm-12 mb-2">
+                                                                                Are you sure you want permanently delete
                                                                                 {{ $answer->email }} ?
                                                                             </div>
                                                                             <div

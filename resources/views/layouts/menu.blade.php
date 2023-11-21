@@ -33,3 +33,9 @@
         <p>Folders</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('answer.deleted-answers') }}" class="nav-link text-dark {{ Request::is('answer.deleted-answers') ? 'active' : '' }}">
+        <i class="fa-solid fa-box-archive"></i>
+            <p>Archives</p>
+    </a>
+</li>
