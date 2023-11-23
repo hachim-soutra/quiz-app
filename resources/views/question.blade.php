@@ -12,6 +12,7 @@
                         <p class="sous-title">xxxxxxxx</p>
                         <div class="countdown"></div>
                     </div>
+                    <button id="end-break" class="btn btn-primary float-end">Back to quiz</button>
                 @else
                     <form method="POST"
                         action="{{ route('quiz.store-answer', ['id' => $answer->id, 'question_id' => $question->id]) }}">
@@ -230,6 +231,11 @@
                     }
                 }
                 var interval = setInterval(countdown, 1000);
+
+                $('#end-break').click(function(){
+                clearInterval(interval);
+                window.location ="{{ route('questions', ['token' => $answer->token, 'id' => $question->id, 'pass' => true]) }}";
+            });
             }
         }
     </script>

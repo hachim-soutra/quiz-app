@@ -25,6 +25,7 @@ class Answer extends Model
 
     public function getScoreAttribute()
     {
-        return $this->answers ? $this->nbr_of_correct * 100 / count($this->answers) : 0;
+        // return $this->answers ? $this->nbr_of_correct * 100 / count($this->answers) : 0;
+        return 0;
     }
 }

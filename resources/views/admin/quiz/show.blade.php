@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>categorie</label>
+                                                <label>category</label>
                                                 <select name="categorie" class="form-control">
                                                     @foreach ($categories as $categorie)
                                                         <option value="{{ $categorie->id }}"
@@ -139,7 +139,7 @@
                                 <tr>
                                     <th>Title</th>
                                     <th>Type</th>
-                                    <th>Categorie</th>
+                                    <th>Category</th>
                                     <th>Answers</th>
                                     <th>Comment if wrong answer</th>
                                     <th colspan="4">Action</th>
