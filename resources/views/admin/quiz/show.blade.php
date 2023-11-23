@@ -150,7 +150,7 @@
                                     <tr>
                                         <td title="{{ $item->question->name }}">{!! Str::limit($item->question->name, 70, '...') !!}</td>
                                         <td>{{ $item->question->question_type?->name }}</td>
-                                        <td>{{ $item->question->questions_categorization?->name }}</td>
+                                        <td>{{ $item->question->questions_categorization ? $item->question->questions_categorization->name : 'uncategorized' }}</td>
                                         <td>
                                             <a href="{{ route('question.show', ['id' => $item->question->id]) }}"
                                                 class=" text-nowrap">
