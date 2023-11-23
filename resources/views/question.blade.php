@@ -12,6 +12,7 @@
                         <p class="sous-title">xxxxxxxx</p>
                         <div class="countdown"></div>
                     </div>
+                    <a href="{{ route('questions', ['token' => $answer->token, 'id' => $question->id, 'pass' => true]) }}"  class="btn btn-primary float-end">Back to quiz</a>
                 @else
                     <form method="POST"
                         action="{{ route('quiz.store-answer', ['id' => $answer->id, 'question_id' => $question->id]) }}">
