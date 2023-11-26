@@ -26,7 +26,7 @@ class QuizController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
-        $data = Quiz::with('questions')->withCount('questions')->latest()
+        $data = Quiz::with('questions')->withCount('questions')->ordered()
             ->where('name', 'like', "%{$search}%")
             ->paginate(10);
         return view('admin.quiz.index', compact('data'));
@@ -425,5 +425,16 @@ class QuizController extends Controller
             "status" => "Time out"
         ]);
         return redirect()->route('answer', ['token' => $answer->token]);
+    }
+
+    public function order($id, $type)
+    {
+        $quiz =  Quiz::findOrFail($id);
+        if ($type === "up") {
+            $quiz->moveOrderUp();
+        } else {
+            $quiz->moveOrderDown();
+        }
+        return redirect()->route('quiz.index')->with('status', 'Quiz has been sorting');
     }
 }
