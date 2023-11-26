@@ -26,24 +26,14 @@ class QuizController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->search;
-        $fQuery = $request->folder;
         $folders = QuizTheme::all();
-        if(empty($fQuery))
-        {
-            $data = Quiz::with('questions')->withCount('questions')->ordered()
-            ->where('name', 'like', "%{$search}%")
-            ->paginate(10);
-        }else {
-            $data = Quiz::with('questions')->withCount('questions')->ordered()
-                ->where('name', 'like', "%{$search}%")
-                ->whereHas('folder',function ($q) use ($fQuery) {
-                    $q->where('label','like',"%{$fQuery}%");
-                })
-                ->paginate(10);
+        $data = Quiz::with('questions')->withCount('questions')->ordered()
+            ->where('name', 'like', "%{$request->search}%");
+        if ($request->folder) {
+            $data = $data->where('folder_id', $request->folder);
         }
-
-        return view('admin.quiz.index', compact('data','folders'));
+        $data = $data->paginate(10);
+        return view('admin.quiz.index', compact('data', 'folders'));
     }
 
     /**
@@ -306,7 +296,7 @@ class QuizController extends Controller
     public function edit(Quiz $quiz)
     {
         $folders = QuizTheme::all();
-        return view('admin.quiz.updateQuiz')->with(['item' => $quiz ,'folders' => $folders]);
+        return view('admin.quiz.updateQuiz')->with(['item' => $quiz, 'folders' => $folders]);
     }
 
     /**
@@ -333,12 +323,11 @@ class QuizController extends Controller
             $filename = time() . '.' . $extension;
             $file->move('images/', $filename);
         }
-
         $quiz->update([
             'quiz_type' => $request->quiz_type,
             'name' => $request->name,
             'description' => $request->description,
-            'folder_id' => $request->folder,
+            'folder_id' => $request->folder === "null" ? NULL : $request->folder,
             'quiz_time' => $request->quiz_time,
             'quiz_time_remind' => $request->quiz_time_remind,
             'slug' => Str::slug($request->name),
