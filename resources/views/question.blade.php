@@ -8,11 +8,13 @@
 
                 @if ($break)
                     <div class="d-flex flex-column justify-content-between px-2">
-                        <h2 class="text-deco">Take break</h2>
+                        <h2 class="text-deco">Take break <span class="countdown"></span>
+                        </h2>
                         <p class="sous-title">xxxxxxxx</p>
-                        <div class="countdown"></div>
+
                     </div>
-                    <a href="{{ route('questions', ['token' => $answer->token, 'id' => $question->id, 'pass' => true]) }}"  class="btn btn-primary float-end">Back to quiz</a>
+                    <a href="{{ route('questions', ['token' => $answer->token, 'id' => $question->id, 'pass' => true]) }}"
+                        class="btn btn-primary float-end">Back to quiz</a>
                 @else
                     <form method="POST"
                         action="{{ route('quiz.store-answer', ['id' => $answer->id, 'question_id' => $question->id]) }}">
