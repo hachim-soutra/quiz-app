@@ -8,15 +8,19 @@
 
                 @if ($break)
                     <div class="d-flex flex-column justify-content-between px-2">
-                        <h2 class="text-deco">Take break</h2>
+                        <h2 class="text-deco">Take break <span class="countdown"></span>
+                        </h2>
                         <p class="sous-title">xxxxxxxx</p>
-                        <div class="countdown"></div>
+
                     </div>
+                    <a href="{{ route('questions', ['token' => $answer->token, 'id' => $question->id, 'pass' => true]) }}"
+                        class="btn btn-primary float-end">Back to quiz</a>
                 @else
                     <form method="POST"
                         action="{{ route('quiz.store-answer', ['id' => $answer->id, 'question_id' => $question->id]) }}">
                         <div class="d-flex flex-column justify-content-between px-2">
-                            <h2 class="text-deco">{{ $answer->quiz->name }}</h2>
+                            <h2 class="text-deco">
+                                {{ $answer->quiz->name }}</h2>
                             <p class="sous-title">{{ $answer->quiz->description }}</p>
                         </div>
 
@@ -42,7 +46,7 @@
                                                 border-radius: 5px;
                                             ">
                                         </div>
-                                        <button class="btn btn btn-primary" type="button" id="stopTimer">Stop</button>
+                                        <button class="btn btn btn-primary" type="button" id="stopTimer">Pause</button>
                                     </div>
                                     <input type="hidden" name="timer" id="timer">
                                 @endif
@@ -183,6 +187,9 @@
                         timer2 = hours + ':' + minutes + ':' + seconds;
                         $('#timer').val(timer2);
                     }
+                    if (timer2 === "0:0:10") {
+                        $('.countdown').addClass(" zoom-in-out");
+                    }
                 }
 
                 var interval = setInterval(countdown, 1000);
@@ -220,6 +227,9 @@
                         $('.countdown').html(hours + ':' + minutes + ':' + seconds);
                         timerBreak = hours + ':' + minutes + ':' + seconds;
                         $('#timer').val(timerBreak);
+                    }
+                    if (timer2 === "0:0:10") {
+                        $('.countdown').addClass(" zoom-in-out");
                     }
                 }
                 var interval = setInterval(countdown, 1000);

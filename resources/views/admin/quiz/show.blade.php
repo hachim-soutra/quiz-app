@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>categorie</label>
+                                                <label>category</label>
                                                 <select name="categorie" class="form-control">
                                                     @foreach ($categories as $categorie)
                                                         <option value="{{ $categorie->id }}"
@@ -139,7 +139,7 @@
                                 <tr>
                                     <th>Title</th>
                                     <th>Type</th>
-                                    <th>Categorie</th>
+                                    <th>Category</th>
                                     <th>Answers</th>
                                     <th>Comment if wrong answer</th>
                                     <th colspan="4">Action</th>
@@ -150,7 +150,7 @@
                                     <tr>
                                         <td title="{{ $item->question->name }}">{!! Str::limit($item->question->name, 70, '...') !!}</td>
                                         <td>{{ $item->question->question_type?->name }}</td>
-                                        <td>{{ $item->question->questions_categorization?->name }}</td>
+                                        <td>{{ $item->question->questions_categorization ? $item->question->questions_categorization->name : 'uncategorized' }}</td>
                                         <td>
                                             <a href="{{ route('question.show', ['id' => $item->question->id]) }}"
                                                 class=" text-nowrap">

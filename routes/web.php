@@ -28,7 +28,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $logo_home = Settings::where("name", "home page logo")->first();
+    return view('welcome')->with(["logo_home" => $logo_home]);
 });
 
 Route::get('/quiz/{slug}', function ($slug) {
@@ -118,6 +119,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('/quiz/add-option/{id}', [QuizController::class, 'addOption'])->name('quiz.add-option');
     Route::put('/quiz/update-option/{id}', [QuizController::class, 'updateOption'])->name('quiz.update-option');
     Route::post('/quiz/delete-option/{id}', [QuizController::class, 'removeOption'])->name('quiz.delete-option');
+    Route::get('/quiz/order/{id}/{type}', [QuizController::class, 'order'])->name('quiz.order');
     Route::resource("quiz", QuizController::class);
     Route::resource("categorie", QuestionsCategorizationController::class);
     Route::resource("settings", SettingsController::class);

@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use App\Models\QuizTheme;
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
-use Harishdurga\LaravelQuiz\Models\QuestionsCategorization;
+use App\Models\QuestionsCategorization;
 use Harishdurga\LaravelQuiz\Models\QuestionType;
 use Harishdurga\LaravelQuiz\Models\Quiz;
 use Harishdurga\LaravelQuiz\Models\QuizQuestion;
@@ -31,11 +31,11 @@ class QuizController extends Controller
         $folders = QuizTheme::all();
         if(empty($fQuery))
         {
-            $data = Quiz::with('questions')->withCount('questions')->latest()
+            $data = Quiz::with('questions')->withCount('questions')->ordered()
             ->where('name', 'like', "%{$search}%")
             ->paginate(10);
         }else {
-            $data = Quiz::with('questions')->withCount('questions')->latest()
+            $data = Quiz::with('questions')->withCount('questions')->ordered()
                 ->where('name', 'like', "%{$search}%")
                 ->whereHas('folder',function ($q) use ($fQuery) {
                     $q->where('label','like',"%{$fQuery}%");
@@ -63,8 +63,8 @@ class QuizController extends Controller
         $request->validate([
             'name' => 'required',
             'quiz_type' => 'required',
-            'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i',
-            'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i|before:quiz_time',
+            'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i:s',
+            'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i:s|before:quiz_time',
             'nbr_questions_sequance' => 'required_if:quiz_type,==,3',
             'break_time' => 'required_if:quiz_type,==,3'
         ]);
@@ -234,7 +234,7 @@ class QuizController extends Controller
             "answers" => [],
             "email" => $request->email ?? "",
             "score" => 0,
-            "timer" => $quiz->quiz_time ? Carbon::parse($quiz->quiz_time)->format('H:i') : null
+            "timer" => $quiz->quiz_time ? Carbon::parse($quiz->quiz_time)->format('H:i:s') : null
         ]);
 
         $question = Question::whereHas("quiz_questions", function ($q) use ($id) {
@@ -317,8 +317,8 @@ class QuizController extends Controller
         $request->validate([
             'name' => 'required',
             'quiz_type' => 'required',
-            'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i',
-            'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i|before:quiz_time',
+            'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i:s',
+            'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i:s|before:quiz_time',
             'nbr_questions_sequance' => 'required_if:quiz_type,==,3',
             'break_time' => 'required_if:quiz_type,==,3'
         ]);
@@ -439,8 +439,20 @@ class QuizController extends Controller
             }
         }
         $answer->update([
-            "answers" => $questions
+            "answers" => $questions,
+            "status" => "Time out"
         ]);
         return redirect()->route('answer', ['token' => $answer->token]);
+    }
+
+    public function order($id, $type)
+    {
+        $quiz =  Quiz::findOrFail($id);
+        if ($type === "up") {
+            $quiz->moveOrderUp();
+        } else {
+            $quiz->moveOrderDown();
+        }
+        return redirect()->route('quiz.index')->with('status', 'Quiz has been sorting');
     }
 }

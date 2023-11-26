@@ -23,11 +23,14 @@
                             Here below a quick summary of your assessment
                         </p>
                     @endif
-                    <p class="fw-bold">Score :
+                    <p class="fw-bold mb-0">Score :
                         <span
                             class="{{ $answer->score >= 75 ? 'text-success' : 'text-danger' }}">{{ round($answer->score, 2) }}%
                             correct ({{ $answer->nbr_of_correct }} / {{ count($answer->answers) }})</span>
                     </p>
+                    @if ($answer->status)
+                        <p class="status-text mb-0 mt-2">Status : {{ $answer->status }}</p>
+                    @endif
                 </div>
                 @csrf
                 @foreach ($answer->quiz->questions as $question)

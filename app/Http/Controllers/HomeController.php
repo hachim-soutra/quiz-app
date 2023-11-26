@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Harishdurga\LaravelQuiz\Models\QuestionsCategorization;
-use Harishdurga\LaravelQuiz\Models\Quiz;
-use Illuminate\Http\Request;
+use App\Models\QuestionsCategorization;
 
 class HomeController extends Controller
 {

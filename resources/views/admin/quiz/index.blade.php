@@ -59,6 +59,7 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
+                                            <th>#</th>
                                             <th>Title</th>
                                             <th>Description</th>
                                             <th>Questions</th>
@@ -68,6 +69,21 @@
                                     <tbody>
                                         @foreach ($data as $item)
                                             <tr>
+                                                <td>
+                                                    @if (!$item->isFirstInOrder())
+                                                        <a
+                                                            href="{{ route('quiz.order', ['type' => 'up', 'id' => $item->id]) }}">
+                                                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                                                        </a>
+                                                    @endif
+                                                    @if (!$item->isLastInOrder())
+                                                        <a
+                                                            href="{{ route('quiz.order', ['type' => 'down', 'id' => $item->id]) }}">
+                                                            <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                                                        </a>
+                                                    @endif
+
+                                                </td>
                                                 <td title="{{ $item->name }}">{!! Str::limit($item->name, 70, '...') !!}</td>
                                                 <td title="{{ $item->description }}">{!! Str::limit($item->description, 70, '...') !!}</td>
                                                 <td>
