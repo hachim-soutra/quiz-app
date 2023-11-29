@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Helper\Helper;
+use App\Models\Settings;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Pagination\Paginator;
@@ -25,7 +26,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $logo_home = Settings::where("name", "home page logo")->first();
+        $logo = Settings::where("name", "logo")->first();
+        view()->share('logo_home', $logo_home);
+        view()->share('logo', $logo);
         Builder::defaultStringLength(191);
         Paginator::useBootstrap();
     }

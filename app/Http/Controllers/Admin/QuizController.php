@@ -7,6 +7,7 @@ use App\Imports\QuestionImport;
 use App\Imports\QuizImport;
 use App\Models\Answer;
 use Carbon\Carbon;
+use App\Models\QuizTheme;
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
 use App\Models\QuestionsCategorization;
@@ -25,11 +26,14 @@ class QuizController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->search;
-        $data = Quiz::with('questions')->withCount('questions')->latest()
-            ->where('name', 'like', "%{$search}%")
-            ->paginate(10);
-        return view('admin.quiz.index', compact('data'));
+        $folders = QuizTheme::all();
+        $data = Quiz::with('questions')->withCount('questions')->ordered()
+            ->where('name', 'like', "%{$request->search}%");
+        if ($request->folder) {
+            $data = $data->where('folder_id', $request->folder);
+        }
+        $data = $data->paginate(10);
+        return view('admin.quiz.index', compact('data', 'folders'));
     }
 
     /**
@@ -37,7 +41,8 @@ class QuizController extends Controller
      */
     public function create()
     {
-        return view('admin.quiz.create');
+        $folders = QuizTheme::all();
+        return view('admin.quiz.create', compact('folders'));
     }
 
     /**
@@ -64,6 +69,7 @@ class QuizController extends Controller
             'quiz_type' => $request->quiz_type,
             'name' => $request->name,
             'description' => $request->description,
+            'folder_id' => $request->folder,
             'quiz_time' => $request->quiz_time,
             'quiz_time_remind' => $request->quiz_time_remind,
             'nbr_questions_sequance' => $request->nbr_questions_sequance,
@@ -285,7 +291,8 @@ class QuizController extends Controller
      */
     public function edit(Quiz $quiz)
     {
-        return view('admin.quiz.updateQuiz')->with(['item' => $quiz]);
+        $folders = QuizTheme::all();
+        return view('admin.quiz.updateQuiz')->with(['item' => $quiz, 'folders' => $folders]);
     }
 
     /**
@@ -312,11 +319,11 @@ class QuizController extends Controller
             $filename = time() . '.' . $extension;
             $file->move('images/', $filename);
         }
-
         $quiz->update([
             'quiz_type' => $request->quiz_type,
             'name' => $request->name,
             'description' => $request->description,
+            'folder_id' => $request->folder === "null" ? NULL : $request->folder,
             'quiz_time' => $request->quiz_time,
             'quiz_time_remind' => $request->quiz_time_remind,
             'slug' => Str::slug($request->name),
@@ -327,7 +334,7 @@ class QuizController extends Controller
             'break_time' => $request->break_time,
         ]);
 
-        return redirect()->back()->with('status', 'Quiz updated Successfully');
+        return redirect()->route('quiz.index')->with('status', 'Quiz updated Successfully');
     }
 
     /**
@@ -407,7 +414,7 @@ class QuizController extends Controller
         return redirect()->back()->with('status', 'Answer has been deleted');
     }
 
-    public function quizExpired(string $token)
+    public function quizExpired(string $token , string $status)
     {
         $answer = Answer::whereToken($token)->with(['quiz', 'quiz.questions', 'quiz.questions.question', 'quiz.questions.question.question_type'])->firstOrFail();
         $questions = $answer->answers;
@@ -418,8 +425,19 @@ class QuizController extends Controller
         }
         $answer->update([
             "answers" => $questions,
-            "status" => "Time out"
+            "status" => $status
         ]);
         return redirect()->route('answer', ['token' => $answer->token]);
+    }
+
+    public function order($id, $type)
+    {
+        $quiz =  Quiz::findOrFail($id);
+        if ($type === "up") {
+            $quiz->moveOrderUp();
+        } else {
+            $quiz->moveOrderDown();
+        }
+        return redirect()->route('quiz.index')->with('status', 'Quiz has been sorting');
     }
 }

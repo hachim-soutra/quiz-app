@@ -30,48 +30,40 @@ class AnswerController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function deletedAnswers(Request $request)
     {
-        //
+        $search = $request->input('search');
+        $answers = Answer::onlyTrashed()->with('quiz')->latest()
+        ->Where(function ($q) use ($search){
+            $q->where('email','like', "%{$search}%")
+            ->orWhereHas('quiz', function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%");
+            });
+        })
+        ->paginate(10);
+        return view('admin.deleted_answers.index',compact('answers', 'search'));
+
+    }
+    public function restoreAnswer(string $id)
+    {
+         Answer::withTrashed()->find($id)->restore();
+
+        return redirect()->back()->with('status','deleted answer has been restored');
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreAnswerRequest $request)
+    public function permanentDelete(string $id)
     {
-        //
+        $item = Answer::withTrashed()->find($id);
+        $item->forceDelete();
+        return redirect()->back()->with('status','deleted answer has been permanently deleted');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Answer $answer)
+    public function destroy(string $id)
     {
-        //
+        $answer = Answer::findOrFail($id);
+        $answer->delete();
+        return redirect()->back()->with('status','Answer has been deleted');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Answer $answer)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateAnswerRequest $request, Answer $answer)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Answer $answer)
-    {
-        //
-    }
 }

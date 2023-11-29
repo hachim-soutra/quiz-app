@@ -1,6 +1,7 @@
 <?php
 
 use App\Helper\Helper;
+use App\Http\Controllers\Admin\FolderController;
 use App\Http\Controllers\Admin\QuestionsCategorizationController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\QuizController;
@@ -28,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $logo_home = Settings::where("name","home page logo")->first();
+    $logo_home = Settings::where("name", "home page logo")->first();
     return view('welcome')->with(["logo_home" => $logo_home]);
 });
 
@@ -83,9 +84,13 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/quiz/add-question/{id}/{question_id}', [QuizController::class, 'storeQuestion'])->name('quiz.store-answer');
 Route::post('/quiz/create-answer/{id}', [QuizController::class, 'createAnswer'])->name('quiz.create-answer');
-Route::get('/quiz/expired/{token}', [QuizController::class, 'quizExpired'])->name('quiz.expired');
+Route::get('/quiz/expired/{token}/{status}', [QuizController::class, 'quizExpired'])->name('quiz.expired');
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/answer', [App\Http\Controllers\Admin\AnswerController::class, 'index'])->name('admin.answer');
+    Route::delete('/answer/delete/{id}', [App\Http\Controllers\Admin\AnswerController::class, 'destroy'])->name('answer.destroy');
+    Route::get('/answer/deleted-answers', [App\Http\Controllers\Admin\AnswerController::class, 'deletedAnswers'])->name('answer.deleted-answers');
+    Route::get('/answer/restore-answer/{id}', [App\Http\Controllers\Admin\AnswerController::class, 'restoreAnswer'])->name('answer.restore-answer');
+    Route::delete('/answer/permanent-delete/{id}', [App\Http\Controllers\Admin\AnswerController::class, 'permanentDelete'])->name('answer.permanent-delete');
     Route::get('/add-quiz', [QuizController::class, 'create'])->name('quiz.add');
     Route::post('/quiz/import', [QuizController::class, 'import'])->name('quiz.import');
     Route::get('/quiz/timer/{id}', [QuizController::class, 'removeTimer'])->name('quiz.timer');
@@ -103,8 +108,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('/quiz/add-option/{id}', [QuizController::class, 'addOption'])->name('quiz.add-option');
     Route::put('/quiz/update-option/{id}', [QuizController::class, 'updateOption'])->name('quiz.update-option');
     Route::post('/quiz/delete-option/{id}', [QuizController::class, 'removeOption'])->name('quiz.delete-option');
+    Route::get('/quiz/order/{id}/{type}', [QuizController::class, 'order'])->name('quiz.order');
     Route::resource("quiz", QuizController::class);
     Route::resource("categorie", QuestionsCategorizationController::class);
     Route::resource("settings", SettingsController::class);
     Route::get('/question/sort/{id}/{type}', [App\Http\Controllers\Admin\QuestionController::class, 'sort'])->name('question.sort');
+    Route::resource("folder", FolderController::class);
 });

@@ -30,3 +30,15 @@
         <p>Settings</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('folder.index') }}" class="nav-link text-dark {{ Request::is('folder.index') ? 'active' : '' }}">
+        <i class="fa-regular fa-folder-open"></i>
+        <p>Folders</p>
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('answer.deleted-answers') }}" class="nav-link text-dark {{ Request::is('answer.deleted-answers') ? 'active' : '' }}">
+        <i class="fa-solid fa-box-archive"></i>
+            <p>Archives</p>
+    </a>
+</li>

@@ -34,7 +34,7 @@
                                     @csrf
                                     @method('PUT')
                                     <div class="row">
-                                        <div class="col-sm-12">
+                                        <div class="col-6">
                                             <div class="form-group">
                                                 <label for="">Quiz type
                                                     {{ old('quiz_type') ? $item->quiz_type : old('quiz_type') }}</label>
@@ -53,6 +53,19 @@
                                                 @error('quiz_type')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="control-form">
+                                                <label for="">Folder</label>
+                                                <select name="folder" class="form-control">
+                                                    <option value="null">--------------</option>
+                                                    @foreach ($folders as $folder)
+                                                        <option value="{{ $folder->id }}"
+                                                            {{ $folder->id == $item->folder_id ? 'selected' : '' }}>
+                                                            {{ $folder->label }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
