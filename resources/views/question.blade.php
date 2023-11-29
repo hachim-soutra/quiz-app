@@ -127,7 +127,8 @@
                             <button class="btn btn-primary border-success align-items-center btn-success"
                                 type="submit">Next<i class="fa fa-angle-right ml-2"></i>
                             </button>
-                            <a href="{{ route('quiz.expired', ['token' => $answer->token , 'status' => 'Terminate test']) }}" class="btn btn-danger">Terminate Test</a>
+                            <a href="{{ route('quiz.expired', ['token' => $answer->token, 'status' => 'Terminate test']) }}"
+                                class="btn btn-danger">Terminate Test</a>
                         </div>
                     </form>
                 @endif
@@ -147,7 +148,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 @endsection
 
@@ -157,8 +157,7 @@
         window.onload = function() {
             var timer2 = "{{ $answer->timer }}";
             var breakQuestion = "{{ $break }}";
-            var timerReminer = "{{ $answer->quiz->quiz_time_remind }}";
-            var timerBreak = "{{ $answer->quiz->break_time }}";
+            var timerReminer = "{{ $answer->quiz->quiz_time_remind->format('H:i:s') }}";
 
             if (timer2 && !breakQuestion) {
 
@@ -172,23 +171,25 @@
                     --seconds;
                     hours = (hours > 0 && minutes == 0) ? --hours : hours;
                     minutes = (seconds < 0) ? --minutes : minutes;
-                    console.log(hours, minutes, seconds);
                     if (hours == 0 && minutes == 0 && seconds == 0) {
                         clearInterval(interval);
-                        window.location = "{{ route('quiz.expired', ['token' => $answer->token, 'status' => 'Time out']) }}";
+                        window.location =
+                            "{{ route('quiz.expired', ['token' => $answer->token, 'status' => 'Time out']) }}";
                     } else {
                         seconds = (seconds < 0) ? 59 : seconds;
                         seconds = (seconds < 10) ? '0' + seconds : seconds;
                         minutes = (minutes < 0) ? 59 : minutes;
                         minutes = (minutes < 10) ? '0' + minutes : minutes;
                         $('.countdown').html(hours + ':' + minutes + ':' + seconds);
-                        if (hours <= timerReminder[0] && minutes < timerReminder[1]) {
+
+                        if (parseInt(hours) <= parseInt(timerReminder[0]) && minutes <= parseInt(timerReminder[1]) &&
+                            seconds <= parseInt(timerReminder[2])) {
                             $('.countdown').css('background-color', 'red');
                         }
                         timer2 = hours + ':' + minutes + ':' + seconds;
                         $('#timer').val(timer2);
                     }
-                    if (timer2 === "0:0:10") {
+                    if (timer2 === "0:00:10") {
                         $('.countdown').addClass(" zoom-in-out");
                     }
                 }
@@ -206,6 +207,8 @@
             }
 
             if (breakQuestion) {
+                var timerBreak = "{{ $answer->quiz->break_time }}";
+
                 function countdown() {
                     var timer = timerBreak.split(':');
                     var hours = parseInt(timer[0], 10);
@@ -229,7 +232,7 @@
                         timerBreak = hours + ':' + minutes + ':' + seconds;
                         $('#timer').val(timerBreak);
                     }
-                    if (timer2 === "0:0:10") {
+                    if (timer2 === "0:00:10") {
                         $('.countdown').addClass(" zoom-in-out");
                     }
                 }
