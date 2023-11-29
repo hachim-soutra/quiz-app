@@ -182,8 +182,10 @@
                         minutes = (minutes < 10) ? '0' + minutes : minutes;
                         $('.countdown').html(hours + ':' + minutes + ':' + seconds);
 
-                        if (parseInt(hours) <= parseInt(timerReminder[0]) && minutes <= parseInt(timerReminder[1]) &&
-                            seconds <= parseInt(timerReminder[2])) {
+                        let x1 = parseInt(timerReminder[0]) * 3600 + parseInt(timerReminder[1]) * 60 + parseInt(
+                            timerReminder[2]);
+                        let x2 = parseInt(timer[0]) * 3600 + parseInt(timer[1]) * 60 + parseInt(timer[2]);
+                        if (x1 >= x2) {
                             $('.countdown').css('background-color', 'red');
                         }
                         timer2 = hours + ':' + minutes + ':' + seconds;
