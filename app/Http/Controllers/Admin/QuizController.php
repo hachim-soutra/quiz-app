@@ -418,7 +418,7 @@ class QuizController extends Controller
         return redirect()->back()->with('status', 'Answer has been deleted');
     }
 
-    public function quizExpired(string $token)
+    public function quizExpired(string $token , string $status)
     {
         $answer = Answer::whereToken($token)->with(['quiz', 'quiz.questions', 'quiz.questions.question', 'quiz.questions.question.question_type'])->firstOrFail();
         $questions = $answer->answers;
@@ -429,7 +429,7 @@ class QuizController extends Controller
         }
         $answer->update([
             "answers" => $questions,
-            "status" => "Time out"
+            "status" => $status
         ]);
         return redirect()->route('answer', ['token' => $answer->token]);
     }
