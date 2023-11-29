@@ -127,6 +127,7 @@
                             <button class="btn btn-primary border-success align-items-center btn-success"
                                 type="submit">Next<i class="fa fa-angle-right ml-2"></i>
                             </button>
+                            <a href="{{ route('quiz.expired', ['token' => $answer->token , 'status' => 'Terminate test']) }}" class="btn btn-danger">Terminate Test</a>
                         </div>
                     </form>
                 @endif
@@ -174,7 +175,7 @@
                     console.log(hours, minutes, seconds);
                     if (hours == 0 && minutes == 0 && seconds == 0) {
                         clearInterval(interval);
-                        window.location = "{{ route('quiz.expired', ['token' => $answer->token]) }}";
+                        window.location = "{{ route('quiz.expired', ['token' => $answer->token, 'status' => 'Time out']) }}";
                     } else {
                         seconds = (seconds < 0) ? 59 : seconds;
                         seconds = (seconds < 10) ? '0' + seconds : seconds;
