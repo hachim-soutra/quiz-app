@@ -41,15 +41,14 @@
                         </div>
 
                         <div class="card-body table-responsive p-0">
-                            <table class="table table-hover text-nowrap">
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <th>Quiz name</th>
                                         <th>Email</th>
                                         <th>Score</th>
                                         <th>Date</th>
-                                        <th>Answers</th>
-                                        <th>Action</th>
+                                        <th colspan="2">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -61,51 +60,50 @@
                                             <td>{{ $answer->created_at }}</td>
                                             <td><a href="{{ route('answer', ['token' => $answer->token]) }}"
                                                     class="btn btn-primary">
-                                                    <i class="fas fa-eye"></i>Show</a></td>
-                                                    <td>
-                                                        <a data-toggle="modal" data-target="#modal-delete-{{ $answer->id }}"
-                                                            class="btn btn-danger">Delete</a>
-                                                    </td>
-                                                    <div class="modal fade" id="modal-delete-{{ $answer->id }}"
-                                                        aria-modal="true" role="dialog">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h4 class="modal-title">Delete answer</h4>
-                                                                    <button type="button" class="close" data-dismiss="modal"
-                                                                        aria-label="Close">
-                                                                        <span aria-hidden="true">×</span>
-                                                                    </button>
+                                                    <i class="fas fa-eye"></i>Show</a>
+                                            </td>
+                                            <td>
+                                                <a data-toggle="modal" data-target="#modal-delete-{{ $answer->id }}"
+                                                    class="btn btn-danger">Delete</a>
+                                            </td>
+                                            <div class="modal fade" id="modal-delete-{{ $answer->id }}" aria-modal="true"
+                                                role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Delete answer</h4>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form method="post"
+                                                                action="{{ route('answer.destroy', ['id' => $answer->id]) }}"
+                                                                enctype="multipart/form-data">
+                                                                <div class="row">
+                                                                    @method('DELETE')
+                                                                    @csrf
+
+                                                                    <div class="col-sm-12">
+                                                                        Are you sure you want delete answer's
+                                                                        {{ $answer->email }} ?
+                                                                    </div>
+                                                                    <div class="col-12 d-flex justify-content-end gap-5">
+                                                                        <button type="button" class="btn btn-default mr-3"
+                                                                            data-dismiss="modal">Close</button>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">Delete</button>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="modal-body">
-                                                                    <form method="post"
-                                                                        action="{{ route('answer.destroy', ['id' => $answer->id]) }}"
-                                                                        enctype="multipart/form-data">
-                                                                        <div class="row">
-                                                                            @method('DELETE')
-                                                                            @csrf
-
-                                                                            <div class="col-sm-12">
-                                                                                Are you sure you want delete answer's
-                                                                                {{ $answer->email }} ?
-                                                                            </div>
-                                                                            <div
-                                                                                class="col-12 d-flex justify-content-end gap-5">
-                                                                                <button type="button"
-                                                                                    class="btn btn-default mr-3"
-                                                                                    data-dismiss="modal">Close</button>
-                                                                                <button type="submit"
-                                                                                    class="btn btn-primary">Delete</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-
-                                                            </div>
-
+                                                            </form>
                                                         </div>
 
                                                     </div>
+
+                                                </div>
+
+                                            </div>
 
                                         </tr>
                                     @endforeach
