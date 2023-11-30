@@ -75,10 +75,10 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                @if (!Helper::compareArray($answer->answers[$question->question->id]))
+                                @if ((!Helper::compareArray($answer->answers[$question->question->id])) || (Helper::compareArray($answer->answers[$question->question->id])))
                                     <br>
                                     <strong class="text-danger ms-3">
-                                        {{ $question->question->error }}
+                                        {{ $question->question->error }} 111
                                     </strong>
                                     <br>
                                 @endif
@@ -94,19 +94,21 @@
                                         </label>
                                     </div>
                                 @endforeach
-                                @if (isset($answer->answers[$question->question->id]) &&
+                                @if ((isset($answer->answers[$question->question->id]) &&
                                         (count(array_diff(
                                                 $answer->answers[$question->question->id],
                                                 $question->question->options()->where('is_correct', 1)->pluck('id')->toArray())) > 0 ||
                                             count(array_diff(
                                                     $question->question->options()->where('is_correct', 1)->pluck('id')->toArray(),
-                                                    $answer->answers[$question->question->id])) > 0))
+                                                    $answer->answers[$question->question->id])) > 0)) || (!isset($answer->answers[$question->question->id])) )
                                     <br>
                                     <strong class="text-danger ms-3">
                                         {{ $question->question->error }}
                                     </strong>
                                     <br>
+
                                 @endif
+
                             @endif
                         </div>
                     @endif

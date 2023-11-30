@@ -421,14 +421,14 @@ class QuizController extends Controller
     public function quizExpired(string $token , string $status)
     {
         $answer = Answer::whereToken($token)->with(['quiz', 'quiz.questions', 'quiz.questions.question', 'quiz.questions.question.question_type'])->firstOrFail();
-        $questions = $answer->answers;
+        $answers = $answer->answers;
         foreach ($answer->quiz->questions as $question) {
-            if (!isset($questions[$question->question_id])) {
-                $questions[$question->id] = null;
+            if (!isset($answers[$question->question_id])) {
+                $answers[$question->question_id] = null;
             }
         }
         $answer->update([
-            "answers" => $questions,
+            "answers" => $answers,
             "status" => $status
         ]);
         return redirect()->route('answer', ['token' => $answer->token]);
