@@ -17,15 +17,10 @@ class AnswerController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->input('search');
-        $answers = Answer::whereNotNull('nbr_of_correct')->with('quiz')->latest()
-            ->Where('email', 'LIKE', "%{$search}%")
-            ->orWhereHas('quiz', function ($q) use ($search) {
-                $q->where('name', 'LIKE', "%{$search}%");
-            })
+        $answers = Answer::whereNotNull('nbr_of_correct')->with('quiz')->latest()->get();
 
-            ->paginate(10);
-        return view('admin.answer.index', compact('answers', 'search'));
+
+        return view('admin.answer.index', compact('answers'));
     }
     /**
      * Show the form for creating a new resource.
@@ -59,11 +54,14 @@ class AnswerController extends Controller
         return redirect()->back()->with('status','deleted answer has been permanently deleted');
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        $answer = Answer::findOrFail($id);
-        $answer->delete();
-        return redirect()->back()->with('status','Answer has been deleted');
+
+        $answer = Answer::whereIn('id', $request->item)->get();
+        foreach($answer as $item) {
+            $item->delete();
+        };
+        return response()->json(['message'=>'answers deleted Successfully'],200);
     }
 
 }
