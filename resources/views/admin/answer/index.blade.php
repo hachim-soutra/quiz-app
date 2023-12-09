@@ -39,8 +39,8 @@
                                     @foreach ($answers as $answer)
                                         <tr>
                                             <td>{{ $answer->id }}</td>
-                                            <td>{{ $answer->quiz?->name }}</td>
-                                            <td>{{ $answer->email }}</td>
+                                            <td>{!! Str::limit($answer->quiz?->name, 70, '...') !!}</td>
+                                            <td>{!! Str::limit($answer->email, 70, '...') !!}</td>
                                             <td>{{ round($answer->score, 2) }}%</td>
                                             <td>{{ $answer->created_at }}</td>
                                             <td><a href="{{ route('answer', ['token' => $answer->token]) }}"
@@ -67,9 +67,6 @@
     </div>
 @endsection
 @section('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
     <script type="text/javascript">
         $(function() {
             var table = $('#myTable').DataTable();

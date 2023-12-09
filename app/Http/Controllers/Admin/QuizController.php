@@ -26,14 +26,8 @@ class QuizController extends Controller
      */
     public function index(Request $request)
     {
-        $folders = QuizTheme::all();
-        $data = Quiz::with('questions')->withCount('questions')->ordered()
-            ->where('name', 'like', "%{$request->search}%");
-        if ($request->folder) {
-            $data = $data->where('folder_id', $request->folder);
-        }
-        $data = $data->paginate(10);
-        return view('admin.quiz.index', compact('data', 'folders'));
+        $folders = QuizTheme::with('quizzes')->get();
+        return view('admin.quiz.index', compact('folders'));
     }
 
     /**

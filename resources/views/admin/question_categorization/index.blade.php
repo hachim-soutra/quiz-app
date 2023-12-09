@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">
-                            <table class="table">
+                            <table class="table" id="myTable">
                                 <thead>
                                     <tr>
                                         <th>name</th>
@@ -52,8 +52,8 @@
                                 <tbody>
                                     @foreach ($categories as $categorie)
                                         <tr>
-                                            <td title="{{ $categorie->name }}">{{ $categorie->name }}</td>
-                                            <td title="{{ $categorie->color }}">{{ $categorie->color }}</td>
+                                            <td title="{{ $categorie->name }}">{!! Str::limit($categorie->name, 70, '...') !!}</td>
+                                            <td title="{{ $categorie->color }}">{!! Str::limit($categorie->color, 70, '...') !!}</td>
                                             <td>
                                                 <a type="button" class="btn btn-primary"
                                                     data-toggle="modal" data-target="#modal-update-{{ $categorie->id }}">
@@ -167,3 +167,11 @@
 </div>
 
 @endsection
+@section('js')
+    <script>
+        $(function() {
+            $('#myTable').DataTable();
+        });
+    </script>
+@endsection
+
