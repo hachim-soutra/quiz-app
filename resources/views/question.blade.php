@@ -126,7 +126,7 @@
                                 @endforeach
                             </div>
                         </div>
-                        <div class="d-flex flex-row justify-content-end align-items-center p-3 bg-white gap-5">
+                        <div class="d-flex flex-row justify-content-end align-items-center py-3 bg-white gap-5">
                             @if ($questionPreview)
                                 <a href="{{ route('questions', ['token' => $answer->token, 'id' => $questionPreview->id]) }}"
                                     class="btn btn-primary border-primary align-items-center btn-primary"
