@@ -10,22 +10,22 @@
                     @if ($answer->email)
                         <h2 class="text-deco">User email : {{ $answer->email }}</h2>
                     @endif
-                    @if ($answer->score < 75)
+                    @if ($answer->score < intval($target->value))
                         <p class="text-review">
-                            Thank you for completing the quiz, unfortunately your score is below target 😟, which is 75% of
+                            Thank you for completing the quiz, unfortunately your score is below target 😟, which is {{$target->value}}% of
                             correct answers.<br />
                             Here below a quick summary of your assessment
                         </p>
                     @else
                         <p class="text-review">
-                            Thank you for completing the quiz, Well done 👍 your score is above target, which is 75% of
+                            Thank you for completing the quiz, Well done 👍 your score is above target, which is {{$target->value}}% of
                             correct answers.<br />
                             Here below a quick summary of your assessment
                         </p>
                     @endif
                     <p class="fw-bold mb-0">Score :
                         <span
-                            class="{{ $answer->score >= 75 ? 'text-success' : 'text-danger' }}">{{ round($answer->score, 2) }}%
+                            class="{{ $answer->score >= intval($target->value) ? 'text-success' : 'text-danger' }}">{{ round($answer->score, 2) }}%
                             correct ({{ $answer->nbr_of_correct }} / {{ count($answer->answers) }})</span>
                     </p>
                     @if ($answer->status)
@@ -75,10 +75,10 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                @if (!Helper::compareArray($answer->answers[$question->question->id]))
+                                @if ((!Helper::compareArray($answer->answers[$question->question->id])) || (Helper::compareArray($answer->answers[$question->question->id])))
                                     <br>
                                     <strong class="text-danger ms-3">
-                                        {{ $question->question->error }}
+                                        {{ $question->question->error }} 111
                                     </strong>
                                     <br>
                                 @endif
@@ -94,19 +94,21 @@
                                         </label>
                                     </div>
                                 @endforeach
-                                @if (isset($answer->answers[$question->question->id]) &&
+                                @if ((isset($answer->answers[$question->question->id]) &&
                                         (count(array_diff(
                                                 $answer->answers[$question->question->id],
                                                 $question->question->options()->where('is_correct', 1)->pluck('id')->toArray())) > 0 ||
                                             count(array_diff(
                                                     $question->question->options()->where('is_correct', 1)->pluck('id')->toArray(),
-                                                    $answer->answers[$question->question->id])) > 0))
+                                                    $answer->answers[$question->question->id])) > 0)) || (!isset($answer->answers[$question->question->id])) )
                                     <br>
                                     <strong class="text-danger ms-3">
                                         {{ $question->question->error }}
                                     </strong>
                                     <br>
+
                                 @endif
+
                             @endif
                         </div>
                     @endif

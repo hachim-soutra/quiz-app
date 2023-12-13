@@ -20,19 +20,26 @@ class SettingsController extends Controller
         $request->validate([
             "value" => "required"
         ]);
-        if ($request->hasFile('value')) {
-            $destination = 'images/' . $setting->value;
-            if (File::exists($destination)) {
-                File::delete($destination);
+        if($setting->type === "img") {
+            if ($request->hasFile('value')) {
+                $destination = 'images/' . $setting->value;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('value');
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
+                $file->move('images/', $filename);
             }
-            $file = $request->file('value');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-            $file->move('images/', $filename);
+            $setting->update([
+                'value' => $request->hasFile('value') ? $filename : $setting->value,
+            ]);
+        } else {
+            $setting->update([
+                'value' => $request->value,
+            ]);
         }
-        $setting->update([
-            'value' => $request->hasFile('value') ? $filename : $setting->value,
-        ]);
+        
         return redirect()->back()->with('status', 'Setting Has Been updated');
     }
 }

@@ -31,13 +31,18 @@
                                 @if ($answer->timer)
                                     <div class="my-2"
                                         style="
+                                            padding: 6px;
                                             display: flex;
                                             align-self: end;
                                             justify-content: center;
                                             align-items: center;
                                             gap: 10px;
+                                            border: 1px solid;
+                                            border-radius: 13px;
                                         ">
-                                        <span class="font-semibold ">Time left :</span>
+                                        <span class="font-semibold ">
+                                            <img src="{{ asset('clock.svg') }}" alt="" height="35px">
+                                        </span>
                                         <div class="countdown"
                                             style="
                                                 display: inline;
@@ -47,7 +52,11 @@
                                                 border-radius: 5px;
                                             ">
                                         </div>
-                                        <button class="btn btn btn-primary" type="button" id="stopTimer">Pause</button>
+                                        <button class="btn p-0" type="button" id="stopTimer">
+                                            <span class="font-semibold ">
+                                                <img src="{{ asset('pause.svg') }}" alt="" height="35px">
+                                            </span>
+                                        </button>
                                     </div>
                                     <input type="hidden" name="timer" id="timer">
                                 @endif
@@ -118,7 +127,7 @@
                                 @endforeach
                             </div>
                         </div>
-                        <div class="d-flex flex-row justify-content-end align-items-center p-3 bg-white gap-5">
+                        <div class="d-flex flex-row justify-content-end align-items-center py-3 bg-white gap-5">
                             <button class="btn btn-primary border-success align-items-center btn-success"
                                 type="button">Mark for review<i class="fa fa-angle-right ml-2"></i>
                             </button>
@@ -165,6 +174,7 @@
             window.onload = function() {
 
                 var timerBreak = "{{ $answer->quiz->break_time }}";
+
                 function countdown() {
                     var timer = timerBreak.split(':');
                     var hours = parseInt(timer[0], 10);

@@ -21,8 +21,9 @@ class DatabaseSeeder extends Seeder
         // $setting->save();
         DB::table('settings')->insert([
             [
-                'name' => 'home page logo',
-                'value' => '',
+                'name' => 'answer target',
+                'value' => '75',
+                'type' => 'int',
             ]
         ]);
     }
