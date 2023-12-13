@@ -28,8 +28,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $logo_home = Settings::where("name", "home page logo")->first();
         $logo = Settings::where("name", "logo")->first();
+        $target = Settings::where("name", "answer target")->first();
         view()->share('logo_home', $logo_home);
         view()->share('logo', $logo);
+        view()->share('target', $target);
         Builder::defaultStringLength(191);
         Paginator::useBootstrap();
     }

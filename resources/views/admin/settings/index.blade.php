@@ -43,8 +43,14 @@
                                         @foreach ($settings as $item)
                                             <tr>
                                                 <td>{{ $item->name }}</td>
-                                                <td><img src="{{ asset('images/' . $item->value) }}" width="150"
-                                                        height="auto" class="mt-3 rounded"></td>
+                                                <td>
+                                                    @if ($item->type == 'img')
+                                                        <img src="{{ asset('images/' . $item->value) }}" width="150"
+                                                            alt="{{ $item->value }}" height="auto" class="mt-3 rounded">
+                                                    @else
+                                                        {{ $item->value }}
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
                                                         class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
@@ -70,23 +76,35 @@
                                                                 <div class="row">
                                                                     @csrf
                                                                     @method('put')
-
-                                                                    <div class="col-sm-12">
-                                                                        <div class="form-group">
-                                                                            <label for="">Image</label>
-                                                                            <input type="file" name="value"
-                                                                                value="{{ old('value') ? old('value') : $item->value }}"
-                                                                                class="form-control">
-                                                                            <img src="{{ asset('images/' . $item->value) }}"
-                                                                                width="150" class="mt-3 rounded">
+                                                                    @if ($item->type == 'img')
+                                                                        <div class="col-sm-12">
+                                                                            <div class="form-group">
+                                                                                <label for="">Image</label>
+                                                                                <input type="file" name="value"
+                                                                                    value="{{ old('value') ? old('value') : $item->value }}"
+                                                                                    class="form-control">
+                                                                                <img src="{{ asset('images/' . $item->value) }}"
+                                                                                    width="150" class="mt-3 rounded">
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
+                                                                    @else
+                                                                        <div class="col-sm-12">
+                                                                            <div class="form-group">
+                                                                                <label for="">Value</label>
+                                                                                <input type="text" name="value"
+                                                                                    value="{{ old('value') ? old('value') : $item->value }}"
+                                                                                    class="form-control">
+                                                                            </div>
+                                                                        </div>
+                                                                    
+                                                                    @endif
                                                                     <div class="col-12 d-flex justify-content-end gap-5">
                                                                         <button type="button" class="btn btn-default mr-3"
                                                                             data-dismiss="modal">Close</button>
                                                                         <button type="submit"
                                                                             class="btn btn-primary">Update</button>
                                                                     </div>
+                                                                    
                                                                 </div>
                                                             </form>
                                                         </div>
