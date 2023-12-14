@@ -1,26 +1,30 @@
 @extends('layouts.app')
 @section('style')
-<style>
-     .hide {
-        display: 'none';
-    }
-    .bg-tr {
-        background-color: #ccccccff;
-    }
-    thead {
-        background-color: #343b7c;
-        color: white ;
-  
-    }
-    input[type="checkbox"]:checked {
-        appearance: none;
+    <style>
+        .hide {
+            display: 'none';
+        }
+
+        .bg-tr {
+            background-color: #ccccccff;
+        }
+
+        thead {
+            background-color: #343b7c;
+            color: white;
+
+        }
+
+        input[type="checkbox"]:checked {
+            appearance: none;
             background: url("{{ url('collapse.png') }}") no-repeat left center;
             background-size: 20px;
             padding-left: 25px;
             border: none;
             filter: brightness(0);
-            transform:rotate(180deg);
+            transform: rotate(180deg);
         }
+
         input[type="checkbox"] {
             appearance: none;
             background: url("{{ url('collapse.png') }}") no-repeat left center;
@@ -28,12 +32,11 @@
             padding-left: 25px;
             border: none;
             filter: brightness(0);
-            transform:rotate(0deg);
+            transform: rotate(0deg);
             width: 20px;
             height: 20px;
         }
-
-</style>
+    </style>
 @endsection
 
 @section('content')
@@ -76,7 +79,7 @@
                                 </div>
                             </div>
 
-                            <div class="card-body table-responsive p-0">
+                            <div class="card-body table-responsive px-2">
                                 {{-- <table class="table w-100" id="myTable">
                                     <thead>
                                         <tr>
@@ -192,83 +195,87 @@
                                 <table class="table w-100" id="myTable">
                                     <thead>
                                         <tr>
-                                            <td>#</td>
-                                            <td>Title</td>
-                                            <td>Description</td>
-                                            <td>Questions</td>
-                                            <td colspan="4" >Action</td>
+                                            <th>#</th>
+                                            <th>Title</th>
+                                            <th>Description</th>
+                                            <th>Questions</th>
+                                            <th>Action</th>
                                         </tr>
 
                                     </thead>
                                     <tbody>
                                         @foreach ($folders as $folder)
                                             <tr class="bg-tr">
-                                                <td colspan="8" >
-                                                    <input type="checkbox" name="accounting" id="accounting" data-toggle="toggle">
-                                                    {{ $folder->label }}</td>
+
+                                                <td>
+                                                    <input type="checkbox" name="accounting" id="accounting"
+                                                        data-toggle="toggle">
+                                                    {{ $folder->label }}
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
                                             </tr>
-                                            <tbody class="hide">
-                                            @foreach ($folder->quizzes as $item)
-                                                <tr >
-                                                    <td>
-                                                        @if (!$item->isFirstInOrder())
-                                                            <a
-                                                                href="{{ route('quiz.order', ['type' => 'up', 'id' => $item->id]) }}">
-                                                                <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                                                            </a>
-                                                        @endif
-                                                        @if (!$item->isLastInOrder())
-                                                            <a
-                                                                href="{{ route('quiz.order', ['type' => 'down', 'id' => $item->id]) }}">
-                                                                <i class="fas fa-arrow-down" aria-hidden="true"></i>
-                                                            </a>
-                                                        @endif
 
-                                                    </td>
-                                                    <td title="{{ $item->name }}">{!! Str::limit($item->name, 70, '...') !!}</td>
-                                                    <td title="{{ $item->description }}">{!! Str::limit($item->description, 70, '...') !!}</td>
-                                                    <td>
-                                                        <a href="{{ route('quiz.show', ['quiz' => $item]) }}">
-
-                                                            {{ $item->questions_count }}</a>
-                                                    </td>
-
-                                                    <td>
-                                                        <a target="_blank"
-                                                            href="{{ route('quiz', ['slug' => $item->slug]) }}"
-                                                            class="btn btn-success">
-                                                            <i class="fas fa-eye"></i>
-                                                            Show</a>
-                                                    </td>
-
-                                                    <td>
-                                                        <form method="POST"
-                                                            action="{{ route('quiz.duplicate-quiz', ['id' => $item->id]) }}"
-                                                            class="d-inline-block">
-                                                            @csrf
-                                                            <button class="btn btn-secondary">
-                                                                <i class="fas fa-copy"></i>
-                                                                Duplicate
-                                                            </button>
-                                                        </form>
-                                                    </td>
-                                                    <td>
-
-                                                        <a href="{{ route('quiz.edit', ['quiz' => $item]) }}"
-                                                            class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
-
-                                                    </td>
-                                                    <td>
-                                                        <a data-toggle="modal"
-                                                            data-target="#modal-delete-{{ $item->id }}"
-                                                            class="btn btn-danger">
-                                                            <i class="fas fa-trash"></i> Delete
+                                    <tbody class="hide">
+                                        @foreach ($folder->quizzes as $item)
+                                            <tr>
+                                                <td>
+                                                    @if (!$item->isFirstInOrder())
+                                                        <a
+                                                            href="{{ route('quiz.order', ['type' => 'up', 'id' => $item->id]) }}">
+                                                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
                                                         </a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            </tbody>
+                                                    @endif
+                                                    @if (!$item->isLastInOrder())
+                                                        <a
+                                                            href="{{ route('quiz.order', ['type' => 'down', 'id' => $item->id]) }}">
+                                                            <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                                                        </a>
+                                                    @endif
+
+                                                </td>
+                                                <td title="{{ $item->name }}">{!! Str::limit($item->name, 70, '...') !!}</td>
+                                                <td title="{{ $item->description }}">{!! Str::limit($item->description, 70, '...') !!}</td>
+                                                <td>
+                                                    <a href="{{ route('quiz.show', ['quiz' => $item]) }}">
+
+                                                        {{ count($item->questions) }}</a>
+                                                </td>
+
+                                                <td>
+                                                    <a target="_blank" href="{{ route('quiz', ['slug' => $item->slug]) }}"
+                                                        class="btn btn-success">
+                                                        <i class="fas fa-eye"></i>
+                                                        Show</a>
+
+
+                                                    <form method="POST"
+                                                        action="{{ route('quiz.duplicate-quiz', ['id' => $item->id]) }}"
+                                                        class="d-inline-block">
+                                                        @csrf
+                                                        <button class="btn btn-secondary">
+                                                            <i class="fas fa-copy"></i>
+                                                            Duplicate
+                                                        </button>
+                                                    </form>
+
+
+                                                    <a href="{{ route('quiz.edit', ['quiz' => $item]) }}"
+                                                        class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
+
+
+                                                    <a data-toggle="modal" data-target="#modal-delete-{{ $item->id }}"
+                                                        class="btn btn-danger">
+                                                        <i class="fas fa-trash"></i> Delete
+                                                    </a>
+
+                                                </td>
+                                            </tr>
                                         @endforeach
+                                    </tbody>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -319,12 +326,8 @@
 @endsection
 @section('js')
     <script>
-        // $(function() {
-        //     $('#myTable').DataTable();
-        // });
         $(document).ready(function() {
-          $('#myTable').DataTable();
-
+            $('#myTable').DataTable();
             $('[data-toggle="toggle"]').change(function() {
                 $(this).parents().next('.hide').toggle();
             });

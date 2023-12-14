@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/1.7.0/jquery-confirm.min.css"
         integrity="sha512-aSZhdO9qRbI5Yvk2tJciP+L7R++CSmyZE3vekxHiW55tQb7dgXxpX0PXr188QfzThNGC8Nb7Wrn9fUCAD/KpyQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <style>
         * {
             font-family: 'Century Gothic Paneuropean', sans-serif !important;
