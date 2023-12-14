@@ -5,7 +5,7 @@
         <div class="col-md-10 col-lg-10">
             <img src="{{ asset('images/' . $logo->value) }}" alt="" width="300px" class="profil">
             <div class="mt-3">
-                <h1> xxxxxxxxxxxxx{{ $question->quiz_questions[0]->order }}</h1>
+                <h1> {{ $answer->getQuestion($id)['sort'] }}</h1>
 
                 @if ($break)
                     <div class="d-flex flex-column justify-content-between px-2">
@@ -14,11 +14,11 @@
                         <p class="sous-title">xxxxxxxx</p>
 
                     </div>
-                    <a href="{{ route('questions', ['token' => $answer->token, 'id' => $question->id, 'pass' => true]) }}"
+                    <a href="{{ route('questions', ['token' => $answer->token, 'id' => $id, 'pass' => true]) }}"
                         class="btn btn-primary float-end">Back to quiz</a>
                 @else
                     <form method="POST"
-                        action="{{ route('quiz.store-answer', ['id' => $answer->id, 'question_id' => $question->id]) }}">
+                        action="{{ route('quiz.next', ['token' => $answer->token, 'question_id' => $id]) }}">
                         <div class="d-flex flex-column justify-content-between px-2">
                             <h2 class="text-deco">
                                 {{ $answer->quiz->name }}</h2>
@@ -60,43 +60,43 @@
                                     </div>
                                     <input type="hidden" name="timer" id="timer">
                                 @endif
-                                <h3 class="mt-1 ml-2 d-block">{{ $question->name }}</h3>
-                                @if ($question->question_type && $question->question_type->name === 'multiple answer')
+                                <h3 class="mt-1 ml-2 d-block">{{ $answer->getQuestion($id)['name'] }}</h3>
+                                @if ($answer->getQuestion($id)['type'] === 'multiple answer')
                                     <small class="text-danger">multiple answers possible</small>
                                     <br>
                                 @endif
-                                @if ($question->image)
-                                    <img src="{{ asset('images/question/' . $question->image) }}" width="40%"
-                                        height="auto" class="mt-3 rounded" alt="imgg">
+                                @if ($answer->getQuestion($id)['image'])
+                                    <img src="{{ asset('images/question/' . $answer->getQuestion($id)['image']) }}"
+                                        width="40%" height="auto" class="mt-3 rounded" alt="img">
                                     <br>
                                     <br>
                                 @endif
                             </div>
 
-                            @if ($question->question_type)
-                                @if ($question->question_type->name === 'row answers')
+                            @if ($answer->getQuestion($id)['type'])
+                                @if ($answer->getQuestion($id)['type'] === 'row answers')
                                     <table width="100%">
                                         <thead>
                                             <tr>
                                                 <th></th>
-                                                @foreach ($question->options as $option)
-                                                    <th> {{ $option->name }}</th>
+                                                @foreach ($answer->getQuestion($id)['options'] as $option)
+                                                    <th> {{ $option['name'] }}</th>
                                                 @endforeach
                                             </tr>
                                         </thead>
 
                                         <tbody>
-                                            @foreach ($question->options as $optionl)
+                                            @foreach ($answer->getQuestion($id)['options'] as $optionl)
                                                 <tr>
-                                                    @foreach ($question->options as $k => $option)
+                                                    @foreach ($answer->getQuestion($id)['options'] as $k => $option)
                                                         @if ($loop->first)
-                                                            <td> {{ $optionl->value }}</td>
+                                                            <td> {{ $optionl['value'] }}</td>
                                                         @endif
                                                         <td>
                                                             <input required type="radio"
-                                                                name="question[{{ $question->id }}][{{ $optionl->id }}]"
+                                                                name="question[{{ $id }}][{{ $optionl['id'] }}]"
                                                                 value="{{ $option->value }}"
-                                                                {{ isset($answer->answers[$question->id]) && $option->value == $answer->answers[$question->id][$optionl->id] ? 'checked' : '' }}
+                                                                {{ isset($answer->answers[$id]) && $option['value'] == $answer->answers[$id][$optionl['id']] ? 'checked' : '' }}
                                                                 class="@error('question') is-invalid @enderror">
 
                                                         </td>
@@ -106,16 +106,16 @@
                                         </tbody>
                                     </table>
                                 @else
-                                    @foreach ($question->options as $option)
+                                    @foreach ($answer->getQuestion($id)['options'] as $option)
                                         <div class="ans ml-2 lh-lg">
                                             <label class="radio">
                                                 <input
-                                                    {{ isset($answer->answers[$question->id]) && in_array($option->id, $answer->answers[$question->id]) ? 'checked' : '' }}
-                                                    type="{{ $question->question_type && $question->question_type->name === 'one answer' ? 'radio' : 'checkbox' }}"
-                                                    name="question[]" value="{{ $option->id }}"
+                                                    {{ isset($answer->getQuestion($id)['value']) && in_array($option['id'], $answer->getQuestion($id)['value']) ? 'checked' : '' }}
+                                                    type="{{ $answer->getQuestion($id)['type'] === 'one answer' ? 'radio' : 'checkbox' }}"
+                                                    name="question[]" value="{{ $option['id'] }}"
                                                     class="@error('question') is-invalid @enderror">
 
-                                                <span>{{ $option->name }}</span>
+                                                <span>{{ $option['name'] }}</span>
                                             </label>
                                         </div>
                                     @endforeach
@@ -127,18 +127,33 @@
                                 @endforeach
                             </div>
                         </div>
-                        <div class="d-flex flex-row justify-content-end align-items-center py-3 bg-white gap-5">
-                            <button class="btn btn-primary border-success align-items-center btn-success"
-                                type="button">Mark for review<i class="fa fa-angle-right ml-2"></i>
-                            </button>
-                            <button class="btn btn-primary border-success align-items-center btn-success"
-                                type="button">Ignore<i class="fa fa-angle-right ml-2"></i>
-                            </button>
-                            @if ($question->quiz_questions[0]->order > 1)
-                                <a href="{{ route('question.prev', ['id' => $question->id, 'token' => $answer->token]) }}"
-                                    class="btn btn-primary border-primary align-items-center btn-primary">Previous<i
+                        <div class="d-flex flex-row justify-content-end align-items-center p-3 bg-white gap-2">
+                            <form method="POST"
+                                action="{{ route('question.review', ['id' => $id, 'token' => $answer->token]) }}">
+                                @csrf
+                                <input type="hidden" name="timer" id="timer1">
+                                <button class="btn btn-primary border-primary align-items-center btn-primary">Mark for
+                                    review<i class="fa fa-angle-right ml-2"></i>
+                                </button>
+                            </form>
+                            <form method="POST"
+                                action="{{ route('question.ignore', ['id' => $id, 'token' => $answer->token]) }}">
+                                @csrf
+                                <input type="hidden" name="timer" id="timer2">
+                                <button class="btn btn-primary border-primary align-items-center btn-primary">Ignore<i
                                         class="fa fa-angle-right ml-2"></i>
-                                </a>
+                                </button>
+                            </form>
+                            @if ($answer->getQuestion($id)['sort'] > 1)
+                                <form action="{{ route('question.prev', ['id' => $id, 'token' => $answer->token]) }}"
+                                    method="POST">
+                                    @csrf
+                                    <input type="hidden" name="timer" id="timer3">
+                                    <button type="submit"
+                                        class="btn btn-primary border-primary align-items-center btn-primary">Previous<i
+                                            class="fa fa-angle-right ml-2"></i>
+                                    </button>
+                                </form>
                             @endif
                             <button class="btn btn-primary border-success align-items-center btn-success"
                                 type="submit">Next<i class="fa fa-angle-right"></i>
@@ -187,7 +202,7 @@
 
                         clearInterval(interval);
                         window.location =
-                            "{{ route('questions', ['token' => $answer->token, 'id' => $question->id, 'pass' => true]) }}";
+                            "{{ route('questions', ['token' => $answer->token, 'id' => $id, 'pass' => true]) }}";
                     } else {
 
                         seconds = (seconds < 0) ? 59 : seconds;
@@ -246,6 +261,9 @@
                         }
                         timer2 = hours + ':' + minutes + ':' + seconds;
                         $('#timer').val(timer2);
+                        $('#timer1').val(timer2);
+                        $('#timer2').val(timer2);
+                        $('#timer3').val(timer2);
                     }
                     if (timer2 === "0:00:10") {
                         $('.countdown').addClass(" zoom-in-out");

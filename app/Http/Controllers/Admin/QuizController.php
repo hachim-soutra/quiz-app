@@ -212,51 +212,34 @@ class QuizController extends Controller
 
     public function createAnswer(string $id, Request $request)
     {
-        $token = Str::random(16);
         $quiz = Quiz::findOrFail($id);
-        Answer::create([
+        $sort = 0;
+        $question_json = $quiz->questions->map(function ($question) use (&$sort) {
+            $sort++;
+            return [
+                'id' => $question->question?->id,
+                'name' => $question->question?->name,
+                'image' => $question->question?->image,
+                'type' => $question->question?->question_type?->name,
+                'error' => $question->question?->error,
+                'options' => $question->question?->options,
+                'value' => -1,
+                'sort' => $sort
+            ];
+        });
+        $answer = Answer::create([
             "quiz_id" => $id,
-            "token" => $token,
+            "token" => Str::random(16),
             "answers" => [],
+            "questions_json" => $question_json,
             "email" => $request->email ?? "",
             "score" => 0,
             "timer" => $quiz->quiz_time ? Carbon::parse($quiz->quiz_time)->format('H:i:s') : null
         ]);
-
-        $quizQuestions = QuizQuestion::where("quiz_id", $id)
-            ->whereHas("question", function ($q) {
-                $q->whereNull('deleted_at');
-            })->orderBy('order')
-            ->first();
-        return redirect()->route('questions', ['token' => $token, 'id' => $quizQuestions->question_id]);
+        return redirect()->route('questions', ['token' => $answer->token, 'id' => $answer->questions_json[0]["id"]]);
     }
 
-    public function storeQuestion(int $id, int $question_id, Request $request)
-    {
-        $answer = Answer::findOrFail($id);
-        $questions = $answer->answers;
-        $questions[$question_id] = isset($request->question[$question_id]) ? $request->question[$question_id] : $request->question;
-        $answer->update([
-            "answers" => $questions,
-            "timer" => $answer->quiz->quiz_time ? $request->timer : null,
-        ]);
-        $questionL = Question::whereHas("quiz_questions", function ($q) use ($answer) {
-            $q->where("quiz_id", $answer->quiz_id);
-        })->whereNull('deleted_at')
-            ->where("id", '>', $question_id)
-            ->first();
-        if ($questionL) {
-            return redirect()->route('questions', ['token' => $answer->token, 'id' => $questionL->id]);
-        } else {
-            $arr = array_filter($answer->answers, function ($item) {
-                return !$item;
-            });
-            if (count($arr) > 0) {
-                return redirect()->route('questions', ['token' => $answer->token, 'id' => array_keys($arr)[0]]);
-            }
-            return redirect()->route('answer', ['token' => $answer->token]);
-        }
-    }
+
 
     public function removeQuestion(string $id)
     {
@@ -414,7 +397,7 @@ class QuizController extends Controller
         return redirect()->back()->with('status', 'Answer has been deleted');
     }
 
-    public function quizExpired(string $token , string $status)
+    public function quizExpired(string $token, string $status)
     {
         $answer = Answer::whereToken($token)->with(['quiz', 'quiz.questions', 'quiz.questions.question', 'quiz.questions.question.question_type'])->firstOrFail();
         $answers = $answer->answers;

@@ -31,7 +31,7 @@ class SortQuestion extends Command
 
         foreach ($quizzes as $quiz) {
             $order = 1;
-            foreach ($quiz->questions as $q) {
+            foreach ($quiz->questions()->orderBy('order', 'ASC')->get() as $q) {
                 $q->order = $order;
                 $q->save();
                 $order++;

@@ -44,15 +44,17 @@ class QuestionImport implements ToModel, WithStartRow, WithCustomCsvSettings
     public function model(array $row)
     {
         $quiz = Quiz::whereId($this->id)->firstOrFail();
+        $max = $quiz->questions()->max('order');
         $question = Question::create([
             'name' => $row[0],
             'question_type_id' => $row[1],
             'error' => $row[4],
-            'is_active' => true
+            'is_active' => true,
         ]);
         QuizQuestion::create([
             'quiz_id' => $quiz->id,
             'question_id' => $question->id,
+            'order' => $max + 1
         ]);
 
         $optionsAnswer = explode(",", $row[3]);
