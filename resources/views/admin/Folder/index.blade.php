@@ -101,17 +101,17 @@
 
                                                                                 <div class="form-group">
                                                                                     <label>quizzes :</label>
-                                                                                    <select name="quizzes"
+                                                                                    <select name="select_quizzes[]"
                                                                                         class="form-control select2 select2-hidden-accessible"
                                                                                         multiple=""
-                                                                                        data-placeholder="Select a State"
+                                                                                        data-placeholder="Select a quiz"
                                                                                         style="width: 100%;" tabindex="-1"
                                                                                         aria-hidden="true">
-                                                                                        @foreach ($folder->quizzes as $quiz)
-                                                                                            <option
-                                                                                                value="{{ $quiz->id }}">
-                                                                                                {{ $quiz->name }}
-                                                                                            </option>
+                                                                                        @foreach ($quiz as $item)
+                                                                                        <option
+                                                                                            value="{{ $item->id }}" @if ($item->folder_id == $folder->id) selected @endif>
+                                                                                            {{ $item->name }}
+                                                                                        </option>
                                                                                         @endforeach
 
                                                                                     </select>

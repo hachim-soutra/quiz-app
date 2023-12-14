@@ -11,7 +11,7 @@ class FolderController extends Controller
 {
     public function index()
     {
-        $folders = QuizTheme::with("quizzes")->get();
+        $folders = QuizTheme::with("quizzes")->orderBy('label')->get();
         $quiz = Quiz::all();
 
         return view('admin.Folder.index', compact('folders', 'quiz'));
@@ -31,9 +31,12 @@ class FolderController extends Controller
     public function update(Request $request, QuizTheme $folder)
     {
         $request->validate([
-            'label' => ['required', 'unique:folders,label' . $folder->id],
+            'label' => ['required', 'unique:folders,label,'.$folder->id ],
         ]);
-
+        $folder->quizzes()->update(['folder_id' => 9999]);
+        if($request->select_quizzes){
+            Quiz::whereIn("id",array_map('intval', $request->select_quizzes))->update(['folder_id'=>$folder->id]);
+        }
         $folder->update([
             'label' => $request->label,
         ]);

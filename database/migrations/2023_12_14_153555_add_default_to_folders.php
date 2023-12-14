@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('quizzes', function (Blueprint $table) {
-            $table->dropColumn('folder_id');
+        Schema::table('folders', function (Blueprint $table) {
+            //
         });
     }
 };
