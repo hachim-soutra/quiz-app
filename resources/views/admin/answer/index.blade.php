@@ -23,11 +23,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card-body table-responsive p-0">
-                            <button class="btn btn-secondary mb-3" id="button">Delete selected row</button>
+                            <button class="btn btn-secondary mb-3" id="deleteAllSelectedRecords">Delete selected
+                                row</button>
                             <table class="table" id="myTable">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
+                                        <th><input type="checkbox" id="select_all_ids"></th>
                                         <th>Quiz name</th>
                                         <th>Email</th>
                                         <th>Score</th>
@@ -38,9 +39,10 @@
                                 <tbody>
                                     @foreach ($answers as $answer)
                                         <tr>
-                                            <td>{{ $answer->id }}</td>
-                                            <td>{!! Str::limit($answer->quiz?->name, 70, '...') !!}</td>
-                                            <td>{!! Str::limit($answer->email, 70, '...') !!}</td>
+                                            <td><input type="checkbox" value="{{ $answer->id }}" name="ids"
+                                                    class="checkbox_ids"></th>
+                                            <td>{{ Str::limit($answer->quiz?->name, 70, '...') }}</td>
+                                            <td>{{ Str::limit($answer->email, 70, '...') }}</td>
                                             <td>{{ round($answer->score, 2) }}%</td>
                                             <td>{{ $answer->created_at }}</td>
                                             <td><a href="{{ route('answer', ['token' => $answer->token]) }}"
@@ -68,28 +70,42 @@
 @endsection
 @section('js')
     <script type="text/javascript">
-        $(function() {
-            var table = $('#myTable').DataTable();
-            table.on('click', 'tbody tr', function(e) {
-                e.currentTarget.classList.toggle('selected');
+        var table = $('#myTable').DataTable();
+        $(function(e) {
+            $("#select_all_ids").click(function() {
+                $('.checkbox_ids').prop('checked', $(this).prop('checked'));
             });
-            document.querySelector('#button').addEventListener('click', function() {
-                var listOfId = [];
-                var i = table.rows('.selected').data().map(function(item) {
-                    return listOfId.push(item[0]);
+            $('#deleteAllSelectedRecords').click(function(e) {
+                e.preventDefault();
+                var all_ids = [];
+                $('input:checkbox[name=ids]:checked').each(function() {
+                    all_ids.push($(this).val());
                 });
-
-                $.ajax({
-                    "type": "POST",
-                    "url": "{{ route('answer.destroy') }}",
-                    success: function(result) {
-                        location.reload();
+                var obj = $.confirm({
+                    title: 'Confirm!',
+                    content: `Are you sure you want delete ${all_ids.length} answer(s) ?  `,
+                    confirmButtonClass: 'btn-info',
+                    cancelButtonClass: 'btn-danger',
+                    confirm: function() {
+                        $.ajax({
+                            "type": "POST",
+                            "url": "{{ route('answer.destroy') }}",
+                            success: function(result) {
+                                location.reload();
+                            },
+                            "data": {
+                                _token: '{{ csrf_token() }}',
+                                item: all_ids
+                            },
+                        });
                     },
-                    "data": {
-                        _token: '{{ csrf_token() }}',
-                        item: listOfId
-                    },
-
+                    cancel: function() {}
+                });
+                obj.$el.find('.jconfirm-box').css({
+                    'top': '150%',
+                    'left': '50%',
+                    'margin-top': '-43px',
+                    'margin-left': '0px'
                 });
             });
         });
