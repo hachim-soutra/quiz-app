@@ -8,6 +8,7 @@ use App\Imports\QuizImport;
 use App\Models\Answer;
 use Carbon\Carbon;
 use App\Models\QuizTheme;
+use App\Models\Settings;
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
 use App\Models\QuestionsCategorization;
@@ -209,7 +210,7 @@ class QuizController extends Controller
         // $validated = $request->validate([
         //     'email' => 'required',
         // ]);
-
+        $target = Settings::where('name','LIKE',"answer target")->first();
         $token = Str::random(16);
         $quiz = Quiz::findOrFail($id);
         Answer::create([
@@ -218,7 +219,8 @@ class QuizController extends Controller
             "answers" => [],
             "email" => $request->email ?? "",
             "score" => 0,
-            "timer" => $quiz->quiz_time ? Carbon::parse($quiz->quiz_time)->format('H:i:s') : null
+            "timer" => $quiz->quiz_time ? Carbon::parse($quiz->quiz_time)->format('H:i:s') : null,
+            "target" => $target->value
         ]);
 
         $question = Question::whereHas("quiz_questions", function ($q) use ($id) {
