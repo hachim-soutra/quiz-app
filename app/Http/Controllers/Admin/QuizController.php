@@ -8,6 +8,7 @@ use App\Imports\QuizImport;
 use App\Models\Answer;
 use Carbon\Carbon;
 use App\Models\QuizTheme;
+use App\Models\Settings;
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
 use App\Models\QuestionsCategorization;
@@ -26,14 +27,8 @@ class QuizController extends Controller
      */
     public function index(Request $request)
     {
-        $folders = QuizTheme::all();
-        $data = Quiz::with('questions')->withCount('questions')->ordered()
-            ->where('name', 'like', "%{$request->search}%");
-        if ($request->folder) {
-            $data = $data->where('folder_id', $request->folder);
-        }
-        $data = $data->paginate(10);
-        return view('admin.quiz.index', compact('data', 'folders'));
+        $folders = QuizTheme::with('quizzes')->get();
+        return view('admin.quiz.index', compact('folders'));
     }
 
     /**
@@ -212,6 +207,11 @@ class QuizController extends Controller
 
     public function createAnswer(string $id, Request $request)
     {
+        // $validated = $request->validate([
+        //     'email' => 'required',
+        // ]);
+        $target = Settings::where('name','LIKE',"answer target")->first();
+        $token = Str::random(16);
         $quiz = Quiz::findOrFail($id);
         $sort = 0;
         $question_json = $quiz->questions->map(function ($question) use (&$sort) {
@@ -234,7 +234,8 @@ class QuizController extends Controller
             "questions_json" => $question_json,
             "email" => $request->email ?? "",
             "score" => 0,
-            "timer" => $quiz->quiz_time ? Carbon::parse($quiz->quiz_time)->format('H:i:s') : null
+            "timer" => $quiz->quiz_time ? Carbon::parse($quiz->quiz_time)->format('H:i:s') : null,
+            "target" => $target->value
         ]);
         return redirect()->route('questions', ['token' => $answer->token, 'id' => $answer->questions_json[0]["id"]]);
     }

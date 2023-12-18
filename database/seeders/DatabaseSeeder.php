@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Settings;
+use Harishdurga\LaravelQuiz\Models\Quiz;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -19,12 +20,12 @@ class DatabaseSeeder extends Seeder
         // $setting->name = "logo";
         // $setting->value = "";
         // $setting->save();
-        DB::table('settings')->insert([
+        DB::table('folders')->insert([
             [
-                'name' => 'answer target',
-                'value' => '75',
-                'type' => 'int',
+                'id' => 9999,
+                'label' => 'uncategorized',
             ]
         ]);
+        Quiz::whereNull('folder_id')->update(['folder_id' => 9999]);
     }
 }

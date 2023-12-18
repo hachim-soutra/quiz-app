@@ -15,6 +15,10 @@ class QuizTheme extends Model
 
     protected $fillable = ['label'];
 
+    protected $casts = [
+        'select_quizzes' => 'array',
+    ];
+
     public function quizzes()
     {
         return $this->hasMany(config('laravel-quiz.models.quiz'),'folder_id');

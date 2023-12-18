@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('quizzes', function (Blueprint $table) {
-            $table->integer('folder_id')->default(0)->change();
+        Schema::table('answers', function (Blueprint $table) {
+            $table->integer('target')->nullable();
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('quizzes', function (Blueprint $table) {
-            $table->dropColumn('folder_id');
+        Schema::table('answers', function (Blueprint $table) {
+            $table->dropColumn('target');
         });
     }
 };

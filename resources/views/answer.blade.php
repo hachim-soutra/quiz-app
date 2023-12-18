@@ -10,24 +10,22 @@
                     @if ($answer->email)
                         <h2 class="text-deco">User email : {{ $answer->email }}</h2>
                     @endif
-                    @if ($answer->score < intval($target->value))
+                    @if ($answer->score < intval($answer->target))
                         <p class="text-review">
-                            Thank you for completing the quiz, unfortunately your score is below target 😟, which is
-                            {{ $target->value }}% of
+                            Thank you for completing the quiz, unfortunately your score is below target 😟, which is {{$answer->target}}% of
                             correct answers.<br />
                             Here below a quick summary of your assessment
                         </p>
                     @else
                         <p class="text-review">
-                            Thank you for completing the quiz, Well done 👍 your score is above target, which is
-                            {{ $target->value }}% of
+                            Thank you for completing the quiz, Well done 👍 your score is above target, which is {{$answer->target}}% of
                             correct answers.<br />
                             Here below a quick summary of your assessment
                         </p>
                     @endif
                     <p class="fw-bold mb-0">Score :
                         <span
-                            class="{{ $answer->score >= intval($target->value) ? 'text-success' : 'text-danger' }}">{{ round($answer->score, 2) }}%
+                            class="{{ $answer->score >= intval($answer->target) ? 'text-success' : 'text-danger' }}">{{ round($answer->score, 2) }}%
                             correct ({{ $answer->nbr_of_correct }} / {{ count($answer->answers) }})</span>
                     </p>
                     @if ($answer->status)

@@ -23,8 +23,10 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card-body table-responsive p-0">
-                            <button class="btn btn-secondary mb-3" id="deleteAllSelectedRecords">Delete selected
-                                row</button>
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-outline-danger mb-3" id="deleteAllSelectedRecords">
+                                    <i class="fas fa-trash" style="margin-right: 7px;"></i>Delete selected rows</button>
+                                </div>
                             <table class="table" id="myTable">
                                 <thead>
                                     <tr>
@@ -41,8 +43,8 @@
                                         <tr>
                                             <td><input type="checkbox" value="{{ $answer->id }}" name="ids"
                                                     class="checkbox_ids"></th>
-                                            <td>{{ $answer->quiz?->name }}</td>
-                                            <td>{{ $answer->email }}</td>
+                                            <td>{{ Str::limit($answer->quiz?->name, 70, '...') }}</td>
+                                            <td>{{ Str::limit($answer->email, 70, '...') }}</td>
                                             <td>{{ round($answer->score, 2) }}%</td>
                                             <td>{{ $answer->created_at }}</td>
                                             <td><a href="{{ route('answer', ['token' => $answer->token]) }}"
@@ -84,20 +86,21 @@
                 var obj = $.confirm({
                     title: 'Confirm!',
                     content: `Are you sure you want delete ${all_ids.length} answer(s) ?  `,
-                    confirmButtonClass: 'btn-info',
-                    cancelButtonClass: 'btn-danger',    
+                    confirmButtonClass: 'btn-info float-right px-3',
+                    cancelButtonClass: 'btn-danger mr-2',
+                    confirmButton: 'Ok',
                     confirm: function() {
                         $.ajax({
-                    "type": "POST",
-                    "url": "{{ route('answer.destroy') }}",
-                    success: function(result) {
-                        location.reload();
-                    },
-                    "data": {
-                        _token: '{{ csrf_token() }}',
-                        item: all_ids
-                    },
-                });
+                            "type": "POST",
+                            "url": "{{ route('answer.destroy') }}",
+                            success: function(result) {
+                                location.reload();
+                            },
+                            "data": {
+                                _token: '{{ csrf_token() }}',
+                                item: all_ids
+                            },
+                        });
                     },
                     cancel: function() {}
                 });

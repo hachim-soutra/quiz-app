@@ -1,4 +1,43 @@
 @extends('layouts.app')
+@section('style')
+    <style>
+        .hide {
+            display: 'none';
+        }
+
+        .bg-tr {
+            background-color: #ccccccff;
+        }
+
+        thead {
+            background-color: #343b7c;
+            color: white;
+
+        }
+
+        input[type="checkbox"]:checked {
+            appearance: none;
+            background: url("{{ url('collapse.png') }}") no-repeat left center;
+            background-size: 20px;
+            padding-left: 25px;
+            border: none;
+            filter: brightness(0);
+            transform: rotate(180deg);
+        }
+
+        input[type="checkbox"] {
+            appearance: none;
+            background: url("{{ url('collapse.png') }}") no-repeat left center;
+            background-size: 20px;
+            padding-left: 25px;
+            border: none;
+            filter: brightness(0);
+            transform: rotate(0deg);
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+@endsection
 
 @section('content')
     <div class="container-fluid">
@@ -28,23 +67,6 @@
                                     Quiz list
                                 </h3>
                                 <div class="card-tools d-flex">
-                                    <form action="{{ route('quiz.index') }}" method="GET" class="d-flex ms-3">
-                                        <select name="folder" class="form-control">
-                                            <option value="" selected>Select folder</option>
-                                            @foreach ($folders as $folder)
-                                                <option value="{{ $folder->id }}"
-                                                    {{ request()->folder == $folder->id ? 'selected' : '' }}>
-                                                    {{ $folder->label }}</option>
-                                            @endforeach
-                                        </select>
-                                        <input type="text" name="search" class="form-control mx-2" placeholder="Search"
-                                            value="{{ request('search') }}">
-                                        <div class="input-group-append">
-                                            <button type="submit" class="btn btn-default" style="margin-right: 13px;">
-                                                <i class="fas fa-search"></i> Search
-                                            </button>
-                                        </div>
-                                    </form>
                                     <a href="{{ route('quiz.add') }}" type="button" class="btn btn-success"
                                         style="margin-right: 13px;">
                                         Add
@@ -57,15 +79,21 @@
                                 </div>
                             </div>
 
-                            <div class="card-body table-responsive p-0">
-                                <table class="table">
+                            <div class="card-body table-responsive px-2">
+                                {{-- <table class="table w-100" id="myTable">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Title</th>
-                                            <th>Description</th>
-                                            <th>Questions</th>
+                                            <th rowspan="2">#</th>
+                                            <th rowspan="2">Title</th>
+                                            <th rowspan="2">Description</th>
+                                            <th rowspan="2">Questions</th>
                                             <th colspan="4">Action</th>
+                                        </tr>
+                                        <tr style="display:none">
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -161,10 +189,94 @@
                                             </div>
                                         @endforeach
                                     </tbody>
+                                </table> --}}
+
+                                <table class="table w-100" id="myTable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Title</th>
+                                            <th>Description</th>
+                                            <th>Questions</th>
+                                            <th>Action</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($folders as $folder)
+                                            <tr class="bg-tr">
+
+                                                <td>
+                                                    <input type="checkbox" name="accounting" id="accounting"
+                                                        data-toggle="toggle">
+                                                    {{ $folder->label }}
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+
+                                    <tbody class="hide">
+                                        @foreach ($folder->quizzes as $item)
+                                            <tr>
+                                                <td>
+                                                    @if (!$item->isFirstInOrder())
+                                                        <a
+                                                            href="{{ route('quiz.order', ['type' => 'up', 'id' => $item->id]) }}">
+                                                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                                                        </a>
+                                                    @endif
+                                                    @if (!$item->isLastInOrder())
+                                                        <a
+                                                            href="{{ route('quiz.order', ['type' => 'down', 'id' => $item->id]) }}">
+                                                            <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                                                        </a>
+                                                    @endif
+
+                                                </td>
+                                                <td title="{{ $item->name }}">{!! Str::limit($item->name, 70, '...') !!}</td>
+                                                <td title="{{ $item->description }}">{!! Str::limit($item->description, 70, '...') !!}</td>
+                                                <td>
+                                                    <a href="{{ route('quiz.show', ['quiz' => $item]) }}">
+
+                                                        {{ count($item->questions) }}</a>
+                                                </td>
+
+                                                <td>
+                                                    <a target="_blank" href="{{ route('quiz', ['slug' => $item->slug]) }}"
+                                                        class="btn btn-success">
+                                                        <i class="fas fa-eye"></i>
+                                                        Show</a>
+
+
+                                                    <form method="POST"
+                                                        action="{{ route('quiz.duplicate-quiz', ['id' => $item->id]) }}"
+                                                        class="d-inline-block">
+                                                        @csrf
+                                                        <button class="btn btn-secondary">
+                                                            <i class="fas fa-copy"></i>
+                                                            Duplicate
+                                                        </button>
+                                                    </form>
+
+
+                                                    <a href="{{ route('quiz.edit', ['quiz' => $item]) }}"
+                                                        class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
+
+
+                                                    <a data-toggle="modal" data-target="#modal-delete-{{ $item->id }}"
+                                                        class="btn btn-danger">
+                                                        <i class="fas fa-trash"></i> Delete
+                                                    </a>
+
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                    @endforeach
+                                    </tbody>
                                 </table>
-                                <div class="d-flex align-items-center justify-content-end p-5">
-                                    {{ $data->links() }}
-                                </div>
                             </div>
 
                         </div>
@@ -190,16 +302,14 @@
                                     @csrf
                                     <div class="form-group">
                                         <label>Csv</label>
-                                        <input type="file" name="file" class="form-control"
-                                            placeholder="Upload ...">
+                                        <input type="file" name="file" class="form-control" placeholder="Upload ...">
                                         <a href="{{ url('/excel/quiz.csv') }}">excel example file</a>
                                     </div>
 
                                 </div>
 
                                 <div class="col-12 d-flex justify-content-end gap-5">
-                                    <button type="button" class="btn btn-default mr-3"
-                                        data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-default mr-3" data-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Import</button>
                                 </div>
                             </div>
@@ -212,4 +322,14 @@
 
         </div>
     </div>
+@endsection
+@section('js')
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable();
+            $('[data-toggle="toggle"]').change(function() {
+                $(this).parents().next('.hide').toggle();
+            });
+        });
+    </script>
 @endsection

@@ -2,10 +2,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://cdn.datatables.net/v/bs4-4.6.0/dt-1.13.8/af-2.6.0/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/rg-1.4.1/datatables.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/1.7.0/jquery-confirm.min.css" integrity="sha512-aSZhdO9qRbI5Yvk2tJciP+L7R++CSmyZE3vekxHiW55tQb7dgXxpX0PXr188QfzThNGC8Nb7Wrn9fUCAD/KpyQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://cdn.datatables.net/v/bs4-4.6.0/dt-1.13.8/af-2.6.0/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/rg-1.4.1/datatables.min.css"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/1.7.0/jquery-confirm.min.css"
+        integrity="sha512-aSZhdO9qRbI5Yvk2tJciP+L7R++CSmyZE3vekxHiW55tQb7dgXxpX0PXr188QfzThNGC8Nb7Wrn9fUCAD/KpyQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
         * {
             font-family: 'Century Gothic Paneuropean', sans-serif !important;
         }
@@ -30,6 +35,7 @@
             font-size: 20px !important;
         }
     </style>
+    @yield('style')
 
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
@@ -86,15 +92,19 @@
 
 
         </div>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-    <script src="https://cdn.datatables.net/v/bs4-4.6.0/dt-1.13.8/af-2.6.0/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/rg-1.4.1/datatables.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+        <script
+            src="https://cdn.datatables.net/v/bs4-4.6.0/dt-1.13.8/af-2.6.0/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/rg-1.4.1/datatables.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
-<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/1.7.0/jquery-confirm.min.js" integrity="sha512-3rO4uA/MW2+0ttYBRkgnI8teWs5ZFT3jwFZksUnrr9ViTEQ6fSrxHARcJ/WTM8VLcMP/FFyBuEYihtFEwtFczw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-@yield('js')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/1.7.0/jquery-confirm.min.js"
+            integrity="sha512-3rO4uA/MW2+0ttYBRkgnI8teWs5ZFT3jwFZksUnrr9ViTEQ6fSrxHARcJ/WTM8VLcMP/FFyBuEYihtFEwtFczw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        @yield('js')
 
     </body>
 </x-laravel-ui-adminlte::adminlte-layout>

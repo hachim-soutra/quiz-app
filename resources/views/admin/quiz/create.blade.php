@@ -54,9 +54,8 @@
                                             <div class="form-group">
                                                 <label>Choose folder</label>
                                                 <select name="folder" class="form-control">
-                                                    <option value="" selected></option>
                                                     @foreach ($folders as $folder)
-                                                        <option value="{{$folder->id}}">{{$folder->label}}</option>
+                                                        <option value="{{$folder->id}}" {{$folder->label == 'uncategorized' ? 'selected' : ''}}>{{$folder->label}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
