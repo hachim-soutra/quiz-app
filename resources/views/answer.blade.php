@@ -32,6 +32,15 @@
                         <p class="status-text mb-0 mt-2">Status : {{ $answer->status }}</p>
                     @endif
                 </div>
+
+                <div class="row">
+                    <div class="col-4">
+                        <div class="justify-content-center my-5">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
                 @csrf
                 @foreach ($answer->quiz->questions as $question)
                     @if ($question->question)
@@ -117,3 +126,29 @@
         </div>
     </div>
 @endsection
+@section('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script>
+        const ctx = document.getElementById('myChart');
+
+        new Chart(ctx, {
+            type: "doughnut",
+            data: {
+                labels: ['correct','incorrect','ignored'],
+                datasets: [{
+                    backgroundColor: ['green','red','grey'],
+                    data: [{{$answer->nbr_of_correct}},{{$answer->nbr_of_incorrect}},{{$answer->nbr_of_ignored}}]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                title: {
+                    display: false,
+                    text: ""
+                }
+            }
+        });
+    </script>
+@endsection
+

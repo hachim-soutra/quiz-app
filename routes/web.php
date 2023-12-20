@@ -41,34 +41,45 @@ Route::get('/quiz/{slug}', function ($slug) {
 Route::get('/answer/{token}', function ($token) {
     $answer = Answer::whereToken($token)->with(['quiz', 'quiz.questions', 'quiz.questions.question', 'quiz.questions.question.question_type'])->firstOrFail();
     $correct = 0;
+    $incorrect = 0;
+    $ignored = 0;
     foreach ($answer->quiz->questions as $question) {
         if ($question && $question->question && $question->question->question_type) {
             if ($question->question->question_type->name === 'row answers') {
-                if (
-                    isset($answer->answers[$question->question->id]) &&
-                    Helper::compareArray($answer->answers[$question->question->id])
-                ) {
-                    $correct++;
+                if (isset($answer->answers[$question->question->id])) {
+                    if( Helper::compareArray($answer->answers[$question->question->id])){
+                        $correct++;
+                    } else {
+                        $incorrect++;
+                    }
+                } else {
+                    $ignored++;
                 }
             } else {
-                if (
-                    isset($answer->answers[$question->question->id]) &&
-                    count(array_diff(
+                if( isset($answer->answers[$question->question->id])){
+                    if( count(array_diff(
                         $question->question->options()->where('is_correct', 1)->pluck('id')->toArray(),
                         array_values($answer->answers[$question->question->id])
                     )) == 0 &&
                     count(array_diff(
                         array_values($answer->answers[$question->question->id]),
                         $question->question->options()->where('is_correct', 1)->pluck('id')->toArray()
-                    )) === 0
-                ) {
-                    $correct++;
+                    )) === 0)
+                    {
+                        $correct++;
+                    }else {
+                        $incorrect++;
+                    }
+                }else {
+                    $ignored++;
                 }
             }
         }
     }
     $answer->update([
-        "nbr_of_correct" => $correct
+        "nbr_of_correct" => $correct,
+        "nbr_of_incorrect" => $incorrect,
+        "nbr_of_ignored" => $ignored,
     ]);
     $logo = Settings::where("name", "logo")->first();
     return view('answer')->with(["answer" => $answer, "logo" => $logo]);
