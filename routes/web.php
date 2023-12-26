@@ -43,12 +43,18 @@ Route::get('/answer/{token}', function ($token) {
     $correct = 0;
     $incorrect = 0;
     $ignored = 0;
+    $correctAnswers = [];
+    $categories = [];
+    $answersByCategory = [];
+    $allQuestions = [];
     foreach ($answer->quiz->questions as $question) {
+        array_push($allQuestions,$question->question->questions_categorization->name);
         if ($question && $question->question && $question->question->question_type) {
             if ($question->question->question_type->name === 'row answers') {
                 if (isset($answer->answers[$question->question->id])) {
                     if( Helper::compareArray($answer->answers[$question->question->id])){
                         $correct++;
+                        array_push($correctAnswers,$question->question->questions_categorization->name);
                     } else {
                         $incorrect++;
                     }
@@ -67,6 +73,7 @@ Route::get('/answer/{token}', function ($token) {
                     )) === 0)
                     {
                         $correct++;
+                        array_push($correctAnswers,$question->question->questions_categorization->name);
                     }else {
                         $incorrect++;
                     }
@@ -81,8 +88,9 @@ Route::get('/answer/{token}', function ($token) {
         "nbr_of_incorrect" => $incorrect,
         "nbr_of_ignored" => $ignored,
     ]);
-    $logo = Settings::where("name", "logo")->first();
-    return view('answer')->with(["answer" => $answer, "logo" => $logo]);
+    $answersByCatego = array_count_values($correctAnswers);
+    $allQstByCatego = array_count_values($allQuestions);
+    return view('answer')->with(["answer" => $answer,"answersByCatego" => $answersByCatego ,"allQstByCatego" => $allQstByCatego]);
 })->name('answer');
 
 Route::get('/questions/{token}/{id}/{pass?}', function ($token, $id, $pass = null) {

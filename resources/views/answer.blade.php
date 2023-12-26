@@ -33,11 +33,12 @@
                     @endif
                 </div>
 
-                <div class="row">
+                <div class="row align-items-center justify-content-center gap-2 my-5 ">
                     <div class="col-4">
-                        <div class="justify-content-center my-5">
                             <canvas id="myChart"></canvas>
-                        </div>
+                    </div>
+                    <div class="col-6">
+                            <canvas id="myChart2"></canvas>
                     </div>
                 </div>
 
@@ -87,7 +88,7 @@
                                 @if ((!Helper::compareArray($answer->answers[$question->question->id])) || (Helper::compareArray($answer->answers[$question->question->id])))
                                     <br>
                                     <strong class="text-danger ms-3">
-                                        {{ $question->question->error }} 111
+                                        {{ $question->question->error }} 
                                     </strong>
                                     <br>
                                 @endif
@@ -129,14 +130,19 @@
 @section('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script>
-        const ctx = document.getElementById('myChart');
+        var answer = @json($answersByCatego);
+        var questions = @json($allQstByCatego);
 
-        new Chart(ctx, {
-            type: "doughnut",
+        const values = Object.values(questions).map(function(x, index){
+            return Object.values(answer)[index] *100 / x
+        });
+
+        new Chart(document.getElementById('myChart'), {
+            type: "pie",
             data: {
                 labels: ['correct','incorrect','ignored'],
                 datasets: [{
-                    backgroundColor: ['green','red','grey'],
+                    backgroundColor: ['#0d6efd','yellow','#8B0000'],
                     data: [{{$answer->nbr_of_correct}},{{$answer->nbr_of_incorrect}},{{$answer->nbr_of_ignored}}]
                 }]
             },
@@ -146,6 +152,49 @@
                 title: {
                     display: false,
                     text: ""
+                }
+            }
+        });
+
+        var mixedChart = new Chart(document.getElementById('myChart2'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(answer),
+                datasets: [{
+                    label: 'Percent',
+                    data: values,
+                    backgroundColor: values.map((item) => {
+                        if(item < {{$answer->target}}) {
+                            return '#880808';
+                        } else {
+                            return '#0d6efd';
+                        }
+                    }),
+                    borderWidth: 1,
+                    order: 2
+                }, {
+                    label: 'Target',
+                    data: Array(Object.values(answer).length).fill({{$answer->target}}),
+                    type: 'line',
+                    fill: false,
+                    borderDash: [5, 5],
+                    backgroundColor: "#880808",
+                    borderColor: "#880808",
+                    tension: 0.1,
+                    order: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                title: {
+                    display: true,
+                    text: '% of correct answers by categories'
                 }
             }
         });
