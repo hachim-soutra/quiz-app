@@ -42,12 +42,29 @@ class Answer extends Model
         return collect($this->questions_json);
     }
 
+    public function getQuestionsReview()
+    {
+        return $this->getQuestions()->where("value", "review");
+    }
+
     public function setQuestion($id, $value)
     {
         $qu = [];
         foreach ($this->questions_json as $q) {
             if ($q["id"] == $id) {
                 $q["value"] = $value;
+            }
+            $qu[] = $q;
+        }
+        return $qu;
+    }
+
+    public function expiredQuestions()
+    {
+        $qu = [];
+        foreach ($this->questions_json as $q) {
+            if ($q["id"] == -1) {
+                $q["value"] = null;
             }
             $qu[] = $q;
         }

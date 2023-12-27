@@ -210,11 +210,11 @@ class QuizController extends Controller
         // $validated = $request->validate([
         //     'email' => 'required',
         // ]);
-        $target = Settings::where('name','LIKE',"answer target")->first();
+        $target = Settings::where('name', 'LIKE', "answer target")->first();
         $token = Str::random(16);
         $quiz = Quiz::findOrFail($id);
         $sort = 0;
-        $question_json = $quiz->questions->map(function ($question) use (&$sort) {
+        $question_json = $quiz->questions()->whereHas('question')->with('question')->get()->sortBy('question.name')->map(function ($question) use (&$sort, $quiz) {
             $sort++;
             return [
                 'id' => $question->question?->id,
@@ -223,10 +223,12 @@ class QuizController extends Controller
                 'type' => $question->question?->question_type?->name,
                 'error' => $question->question?->error,
                 'options' => $question->question?->options,
+                'corrects' => $question->question?->question_type?->name != "row answers" ? $question->question?->options->where('is_correct', 1)->pluck('id')->toArray() : $question->question?->options->pluck('value', 'id')->toArray(),
                 'value' => -1,
-                'sort' => $sort
+                'sort' => $sort,
             ];
         });
+        $target = Settings::where("name", "answer target")->first();
         $answer = Answer::create([
             "quiz_id" => $id,
             "token" => Str::random(16),
@@ -237,7 +239,8 @@ class QuizController extends Controller
             "timer" => $quiz->quiz_time ? Carbon::parse($quiz->quiz_time)->format('H:i:s') : null,
             "target" => $target->value
         ]);
-        return redirect()->route('questions', ['token' => $answer->token, 'id' => $answer->questions_json[0]["id"]]);
+        $question = $answer->getQuestions()->where("sort", 1)->first();
+        return redirect()->route('questions', ['token' => $answer->token, 'id' => $question["id"]]);
     }
 
 
@@ -401,16 +404,10 @@ class QuizController extends Controller
     public function quizExpired(string $token, string $status)
     {
         $answer = Answer::whereToken($token)->with(['quiz', 'quiz.questions', 'quiz.questions.question', 'quiz.questions.question.question_type'])->firstOrFail();
-        $answers = $answer->answers;
-        foreach ($answer->quiz->questions as $question) {
-            if (!isset($answers[$question->question_id])) {
-                $answers[$question->question_id] = null;
-            }
-        }
-        $answer->update([
-            "answers" => $answers,
-            "status" => $status
-        ]);
+        $questions = $answer->expiredQuestions();
+        $answer->questions_json = $questions;
+        $answer->status = $status;
+        $answer->save();
         return redirect()->route('answer', ['token' => $answer->token]);
     }
 

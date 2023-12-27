@@ -12,13 +12,15 @@
                     @endif
                     @if ($answer->score < intval($answer->target))
                         <p class="text-review">
-                            Thank you for completing the quiz, unfortunately your score is below target 😟, which is {{$answer->target}}% of
+                            Thank you for completing the quiz, unfortunately your score is below target 😟, which is
+                            {{ $answer->target }}% of
                             correct answers.<br />
                             Here below a quick summary of your assessment
                         </p>
                     @else
                         <p class="text-review">
-                            Thank you for completing the quiz, Well done 👍 your score is above target, which is {{$answer->target}}% of
+                            Thank you for completing the quiz, Well done 👍 your score is above target, which is
+                            {{ $answer->target }}% of
                             correct answers.<br />
                             Here below a quick summary of your assessment
                         </p>
@@ -28,12 +30,12 @@
                             class="{{ $answer->score >= intval($answer->target) ? 'text-success' : 'text-danger' }}">{{ round($answer->score, 2) }}%
                             correct ({{ $answer->nbr_of_correct }} / {{ count($answer->answers) }})</span>
                     </p>
-                    @if ($answer->status)
+                    @if ($answer->status && $answer->status !== 'good')
                         <p class="status-text mb-0 mt-2">Status : {{ $answer->status }}</p>
                     @endif
                 </div>
                 @csrf
-                @foreach ($answer->getQuestions() as $question)
+                @foreach ($answer->getQuestions()->sortBy('sort') as $question)
                     <div class="question bg-white p-3 border-bottom">
                         <div class="d-flex flex-row align-items-center question-title">
                             <h3 class="mt-1 ml-2">{{ $question['name'] }}</h3>
@@ -49,35 +51,33 @@
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        @foreach ($question->question->options as $option)
-                                            <th> {{ $option->name }}</th>
+                                        @foreach ($question['options'] as $option)
+                                            <th> {{ $option['name'] }}</th>
                                         @endforeach
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($question->question->options as $optionl)
+                                    @foreach ($question['options'] as $optionl)
                                         <tr
-                                            class="{{ isset($answer->answers[$question->question->id][$optionl->id]) && $answer->answers[$question->question->id][$optionl->id] === $optionl->value ? 'bg-success-1' : 'bg-danger-1' }}">
-                                            @foreach ($question->question->options as $k => $option)
+                                            class=" {{ $question['value'][$question['id']][$optionl['id']] === $optionl['value'] ? 'bg-success-1' : 'bg-danger-1' }}">
+                                            @foreach ($question['options'] as $k => $option)
                                                 @if ($loop->first)
-                                                    <td>{{ $optionl->value }}</td>
+                                                    <td>{{ $optionl['value'] }}</td>
                                                 @endif
                                                 <td>
-                                                    <input disabled required type="radio"
-                                                        {{ isset($answer->answers[$question->question->id][$optionl->id]) && $answer->answers[$question->question->id][$optionl->id] == $option->value ? 'checked' : '' }}
-                                                        name="question[{{ $question->question->id }}][{{ $optionl->id }}]"
-                                                        value="{{ $optionl->value }}">
-
+                                                    <input required type="radio" value="{{ $option['value'] }}"
+                                                        {{ $question['value'][$question['id']][$optionl['id']] === $option['value'] ? 'checked' : '' }}>
+                                                    {{ $option['value'] }}
                                                 </td>
                                             @endforeach
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
-                            @if (!Helper::compareArray($answer->answers[$question->question->id]))
+                            @if (count(array_diff($question['value'][$question['id']], $question['corrects'])) > 0)
                                 <br>
                                 <strong class="text-danger ms-3">
-                                    {{ $question->question->error }}
+                                    {{ $question['error'] }}
                                 </strong>
                                 <br>
                             @endif
@@ -93,25 +93,13 @@
                                     </label>
                                 </div>
                             @endforeach
-                            {{-- @if (isset($answer->answers[$question->question->id]) &&
-    (count(
-        array_diff(
-            $answer->answers[$question->question->id],
-            $question->question->options()->where('is_correct', 1)->pluck('id')->toArray(),
-        ),
-    ) > 0 ||
-        count(
-            array_diff(
-                $question->question->options()->where('is_correct', 1)->pluck('id')->toArray(),
-                $answer->answers[$question->question->id],
-            ),
-        ) > 0))
+                            @if (!is_array($question['value']) || count(array_diff($question['value'], $question['corrects'])) > 0)
                                 <br>
                                 <strong class="text-danger ms-3">
                                     {{ $question['error'] }}
                                 </strong>
                                 <br>
-                            @endif --}}
+                            @endif
                         @endif
                     </div>
                 @endforeach

@@ -5,8 +5,6 @@
         <div class="col-md-10 col-lg-10">
             <img src="{{ asset('images/' . $logo->value) }}" alt="" width="300px" class="profil">
             <div class="mt-3">
-                <h1> {{ $answer->getQuestion($id)['sort'] }}</h1>
-
                 @if ($break)
                     <div class="d-flex flex-column justify-content-between px-2">
                         <h2 class="text-deco">Take break <span class="countdown"></span>
@@ -17,54 +15,61 @@
                     <a href="{{ route('questions', ['token' => $answer->token, 'id' => $id, 'pass' => true]) }}"
                         class="btn btn-primary float-end">Back to quiz</a>
                 @else
+                    <div class="d-flex flex-column justify-content-between px-2">
+                        <h2 class="text-deco">
+                            {{ $answer->quiz->name }}
+                        </h2>
+                        <p class="sous-title">{{ $answer->quiz->description }}</p>
+
+                    </div>
+                    <div class="d-flex flex-row justify-content-end align-items-center py-3 bg-white gap-2">
+                        @if ($answer->getQuestion($id)['sort'] > 1)
+                            <form action="{{ route('question.prev', ['id' => $id, 'token' => $answer->token]) }}"
+                                method="POST">
+                                @csrf
+                                <input type="hidden" name="timer" id="timer3">
+                                <button type="submit" class="btn btn-outline-dark align-items-center"><i
+                                        class="fa fa-angle-left mr-3"></i> Previous
+                                </button>
+                            </form>
+                        @endif
+                        <form method="POST"
+                            action="{{ route('question.review', ['id' => $id, 'token' => $answer->token]) }}">
+                            @csrf
+                            <input type="hidden" name="timer" id="timer1">
+                            <button class="btn btn-outline-dark align-items-center">
+                                <i class="fa fa-solid fa-rotate-right"></i> Mark for review
+                            </button>
+                        </form>
+                        <form method="POST"
+                            action="{{ route('question.ignore', ['id' => $id, 'token' => $answer->token]) }}">
+                            @csrf
+                            <input type="hidden" name="timer" id="timer2">
+                            <button class="btn btn-outline-dark align-items-center">
+                                <i class="fa-regular fa-circle-xmark"></i> Ignore
+                            </button>
+                        </form>
+                        <a href="{{ route('quiz.expired', ['token' => $answer->token, 'status' => 'Terminate test']) }}"
+                            class="btn btn-outline-danger"><i class="fa-solid fa-fire"></i> Terminate Test</a>
+
+                    </div>
                     <form method="POST"
                         action="{{ route('quiz.next', ['token' => $answer->token, 'question_id' => $id]) }}">
-                        <div class="d-flex flex-column justify-content-between px-2">
-                            <h2 class="text-deco">
-                                {{ $answer->quiz->name }}</h2>
-                            <p class="sous-title">{{ $answer->quiz->description }}</p>
-                        </div>
 
                         @csrf
                         <div class="question bg-white my-3">
                             <div class="d-flex flex-row align-items-start question-title flex-column">
-                                @if ($answer->timer)
-                                    <div class="my-2"
-                                        style="
-                                            padding: 6px;
-                                            display: flex;
-                                            align-self: end;
-                                            justify-content: center;
-                                            align-items: center;
-                                            gap: 10px;
-                                            border: 1px solid;
-                                            border-radius: 13px;
-                                        ">
-                                        <span class="font-semibold ">
-                                            <img src="{{ asset('clock.svg') }}" alt="" height="35px">
-                                        </span>
-                                        <div class="countdown"
-                                            style="
-                                                display: inline;
-                                                background-color: green;
-                                                color: white;
-                                                padding: 5px 10px;
-                                                border-radius: 5px;
-                                            ">
-                                        </div>
-                                        <button class="btn p-0" type="button" id="stopTimer">
-                                            <span class="font-semibold ">
-                                                <img src="{{ asset('pause.svg') }}" alt="" height="35px">
-                                            </span>
-                                        </button>
-                                    </div>
-                                    <input type="hidden" name="timer" id="timer">
+                                @if ($answer->getQuestion($id)['value'] === 'review')
+                                    <small class="text-primary"><i class="fa fa-solid fa-rotate-right"></i> Review
+                                        Question</small>
                                 @endif
-                                <h3 class="mt-1 ml-2 d-block">{{ $answer->getQuestion($id)['name'] }}</h3>
+                                <h3 class="ml-2 d-block"> <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                    {{ $answer->getQuestion($id)['name'] }}</h3>
                                 @if ($answer->getQuestion($id)['type'] === 'multiple answer')
                                     <small class="text-danger">multiple answers possible</small>
                                     <br>
                                 @endif
+
                                 @if ($answer->getQuestion($id)['image'])
                                     <img src="{{ asset('images/question/' . $answer->getQuestion($id)['image']) }}"
                                         width="40%" height="auto" class="mt-3 rounded" alt="img">
@@ -95,7 +100,7 @@
                                                         <td>
                                                             <input required type="radio"
                                                                 name="question[{{ $id }}][{{ $optionl['id'] }}]"
-                                                                value="{{ $option->value }}"
+                                                                value="{{ $option['value'] }}"
                                                                 {{ isset($answer->answers[$id]) && $option['value'] == $answer->answers[$id][$optionl['id']] ? 'checked' : '' }}
                                                                 class="@error('question') is-invalid @enderror">
 
@@ -110,7 +115,7 @@
                                         <div class="ans ml-2 lh-lg">
                                             <label class="radio">
                                                 <input
-                                                    {{ isset($answer->getQuestion($id)['value']) && in_array($option['id'], $answer->getQuestion($id)['value']) ? 'checked' : '' }}
+                                                    {{ isset($answer->getQuestion($id)['value']) && is_array($answer->getQuestion($id)['value']) && in_array($option['id'], $answer->getQuestion($id)['value']) ? 'checked' : '' }}
                                                     type="{{ $answer->getQuestion($id)['type'] === 'one answer' ? 'radio' : 'checkbox' }}"
                                                     name="question[]" value="{{ $option['id'] }}"
                                                     class="@error('question') is-invalid @enderror">
@@ -127,41 +132,36 @@
                                 @endforeach
                             </div>
                         </div>
-                        <div class="d-flex flex-row justify-content-end align-items-center p-3 bg-white gap-2">
-                            <form method="POST"
-                                action="{{ route('question.review', ['id' => $id, 'token' => $answer->token]) }}">
-                                @csrf
-                                <input type="hidden" name="timer" id="timer1">
-                                <button class="btn btn-primary border-primary align-items-center btn-primary">Mark for
-                                    review<i class="fa fa-angle-right ml-2"></i>
-                                </button>
-                            </form>
-                            <form method="POST"
-                                action="{{ route('question.ignore', ['id' => $id, 'token' => $answer->token]) }}">
-                                @csrf
-                                <input type="hidden" name="timer" id="timer2">
-                                <button class="btn btn-primary border-primary align-items-center btn-primary">Ignore<i
-                                        class="fa fa-angle-right ml-2"></i>
-                                </button>
-                            </form>
-                            @if ($answer->getQuestion($id)['sort'] > 1)
-                                <form action="{{ route('question.prev', ['id' => $id, 'token' => $answer->token]) }}"
-                                    method="POST">
-                                    @csrf
-                                    <input type="hidden" name="timer" id="timer3">
-                                    <button type="submit"
-                                        class="btn btn-primary border-primary align-items-center btn-primary">Previous<i
-                                            class="fa fa-angle-right ml-2"></i>
-                                    </button>
-                                </form>
-                            @endif
-                            <button class="btn btn-primary border-success align-items-center btn-success"
-                                type="submit">Next<i class="fa fa-angle-right"></i>
+                        <div class="d-flex flex-row justify-content-between align-items-center py-3 bg-white gap-2">
+                            <button class="btn btn-primary border-success align-items-center btn-success" type="submit"><i
+                                    class="fa fa-check ml-3" aria-hidden="true"></i> Next
                             </button>
-                            <a href="{{ route('quiz.expired', ['token' => $answer->token, 'status' => 'Terminate test']) }}"
-                                class="btn btn-danger">Terminate Test</a>
+
+                            @if ($answer->timer)
+                                <div class="my-2"
+                                    style="
+                                display: flex;
+                                align-self: end;
+                                justify-content: center;
+                                align-items: center;
+                                gap: 10px;
+                                font-size: 1.3rem;
+                                color: white;
+                            ">
+                                    <button class="btn btn-outline-success countdown-btn" disabled>
+                                        <i class="fa fa-regular fa-clock"></i>
+                                        <span class="countdown"></span>
+                                    </button>
+                                    <button class="btn btn-outline-dark" id="stopTimer" type="button">
+                                        <i class="fa fa-regular fa-circle-stop"></i> Stop
+                                    </button>
+                                </div>
+                                <input type="hidden" name="timer" id="timer">
+                            @endif
                         </div>
                     </form>
+
+
                 @endif
 
             </div>
@@ -257,7 +257,7 @@
                             timerReminder[2]);
                         let x2 = parseInt(timer[0]) * 3600 + parseInt(timer[1]) * 60 + parseInt(timer[2]);
                         if (x1 >= x2) {
-                            $('.countdown').css('background-color', 'red');
+                            $('.countdown-btn').addClass('btn-outline-danger');
                         }
                         timer2 = hours + ':' + minutes + ':' + seconds;
                         $('#timer').val(timer2);
@@ -266,7 +266,7 @@
                         $('#timer3').val(timer2);
                     }
                     if (timer2 === "0:00:10") {
-                        $('.countdown').addClass(" zoom-in-out");
+                        $('.countdown-btn').addClass(" zoom-in-out");
                     }
                 }
 

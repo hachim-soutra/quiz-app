@@ -137,7 +137,6 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Sort</th>
                                     <th>Title</th>
                                     <th>Type</th>
                                     <th>Category</th>
@@ -149,22 +148,11 @@
                             <tbody>
                                 @foreach ($quiz->questions()->orderBy('order')->get() as $item)
                                     <tr>
-                                        <td>
-                                            <a href="{{ route('question.sort', ['type' => 'up', 'id' => $item->id]) }}">
-                                                <img src="{{ asset('assets/icons/line-angle-up-icon.svg') }}"
-                                                    alt="" height="10px">
-                                            </a>
-                                            <br>
-                                            {{ $item->order }}
-                                            <br>
-                                            <a href="{{ route('question.sort', ['type' => 'down', 'id' => $item->id]) }}">
-                                                <img src="{{ asset('assets/icons/line-angle-down-icon.svg') }}"
-                                                    alt="" height="10px">
-                                            </a>
-                                        </td>
+
                                         <td title="{{ $item->question->name }}">{!! Str::limit($item->question->name, 70, '...') !!}</td>
                                         <td>{{ $item->question->question_type?->name }}</td>
-                                        <td>{{ $item->question->questions_categorization ? $item->question->questions_categorization->name : 'uncategorized' }}</td>
+                                        <td>{{ $item->question->questions_categorization ? $item->question->questions_categorization->name : 'uncategorized' }}
+                                        </td>
                                         <td>
                                             <a href="{{ route('question.show', ['id' => $item->question->id]) }}"
                                                 class=" text-nowrap">

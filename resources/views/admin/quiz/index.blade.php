@@ -2,7 +2,7 @@
 @section('style')
     <style>
         .hide {
-            display: 'none';
+            display: none;
         }
 
         .bg-tr {
@@ -10,9 +10,8 @@
         }
 
         thead {
-            background-color: #343b7c;
-            color: white;
-
+            background-color: #cfe2f3;
+            color: black;
         }
 
         input[type="checkbox"]:checked {
@@ -80,201 +79,99 @@
                             </div>
 
                             <div class="card-body table-responsive px-2">
-                                {{-- <table class="table w-100" id="myTable">
-                                    <thead>
-                                        <tr>
-                                            <th rowspan="2">#</th>
-                                            <th rowspan="2">Title</th>
-                                            <th rowspan="2">Description</th>
-                                            <th rowspan="2">Questions</th>
-                                            <th colspan="4">Action</th>
-                                        </tr>
-                                        <tr style="display:none">
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($data as $item)
-                                            <tr>
-                                                <td>
-                                                    @if (!$item->isFirstInOrder())
-                                                        <a
-                                                            href="{{ route('quiz.order', ['type' => 'up', 'id' => $item->id]) }}">
-                                                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                                                        </a>
-                                                    @endif
-                                                    @if (!$item->isLastInOrder())
-                                                        <a
-                                                            href="{{ route('quiz.order', ['type' => 'down', 'id' => $item->id]) }}">
-                                                            <i class="fas fa-arrow-down" aria-hidden="true"></i>
-                                                        </a>
-                                                    @endif
-
-                                                </td>
-                                                <td title="{{ $item->name }}">{!! Str::limit($item->name, 70, '...') !!}</td>
-                                                <td title="{{ $item->description }}">{!! Str::limit($item->description, 70, '...') !!}</td>
-                                                <td>
-                                                    <a href="{{ route('quiz.show', ['quiz' => $item]) }}">
-
-                                                        {{ $item->questions_count }}</a>
-                                                </td>
-                                                <td>
-                                                    <a target="_blank" href="{{ route('quiz', ['slug' => $item->slug]) }}"
-                                                        class="btn btn-success">
-                                                        <i class="fas fa-eye"></i>
-                                                        Show</a>
-                                                </td>
-
-                                                <td>
-                                                    <form method="POST"
-                                                        action="{{ route('quiz.duplicate-quiz', ['id' => $item->id]) }}"
-                                                        class="d-inline-block">
-                                                        @csrf
-                                                        <button class="btn btn-secondary">
-                                                            <i class="fas fa-copy"></i>
-                                                            Duplicate
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                                <td>
-
-                                                    <a href="{{ route('quiz.edit', ['quiz' => $item]) }}"
-                                                        class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
-
-                                                </td>
-                                                <td>
-                                                    <a data-toggle="modal" data-target="#modal-delete-{{ $item->id }}"
-                                                        class="btn btn-danger">
-                                                        <i class="fas fa-trash"></i> Delete
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <div class="modal fade" id="modal-delete-{{ $item->id }}" aria-modal="true"
-                                                role="dialog">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">Delete quiz</h4>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">×</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form method="POST"
-                                                                action="{{ route('quiz.destroy', ['quiz' => $item]) }}">
-                                                                <div class="row">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <div class="col-12">
-                                                                        Are you sure {{ $item->name }}?
-                                                                    </div>
-                                                                    <div class="col-12 d-flex justify-content-end gap-5">
-                                                                        <button type="button" class="btn btn-default mr-3"
-                                                                            data-dismiss="modal">Close</button>
-                                                                        <button type="submit"
-                                                                            class="btn btn-primary">Delete</button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-                                        @endforeach
-                                    </tbody>
-                                </table> --}}
-
                                 <table class="table w-100" id="myTable">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Title</th>
-                                            <th>Description</th>
-                                            <th>Questions</th>
-                                            <th>Action</th>
+                                            <th>Folder</th>
                                         </tr>
-
                                     </thead>
                                     <tbody>
                                         @foreach ($folders as $folder)
                                             <tr class="bg-tr">
-
                                                 <td>
                                                     <input type="checkbox" name="accounting" id="accounting"
-                                                        data-toggle="toggle">
+                                                        data-toggle="toggle" data-id="{{ $folder->id }}">
                                                     {{ $folder->label }}
-                                                </td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
 
-                                    <tbody class="hide">
-                                        @foreach ($folder->quizzes as $item)
-                                            <tr>
-                                                <td>
-                                                    @if (!$item->isFirstInOrder())
-                                                        <a
-                                                            href="{{ route('quiz.order', ['type' => 'up', 'id' => $item->id]) }}">
-                                                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                                                        </a>
-                                                    @endif
-                                                    @if (!$item->isLastInOrder())
-                                                        <a
-                                                            href="{{ route('quiz.order', ['type' => 'down', 'id' => $item->id]) }}">
-                                                            <i class="fas fa-arrow-down" aria-hidden="true"></i>
-                                                        </a>
-                                                    @endif
+                                                    <table width="100%" class="hide hide-{{ $folder->id }}">
+                                                        <thead>
+                                                            <tr bg="red">
+                                                                <th>#</th>
+                                                                <th>Title</th>
+                                                                <th>Description</th>
+                                                                <th>Questions</th>
+                                                                <th colspan="4">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($folder->quizzes as $item)
+                                                                <tr>
+                                                                    <td>
+                                                                        @if (!$item->isFirstInOrder())
+                                                                            <a
+                                                                                href="{{ route('quiz.order', ['type' => 'up', 'id' => $item->id]) }}">
+                                                                                <i class="fas fa-arrow-up"
+                                                                                    aria-hidden="true"></i>
+                                                                            </a>
+                                                                        @endif
+                                                                        @if (!$item->isLastInOrder())
+                                                                            <a
+                                                                                href="{{ route('quiz.order', ['type' => 'down', 'id' => $item->id]) }}">
+                                                                                <i class="fas fa-arrow-down"
+                                                                                    aria-hidden="true"></i>
+                                                                            </a>
+                                                                        @endif
 
-                                                </td>
-                                                <td title="{{ $item->name }}">{!! Str::limit($item->name, 70, '...') !!}</td>
-                                                <td title="{{ $item->description }}">{!! Str::limit($item->description, 70, '...') !!}</td>
-                                                <td>
-                                                    <a href="{{ route('quiz.show', ['quiz' => $item]) }}">
+                                                                    </td>
+                                                                    <td title="{{ $item->name }}">{!! Str::limit($item->name, 70, '...') !!}
+                                                                    </td>
+                                                                    <td title="{{ $item->description }}">
+                                                                        {!! Str::limit($item->description, 70, '...') !!}</td>
+                                                                    <td>
+                                                                        <a
+                                                                            href="{{ route('quiz.show', ['quiz' => $item]) }}">
 
-                                                        {{ count($item->questions) }}</a>
-                                                </td>
+                                                                            {{ count($item->questions) }}</a>
+                                                                    </td>
 
-                                                <td>
-                                                    <a target="_blank" href="{{ route('quiz', ['slug' => $item->slug]) }}"
-                                                        class="btn btn-success">
-                                                        <i class="fas fa-eye"></i>
-                                                        Show</a>
-
-
-                                                    <form method="POST"
-                                                        action="{{ route('quiz.duplicate-quiz', ['id' => $item->id]) }}"
-                                                        class="d-inline-block">
-                                                        @csrf
-                                                        <button class="btn btn-secondary">
-                                                            <i class="fas fa-copy"></i>
-                                                            Duplicate
-                                                        </button>
-                                                    </form>
-
-
-                                                    <a href="{{ route('quiz.edit', ['quiz' => $item]) }}"
-                                                        class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
+                                                                    <td>
+                                                                        <a target="_blank"
+                                                                            href="{{ route('quiz', ['slug' => $item->slug]) }}"
+                                                                            class="btn btn-success">
+                                                                            <i class="fas fa-eye"></i>
+                                                                            Show</a>
 
 
-                                                    <a data-toggle="modal" data-target="#modal-delete-{{ $item->id }}"
-                                                        class="btn btn-danger">
-                                                        <i class="fas fa-trash"></i> Delete
-                                                    </a>
+                                                                        <form method="POST"
+                                                                            action="{{ route('quiz.duplicate-quiz', ['id' => $item->id]) }}"
+                                                                            class="d-inline-block">
+                                                                            @csrf
+                                                                            <button class="btn btn-secondary">
+                                                                                <i class="fas fa-copy"></i>
+                                                                                Duplicate
+                                                                            </button>
+                                                                        </form>
 
+
+                                                                        <a href="{{ route('quiz.edit', ['quiz' => $item]) }}"
+                                                                            class="btn btn-primary"><i
+                                                                                class="fas fa-edit"></i>Update</a>
+
+
+                                                                        <a data-toggle="modal"
+                                                                            data-target="#modal-delete-{{ $item->id }}"
+                                                                            class="btn btn-danger">
+                                                                            <i class="fas fa-trash"></i> Delete
+                                                                        </a>
+
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
                                                 </td>
                                             </tr>
                                         @endforeach
-                                    </tbody>
-                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -327,8 +224,9 @@
     <script>
         $(document).ready(function() {
             $('#myTable').DataTable();
+            $(".hide").hide();
             $('[data-toggle="toggle"]').change(function() {
-                $(this).parents().next('.hide').toggle();
+                $(".hide-" + this.dataset.id).toggle();
             });
         });
     </script>

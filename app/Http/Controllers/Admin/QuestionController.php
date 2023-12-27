@@ -28,11 +28,22 @@ class QuestionController extends Controller
     public function show($token, $id, $pass = null)
     {
         $answer = Answer::with("quiz")->whereToken($token)->firstOrFail();
-        $question = Question::findOrFail($id);
+        if ($answer->status) {
+            return redirect()->route('answer', ['token' => $answer->token]);
+        }
         $break = false;
-        // if (!$pass && $answer->quiz->nbr_questions_sequance && $answer->quiz->quiz_type == 3 && count($answer->answers) % $answer->quiz->nbr_questions_sequance == 0 && count($answer->answers) > 0) {
-        //     $break = true;
-        // }
+        $question = $answer->getQuestion($id);
+        if (
+            !$pass && $answer->quiz->nbr_questions_sequance
+            && $answer->quiz->quiz_type == 3
+            && (($question['sort'] - 1) % $answer->quiz->nbr_questions_sequance) == 0
+            && $question['sort'] > 1
+        ) {
+            if ($answer->getQuestionsReview()->sortBy('sort')->first()) {
+                return redirect()->route('questions', ['token' => $answer->token, 'id' => $answer->getQuestionsReview()->sortBy('sort')->first()["id"]]);
+            }
+            $break = true;
+        }
         return view('question')->with(["answer" => $answer, "break" => $break, "id" => $id]);
     }
 
@@ -43,33 +54,26 @@ class QuestionController extends Controller
         $answer->questions_json = $questions;
         $answer->timer = $answer->quiz->quiz_time ? $request->timer : null;
         $answer->save();
-        $question = $answer->getQuestions()->where("sort", $answer->getQuestion($id)["sort"] + 1)->first();
-        if ($question) {
-            return redirect()->route('questions', ['token' => $token, 'id' => $question["id"]]);
-        } else {
-            return redirect()->route('answer', ['token' => $answer->token]);
-        }
+        return $this->redirectQuestion($answer, $id);
     }
 
     public function review($token, $id, Request $request)
     {
         $answer = Answer::with("quiz")->whereToken($token)->firstOrFail();
-        $quizQuestionOld = QuizQuestion::findOrFail($id);
-        $quizQuestion = QuizQuestion::where("order", $quizQuestionOld->order + 1)->firstOrFail();
-        $answer->update([
-            "timer" => $answer->quiz->quiz_time ? $request->timer : null,
-        ]);
-        return redirect()->route('questions', ['token' => $token, 'id' => $quizQuestion->question_id]);
+        $questions = $answer->setQuestion($id, "review");
+        $answer->questions_json = $questions;
+        $answer->timer = $answer->quiz->quiz_time ? $request->timer : null;
+        $answer->save();
+        return $this->redirectQuestion($answer, $id);
     }
 
     public function prev($token, $id, Request $request)
     {
         $answer = Answer::with("quiz")->whereToken($token)->firstOrFail();
-        $question = $answer->getQuestions()->where("sort", $answer->getQuestion($id)["sort"] - 1)->first();
         $answer->update([
             "timer" => $answer->quiz->quiz_time ? $request->timer : null,
         ]);
-        return redirect()->route('questions', ['token' => $token, 'id' => $question["id"]]);
+        return $this->redirectQuestion($answer, $id, "prev");
     }
 
     public function next($token, int $question_id, Request $request)
@@ -82,10 +86,23 @@ class QuestionController extends Controller
         $answer->questions_json = $questions;
         $answer->timer = $answer->quiz->quiz_time ? $request->timer : null;
         $answer->save();
-        $question = $answer->getQuestions()->where("sort", $answer->getQuestion($question_id)["sort"] + 1)->first();
-        if ($question) {
-            return redirect()->route('questions', ['token' => $token, 'id' => $question["id"]]);
+        return $this->redirectQuestion($answer, $question_id);
+    }
+
+    public function redirectQuestion($answer, $id, $type = "next")
+    {
+        if ($type === "next") {
+            $question = $answer->getQuestions()->where("sort", $answer->getQuestion($id)["sort"] + 1)->first();
         } else {
+            $question = $answer->getQuestions()->where("sort", $answer->getQuestion($id)["sort"] - 1)->first();
+        }
+        if ($question) {
+            return redirect()->route('questions', ['token' => $answer->token, 'id' => $question["id"]]);
+        } else {
+            if ($answer->getQuestionsReview()->first()) {
+                return redirect()->route('questions', ['token' => $answer->token, 'id' => $answer->getQuestionsReview()->first()["id"]]);
+            }
+            $answer->update(["status" => "good"]);
             return redirect()->route('answer', ['token' => $answer->token]);
         }
     }

@@ -40,7 +40,7 @@
 
                     <div class="d-flex flex-row justify-content-end align-items-center p-3 bg-white">
                         <button class="btn btn-primary border-success align-items-center btn-success" type="submit">Start
-                            Quiz<i class="fa fa-angle-right ml-2"></i>
+                            Quiz
                         </button>
                     </div>
                 </form>
