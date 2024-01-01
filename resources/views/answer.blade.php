@@ -120,7 +120,7 @@
 @section('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script>
-        $(document).ready(function() {
+        document.addEventListener("DOMContentLoaded", function(event) {
             var answer = @json($answersByCatego);
             var questions = @json($allQstByCatego);
             const values = Object.values(questions).map(function(x, index) {
