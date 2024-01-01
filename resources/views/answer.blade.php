@@ -120,75 +120,77 @@
 @section('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script>
-        var answer = @json($answersByCatego);
-        var questions = @json($allQstByCatego);
-        const values = Object.values(questions).map(function(x, index) {
+        $(document).ready(function() {
+            var answer = @json($answersByCatego);
+            var questions = @json($allQstByCatego);
+            const values = Object.values(questions).map(function(x, index) {
 
-            return Object.values(answer)[index] * 100 / x
-        });
+                return Object.values(answer)[index] * 100 / x
+            });
 
-        new Chart(document.getElementById('myChart'), {
-            type: "pie",
-            data: {
-                labels: ['correct', 'incorrect', 'ignored'],
-                datasets: [{
-                    backgroundColor: ['green', 'red', 'orange'],
-                    data: [{{ $answer->nbr_of_correct }}, {{ $answer->nbr_of_incorrect }},
-                        {{ $answer->nbr_of_ignored }}
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                title: {
-                    display: false,
-                    text: ""
-                }
-            }
-        });
-
-        var mixedChart = new Chart(document.getElementById('myChart2'), {
-            type: 'bar',
-            data: {
-                labels: Object.keys(answer),
-                datasets: [{
-                    label: 'Percent',
-                    data: values,
-                    backgroundColor: values.map((item) => {
-                        if (item < {{ $answer->target }}) {
-                            return 'red';
-                        } else {
-                            return 'green';
-                        }
-                    }),
-                    borderWidth: 1,
-                    order: 2
-                }, {
-                    label: 'Target',
-                    data: Array(values.length).fill({{ $answer->target }}),
-                    type: 'line',
-                    fill: false,
-                    borderDash: [5, 5],
-                    backgroundColor: "white",
-                    borderColor: "black",
-                    tension: 0.1,
-                    order: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
+            new Chart(document.getElementById('myChart'), {
+                type: "pie",
+                data: {
+                    labels: ['correct', 'incorrect', 'ignored'],
+                    datasets: [{
+                        backgroundColor: ['green', 'red', 'orange'],
+                        data: [{{ $answer->nbr_of_correct }}, {{ $answer->nbr_of_incorrect }},
+                            {{ $answer->nbr_of_ignored }}
+                        ]
                     }]
                 },
-                title: {
-                    display: true,
-                    text: '% of correct answers by categories'
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    title: {
+                        display: false,
+                        text: ""
+                    }
                 }
-            }
+            });
+
+            var mixedChart = new Chart(document.getElementById('myChart2'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(answer),
+                    datasets: [{
+                        label: 'Percent',
+                        data: values,
+                        backgroundColor: values.map((item) => {
+                            if (item < {{ $answer->target }}) {
+                                return 'red';
+                            } else {
+                                return 'green';
+                            }
+                        }),
+                        borderWidth: 1,
+                        order: 2
+                    }, {
+                        label: 'Target',
+                        data: Array(values.length).fill({{ $answer->target }}),
+                        type: 'line',
+                        fill: false,
+                        borderDash: [5, 5],
+                        backgroundColor: "white",
+                        borderColor: "black",
+                        tension: 0.1,
+                        order: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    title: {
+                        display: true,
+                        text: '% of correct answers by categories'
+                    }
+                }
+            });
         });
     </script>
 @endsection
