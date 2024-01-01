@@ -219,6 +219,7 @@ class QuizController extends Controller
             return [
                 'id' => $question->question?->id,
                 'name' => $question->question?->name,
+                'category' => $question->question?->questions_categorization->name,
                 'image' => $question->question?->image,
                 'type' => $question->question?->question_type?->name,
                 'error' => $question->question?->error,
@@ -237,7 +238,7 @@ class QuizController extends Controller
             "email" => $request->email ?? "",
             "score" => 0,
             "timer" => $quiz->quiz_time ? Carbon::parse($quiz->quiz_time)->format('H:i:s') : null,
-            "target" => $target->value
+            "target" => $target->value,
         ]);
         $question = $answer->getQuestions()->where("sort", 1)->first();
         return redirect()->route('questions', ['token' => $answer->token, 'id' => $question["id"]]);

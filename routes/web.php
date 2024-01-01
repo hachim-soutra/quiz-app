@@ -45,41 +45,25 @@ Route::get('/answer/{token}', function ($token) {
     $incorrect = 0;
     $ignored = 0;
     $correctAnswers = [];
-    $categories = [];
-    $answersByCategory = [];
     $allQuestions = [];
-    foreach ($answer->quiz->questions as $question) {
-        array_push($allQuestions,$question->question->questions_categorization->name);
-        if ($question && $question->question && $question->question->question_type) {
-            if ($question->question->question_type->name === 'row answers') {
-                if (isset($answer->answers[$question->question->id])) {
-                    if( Helper::compareArray($answer->answers[$question->question->id])){
-                        $correct++;
-                        array_push($correctAnswers,$question->question->questions_categorization->name);
-                    } else {
-                        $incorrect++;
-                    }
+    foreach ($answer->getQuestions() as $question) {
+        array_push($allQuestions, $question['category']);
+        if ($question["value"] === -1) {
+            $ignored++;
+        } else {
+            if ($question['type'] === 'row answers') {
+                if (!is_array($question['value']) || count(array_diff($question['value'][$question['id']], $question['corrects'])) > 0) {
+                    $incorrect++;
                 } else {
-                    $ignored++;
+                    array_push($correctAnswers, $question['category']);
+                    $correct++;
                 }
             } else {
-                if( isset($answer->answers[$question->question->id])){
-                    if( count(array_diff(
-                        $question->question->options()->where('is_correct', 1)->pluck('id')->toArray(),
-                        array_values($answer->answers[$question->question->id])
-                    )) == 0 &&
-                    count(array_diff(
-                        array_values($answer->answers[$question->question->id]),
-                        $question->question->options()->where('is_correct', 1)->pluck('id')->toArray()
-                    )) === 0)
-                    {
-                        $correct++;
-                        array_push($correctAnswers,$question->question->questions_categorization->name);
-                    }else {
-                        $incorrect++;
-                    }
-                }else {
-                    $ignored++;
+                if (!is_array($question['value']) || count(array_diff($question['value'], $question['corrects'])) > 0) {
+                    $incorrect++;
+                } else {
+                    array_push($correctAnswers, $question['category']);
+                    $correct++;
                 }
             }
         }
@@ -91,7 +75,8 @@ Route::get('/answer/{token}', function ($token) {
     ]);
     $answersByCatego = array_count_values($correctAnswers);
     $allQstByCatego = array_count_values($allQuestions);
-    return view('answer')->with(["answer" => $answer,"answersByCatego" => $answersByCatego ,"allQstByCatego" => $allQstByCatego]);
+
+    return view('answer')->with(["answer" => $answer, "answersByCatego" => $answersByCatego, "allQstByCatego" => $allQstByCatego]);
 })->name('answer');
 
 Route::middleware('check.answer')->group(function () {

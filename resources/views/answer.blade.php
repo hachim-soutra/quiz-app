@@ -28,7 +28,7 @@
                     <p class="fw-bold mb-0">Score :
                         <span
                             class="{{ $answer->score >= intval($answer->target) ? 'text-success' : 'text-danger' }}">{{ round($answer->score, 2) }}%
-                            correct ({{ $answer->nbr_of_correct }} / {{ count($answer->answers) }})</span>
+                            correct ({{ $answer->nbr_of_correct }} / {{ count($answer->questions_json) }})</span>
                     </p>
                     @if ($answer->status && $answer->status !== 'good')
                         <p class="status-text mb-0 mt-2">Status : {{ $answer->status }}</p>
@@ -36,11 +36,11 @@
                 </div>
 
                 <div class="row align-items-center justify-content-center gap-2 my-5 ">
-                    <div class="col-4">
-                            <canvas id="myChart"></canvas>
+                    <div class="col-6">
+                        <canvas id="myChart"></canvas>
                     </div>
                     <div class="col-6">
-                            <canvas id="myChart2"></canvas>
+                        <canvas id="myChart2"></canvas>
                     </div>
                 </div>
 
@@ -69,14 +69,14 @@
                                 <tbody>
                                     @foreach ($question['options'] as $optionl)
                                         <tr
-                                            class=" {{ $question['value'][$question['id']][$optionl['id']] === $optionl['value'] ? 'bg-success-1' : 'bg-danger-1' }}">
+                                            class="{{ is_array($question['value']) && $question['value'][$question['id']][$optionl['id']] === $optionl['value'] ? 'bg-success-1' : 'bg-danger-1' }}">
                                             @foreach ($question['options'] as $k => $option)
                                                 @if ($loop->first)
                                                     <td>{{ $optionl['value'] }}</td>
                                                 @endif
                                                 <td>
                                                     <input required type="radio" value="{{ $option['value'] }}"
-                                                        {{ $question['value'][$question['id']][$optionl['id']] === $option['value'] ? 'checked' : '' }}>
+                                                        {{ is_array($question['value']) && $question['value'][$question['id']][$optionl['id']] === $option['value'] ? 'checked' : '' }}>
                                                     {{ $option['value'] }}
                                                 </td>
                                             @endforeach
@@ -84,7 +84,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            @if (count(array_diff($question['value'][$question['id']], $question['corrects'])) > 0)
+                            @if (!is_array($question['value']) || count(array_diff($question['value'][$question['id']], $question['corrects'])) > 0)
                                 <br>
                                 <strong class="text-danger ms-3">
                                     {{ $question['error'] }}
@@ -122,18 +122,20 @@
     <script>
         var answer = @json($answersByCatego);
         var questions = @json($allQstByCatego);
+        const values = Object.values(questions).map(function(x, index) {
 
-        const values = Object.values(questions).map(function(x, index){
-            return Object.values(answer)[index] *100 / x
+            return Object.values(answer)[index] * 100 / x
         });
 
         new Chart(document.getElementById('myChart'), {
             type: "pie",
             data: {
-                labels: ['correct','incorrect','ignored'],
+                labels: ['correct', 'incorrect', 'ignored'],
                 datasets: [{
-                    backgroundColor: ['#0d6efd','yellow','#8B0000'],
-                    data: [{{$answer->nbr_of_correct}},{{$answer->nbr_of_incorrect}},{{$answer->nbr_of_ignored}}]
+                    backgroundColor: ['green', 'red', 'orange'],
+                    data: [{{ $answer->nbr_of_correct }}, {{ $answer->nbr_of_incorrect }},
+                        {{ $answer->nbr_of_ignored }}
+                    ]
                 }]
             },
             options: {
@@ -154,22 +156,22 @@
                     label: 'Percent',
                     data: values,
                     backgroundColor: values.map((item) => {
-                        if(item < {{$answer->target}}) {
-                            return '#880808';
+                        if (item < {{ $answer->target }}) {
+                            return 'red';
                         } else {
-                            return '#0d6efd';
+                            return 'green';
                         }
                     }),
                     borderWidth: 1,
                     order: 2
                 }, {
                     label: 'Target',
-                    data: Array(Object.values(answer).length).fill({{$answer->target}}),
+                    data: Array(values.length).fill({{ $answer->target }}),
                     type: 'line',
                     fill: false,
                     borderDash: [5, 5],
-                    backgroundColor: "#880808",
-                    borderColor: "#880808",
+                    backgroundColor: "white",
+                    borderColor: "black",
                     tension: 0.1,
                     order: 1
                 }]
@@ -190,4 +192,3 @@
         });
     </script>
 @endsection
-
