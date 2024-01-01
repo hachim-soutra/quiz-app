@@ -96,7 +96,6 @@
                                                     <table width="100%" class="hide hide-{{ $folder->id }}">
                                                         <thead>
                                                             <tr bg="red">
-                                                                <th>#</th>
                                                                 <th>Title</th>
                                                                 <th>Description</th>
                                                                 <th>Questions</th>
@@ -206,7 +205,9 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            $('#myTable').DataTable();
+            $('#myTable').DataTable({
+                responsive: true
+            });
             $(".hide").hide();
             $('[data-toggle="toggle"]').change(function() {
                 $(".hide-" + this.dataset.id).toggle();
