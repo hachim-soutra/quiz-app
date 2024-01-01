@@ -20,12 +20,12 @@ class DatabaseSeeder extends Seeder
         // $setting->name = "logo";
         // $setting->value = "";
         // $setting->save();
-        DB::table('folders')->insert([
-            [
-                'id' => 9999,
-                'label' => 'uncategorized',
-            ]
-        ]);
+        // DB::table('folders')->insert([
+        //     [
+        //         'id' => 9999,
+        //         'label' => 'uncategorized',
+        //     ]
+        // ]);
         Quiz::whereNull('folder_id')->update(['folder_id' => 9999]);
     }
 }
