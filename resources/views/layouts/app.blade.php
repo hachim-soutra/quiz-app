@@ -34,6 +34,9 @@
         .content-header h1 {
             font-size: 20px !important;
         }
+        td {
+            white-space: nowrap;
+        }
     </style>
     @yield('style')
 
