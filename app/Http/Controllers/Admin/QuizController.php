@@ -27,7 +27,7 @@ class QuizController extends Controller
      */
     public function index(Request $request)
     {
-        $folders = QuizTheme::with('quizzes')->get();
+        $folders = QuizTheme::with('quizzes')->orderBy('label')->get();
         return view('admin.quiz.index', compact('folders'));
     }
 
