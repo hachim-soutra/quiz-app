@@ -34,7 +34,8 @@
         .content-header h1 {
             font-size: 20px !important;
         }
-        td {
+
+        .white-space {
             white-space: nowrap;
         }
     </style>
