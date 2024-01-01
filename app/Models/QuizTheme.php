@@ -21,6 +21,6 @@ class QuizTheme extends Model
 
     public function quizzes()
     {
-        return $this->hasMany(config('laravel-quiz.models.quiz'),'folder_id');
+        return $this->hasMany(config('laravel-quiz.models.quiz'),'folder_id')->orderBy('name');
     }
 }
