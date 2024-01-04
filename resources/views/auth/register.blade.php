@@ -16,14 +16,15 @@
     <body class="hold-transition register-page">
         <div class="register-box">
             <div class="register-logo">
-                <a href="{{ url('/home') }}"><b>{{ config('app.name') }}</b></a>
+                <a href="{{ url('/home') }}"><img src="{{ asset('images/' . $logo_home->value) }}" width="100%"
+                    alt="" style="height: auto;object-fit: cover;"></a>
             </div>
 
             <div class="card">
                 <div class="card-body register-card-body">
                     <p class="login-box-msg">Register a new membership</p>
 
-                    {{-- <form method="post" action="{{ route('register') }}">
+                    <form method="post" action="{{ route('register') }}">
                         @csrf
 
                         <div class="input-group mb-3">
@@ -89,7 +90,7 @@
                             </div>
                             <!-- /.col -->
                         </div>
-                    </form> --}}
+                    </form>
 
                     <a href="{{ route('login') }}" class="text-center">I already have a membership</a>
                 </div>

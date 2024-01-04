@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\QuestionsCategorizationController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\QuizController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\UserController;
 use App\Models\Answer;
 use App\Models\Settings;
 use Harishdurga\LaravelQuiz\Models\Question;
@@ -121,4 +122,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource("settings", SettingsController::class);
     Route::get('/question/sort/{id}/{type}', [App\Http\Controllers\Admin\QuestionController::class, 'sort'])->name('question.sort');
     Route::resource("folder", FolderController::class);
+});
+ Route::prefix('user')->middleware('auth')->group(function () {
+    Route::get('/home',[UserController::class,'index'])->name('user.home');
 });
