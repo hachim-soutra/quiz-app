@@ -28,6 +28,12 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/login',function(){
+    if(!auth::user()) {
+        return redirect('/login');
+    }
+
+});
 
 Route::get('/', function () {
     $logo_home = Settings::where("name", "home page logo")->first();
@@ -90,39 +96,45 @@ Route::middleware('check.answer')->group(function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::post('/quiz/create-answer/{id}', [QuizController::class, 'createAnswer'])->name('quiz.create-answer');
-Route::get('/quiz/expired/{token}/{status}', [QuizController::class, 'quizExpired'])->name('quiz.expired');
-Route::prefix('admin')->middleware('auth')->group(function () {
-    Route::get('/answer', [App\Http\Controllers\Admin\AnswerController::class, 'index'])->name('admin.answer');
-    Route::post('/answer/delete', [App\Http\Controllers\Admin\AnswerController::class, 'destroy'])->name('answer.destroy');
-    Route::get('/answer/deleted-answers', [App\Http\Controllers\Admin\AnswerController::class, 'deletedAnswers'])->name('answer.deleted-answers');
-    Route::get('/answer/restore-answer/{id}', [App\Http\Controllers\Admin\AnswerController::class, 'restoreAnswer'])->name('answer.restore-answer');
-    Route::delete('/answer/permanent-delete/{id}', [App\Http\Controllers\Admin\AnswerController::class, 'permanentDelete'])->name('answer.permanent-delete');
-    Route::get('/add-quiz', [QuizController::class, 'create'])->name('quiz.add');
-    Route::post('/quiz/import', [QuizController::class, 'import'])->name('quiz.import');
-    Route::get('/quiz/timer/{id}', [QuizController::class, 'removeTimer'])->name('quiz.timer');
-    Route::get('/questions/show/{id}', [QuizController::class, 'questionsShow'])->name('question.show');
-    Route::post('/questions/import/{id}', [QuizController::class, 'questionsImport'])->name('questions.import');
+Route::middleware(['auth','admin'])->group(function(){
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::post('/quiz/create-answer/{id}', [QuizController::class, 'createAnswer'])->name('quiz.create-answer');
+    Route::get('/quiz/expired/{token}/{status}', [QuizController::class, 'quizExpired'])->name('quiz.expired');
+    Route::prefix('admin')->middleware('auth')->group(function () {
+        Route::get('/answer', [App\Http\Controllers\Admin\AnswerController::class, 'index'])->name('admin.answer');
+        Route::post('/answer/delete', [App\Http\Controllers\Admin\AnswerController::class, 'destroy'])->name('answer.destroy');
+        Route::get('/answer/deleted-answers', [App\Http\Controllers\Admin\AnswerController::class, 'deletedAnswers'])->name('answer.deleted-answers');
+        Route::get('/answer/restore-answer/{id}', [App\Http\Controllers\Admin\AnswerController::class, 'restoreAnswer'])->name('answer.restore-answer');
+        Route::delete('/answer/permanent-delete/{id}', [App\Http\Controllers\Admin\AnswerController::class, 'permanentDelete'])->name('answer.permanent-delete');
+        Route::get('/add-quiz', [QuizController::class, 'create'])->name('quiz.add');
+        Route::post('/quiz/import', [QuizController::class, 'import'])->name('quiz.import');
+        Route::get('/quiz/timer/{id}', [QuizController::class, 'removeTimer'])->name('quiz.timer');
+        Route::get('/questions/show/{id}', [QuizController::class, 'questionsShow'])->name('question.show');
+        Route::post('/questions/import/{id}', [QuizController::class, 'questionsImport'])->name('questions.import');
 
-    Route::post('/quiz/add-question/{id}', [QuizController::class, 'addQuestion'])->name('quiz.add-question');
-    Route::put('/quiz/update-question/{id}', [QuizController::class, 'updateQuestion'])->name('quiz.update-question');
-    Route::post('/quiz/duplicate-quiz/{id}', [QuizController::class, 'duplicateQuiz'])->name('quiz.duplicate-quiz');
-    Route::post('/quiz/duplicate-question/{id}/{qst_id}', [QuizController::class, 'duplicateQuestion'])->name('quiz.duplicate-question');
-    Route::post('/quiz/remove-question-image/{id}', [QuizController::class, 'removeQuestionImage'])->name('quiz.remove-question-img');
-    Route::post('/quiz/delete-question/{id}', [QuizController::class, 'removeQuestion'])->name('quiz.delete-question');
-    Route::post('/quiz/delete-all/{id}', [QuizController::class, 'removeAllQuestions'])->name('quiz.delete-all');
+        Route::post('/quiz/add-question/{id}', [QuizController::class, 'addQuestion'])->name('quiz.add-question');
+        Route::put('/quiz/update-question/{id}', [QuizController::class, 'updateQuestion'])->name('quiz.update-question');
+        Route::post('/quiz/duplicate-quiz/{id}', [QuizController::class, 'duplicateQuiz'])->name('quiz.duplicate-quiz');
+        Route::post('/quiz/duplicate-question/{id}/{qst_id}', [QuizController::class, 'duplicateQuestion'])->name('quiz.duplicate-question');
+        Route::post('/quiz/remove-question-image/{id}', [QuizController::class, 'removeQuestionImage'])->name('quiz.remove-question-img');
+        Route::post('/quiz/delete-question/{id}', [QuizController::class, 'removeQuestion'])->name('quiz.delete-question');
+        Route::post('/quiz/delete-all/{id}', [QuizController::class, 'removeAllQuestions'])->name('quiz.delete-all');
 
-    Route::post('/quiz/add-option/{id}', [QuizController::class, 'addOption'])->name('quiz.add-option');
-    Route::put('/quiz/update-option/{id}', [QuizController::class, 'updateOption'])->name('quiz.update-option');
-    Route::post('/quiz/delete-option/{id}', [QuizController::class, 'removeOption'])->name('quiz.delete-option');
-    Route::get('/quiz/order/{id}/{type}', [QuizController::class, 'order'])->name('quiz.order');
-    Route::resource("quiz", QuizController::class);
-    Route::resource("categorie", QuestionsCategorizationController::class);
-    Route::resource("settings", SettingsController::class);
-    Route::get('/question/sort/{id}/{type}', [App\Http\Controllers\Admin\QuestionController::class, 'sort'])->name('question.sort');
-    Route::resource("folder", FolderController::class);
+        Route::post('/quiz/add-option/{id}', [QuizController::class, 'addOption'])->name('quiz.add-option');
+        Route::put('/quiz/update-option/{id}', [QuizController::class, 'updateOption'])->name('quiz.update-option');
+        Route::post('/quiz/delete-option/{id}', [QuizController::class, 'removeOption'])->name('quiz.delete-option');
+        Route::get('/quiz/order/{id}/{type}', [QuizController::class, 'order'])->name('quiz.order');
+        Route::resource("quiz", QuizController::class);
+        Route::resource("categorie", QuestionsCategorizationController::class);
+        Route::resource("settings", SettingsController::class);
+        Route::get('/question/sort/{id}/{type}', [App\Http\Controllers\Admin\QuestionController::class, 'sort'])->name('question.sort');
+        Route::resource("folder", FolderController::class);
+    });
 });
- Route::prefix('user')->middleware('auth')->group(function () {
-    Route::get('/home',[UserController::class,'index'])->name('user.home');
+
+Route::middleware(['auth','user'])->group(function(){
+    Route::prefix('user')->middleware('auth')->group(function () {
+        Route::get('/home',[UserController::class,'index'])->name('home');
+    });
 });
+
