@@ -230,7 +230,7 @@
             window.onload = function() {
                 var timer2 = "{{ $answer->timer }}";
                 var breakQuestion = "{{ $break }}";
-                var timerReminer = "{{ $answer->quiz->quiz_time_remind->format('H:i:s') }}";
+                var timerReminer = "{{ $answer->quiz->quiz_time_remind }}";
 
                 function countdown() {
                     var timer = timer2.split(':');
