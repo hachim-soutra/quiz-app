@@ -63,7 +63,7 @@ class Answer extends Model
     {
         $qu = [];
         foreach ($this->questions_json as $q) {
-            if ($q["id"] == -1) {
+            if ($q["value"] == -1) {
                 $q["value"] = null;
             }
             $qu[] = $q;

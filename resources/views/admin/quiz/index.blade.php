@@ -5,6 +5,11 @@
             display: none;
         }
 
+        .text-16-bold {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
         .bg-tr {
             background-color: #ccccccff;
         }
@@ -91,7 +96,7 @@
                                                 <td>
                                                     <input type="checkbox" name="accounting" id="accounting"
                                                         data-toggle="toggle" data-id="{{ $folder->id }}">
-                                                    {{ $folder->label }}
+                                                    <span class="text-16-bold">{{ $folder->label }}</span>
 
                                                     <table width="100%" class="hide hide-{{ $folder->id }}">
                                                         <thead>

@@ -55,7 +55,7 @@ Route::get('/answer/{token}', function ($token) {
     $allQuestions = [];
     foreach ($answer->getQuestions() as $question) {
         array_push($allQuestions, $question['category']);
-        if ($question["value"] === -1) {
+        if ($question["value"] === null) {
             $ignored++;
         } else {
             if ($question['type'] === 'row answers') {

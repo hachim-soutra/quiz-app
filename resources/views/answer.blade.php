@@ -35,7 +35,7 @@
                     @endif
                 </div>
 
-                <div class="row align-items-center justify-content-center gap-2 my-5 ">
+                <div class="row d-flex my-5 ">
                     <div class="col-6">
                         <canvas id="myChart"></canvas>
                     </div>
