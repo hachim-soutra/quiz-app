@@ -135,6 +135,8 @@ Route::middleware(['auth','admin'])->group(function(){
 Route::middleware(['auth','user'])->group(function(){
     Route::prefix('user')->middleware('auth')->group(function () {
         Route::get('/home',[UserController::class,'index'])->name('home');
+        Route::get('/account',[UserController::class,'settings'])->name('account');
+        Route::post('/update-account/{user}',[UserController::class,'updateAccount'])->name('update-account');
     });
 });
 
