@@ -22,37 +22,45 @@
                         <p class="sous-title">{{ $answer->quiz->description }}</p>
 
                     </div>
-                    <div class="d-flex flex-row justify-content-end align-items-center py-3 bg-white gap-2">
-                        @if ($answer->getQuestion($id)['sort'] > 1)
-                            <form action="{{ route('question.prev', ['id' => $id, 'token' => $answer->token]) }}"
-                                method="POST">
+                    <div class="d-flex flex-row justify-content-between align-items-center py-3 bg-white gap-2">
+                        @if ($answer->timer)
+                            <button class="btn btn-outline-dark" id="stopTimer" type="button">
+                                <i class="fa-regular fa-circle-pause"></i> Pause
+                            </button>
+                        @endif
+                        <div class="d-flex flex-row justify-content-end align-items-center py-3 bg-white gap-2">
+                            @if ($answer->getQuestion($id)['sort'] > 1)
+                                <form action="{{ route('question.prev', ['id' => $id, 'token' => $answer->token]) }}"
+                                    method="POST">
+                                    @csrf
+                                    <input type="hidden" name="timer" id="timer3">
+                                    <button type="submit" class="btn btn-outline-dark align-items-center"><i
+                                            class="fa fa-angle-left mr-3"></i> Previous
+                                    </button>
+                                </form>
+                            @endif
+                            <form method="POST"
+                                action="{{ route('question.review', ['id' => $id, 'token' => $answer->token]) }}">
                                 @csrf
-                                <input type="hidden" name="timer" id="timer3">
-                                <button type="submit" class="btn btn-outline-dark align-items-center"><i
-                                        class="fa fa-angle-left mr-3"></i> Previous
+                                <input type="hidden" name="timer" id="timer1">
+                                <button class="btn btn-outline-dark align-items-center">
+                                    <i class="fa fa-solid fa-rotate-right"></i> Mark for review
                                 </button>
                             </form>
-                        @endif
-                        <form method="POST"
-                            action="{{ route('question.review', ['id' => $id, 'token' => $answer->token]) }}">
-                            @csrf
-                            <input type="hidden" name="timer" id="timer1">
-                            <button class="btn btn-outline-dark align-items-center">
-                                <i class="fa fa-solid fa-rotate-right"></i> Mark for review
-                            </button>
-                        </form>
-                        <form method="POST"
-                            action="{{ route('question.ignore', ['id' => $id, 'token' => $answer->token]) }}">
-                            @csrf
-                            <input type="hidden" name="timer" id="timer2">
-                            <button class="btn btn-outline-dark align-items-center">
-                                <i class="fa-regular fa-circle-xmark"></i> Ignore
-                            </button>
-                        </form>
-                        <a href="{{ route('quiz.expired', ['token' => $answer->token, 'status' => 'Terminate test']) }}"
-                            class="btn btn-outline-danger"><i class="fa-solid fa-fire"></i> Terminate Test</a>
+                            <form method="POST"
+                                action="{{ route('question.ignore', ['id' => $id, 'token' => $answer->token]) }}">
+                                @csrf
+                                <input type="hidden" name="timer" id="timer2">
+                                <button class="btn btn-outline-dark align-items-center">
+                                    <i class="fa-regular fa-circle-xmark"></i> Ignore
+                                </button>
+                            </form>
+                            <a href="{{ route('quiz.expired', ['token' => $answer->token, 'status' => 'Terminate test']) }}"
+                                class="btn btn-outline-danger"><i class="fa-solid fa-fire"></i> Terminate Test</a>
 
+                        </div>
                     </div>
+
                     <form method="POST"
                         action="{{ route('quiz.next', ['token' => $answer->token, 'question_id' => $id]) }}">
 
@@ -151,9 +159,6 @@
                                     <button class="btn btn-outline-success countdown-btn" disabled>
                                         <i class="fa fa-regular fa-clock"></i>
                                         <span class="countdown"></span>
-                                    </button>
-                                    <button class="btn btn-outline-dark" id="stopTimer" type="button">
-                                        <i class="fa fa-regular fa-circle-stop"></i> Stop
                                     </button>
                                 </div>
                                 <input type="hidden" name="timer" id="timer">
