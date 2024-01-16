@@ -44,6 +44,8 @@
                     </div>
                 </div>
 
+                <h2><strong class="text-deco">Quiz </strong>: {{ $answer->quiz->name }}</h2>
+
                 @csrf
                 @foreach ($answer->getQuestions()->sortBy('sort') as $question)
                     <div class="question bg-white p-3 border-bottom">
