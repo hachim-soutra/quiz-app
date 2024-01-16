@@ -44,7 +44,8 @@ class QuestionController extends Controller
             }
             $break = true;
         }
-        return view('question')->with(["answer" => $answer, "break" => $break, "id" => $id]);
+        $break_text = Settings::where("name", "Take break text")->first();
+        return view('question')->with(["answer" => $answer, "break" => $break, "id" => $id, "break_text" => $break_text]);
     }
 
     public function ignore($token, $id, Request $request)

@@ -9,7 +9,7 @@
                     <div class="d-flex flex-column justify-content-between px-2">
                         <h2 class="text-deco">Take break <span class="countdown"></span>
                         </h2>
-                        <p class="sous-title">xxxxxxxx</p>
+                        <p class="sous-title">{{$break_text->value}}</p>
 
                     </div>
                     <a href="{{ route('questions', ['token' => $answer->token, 'id' => $id, 'pass' => true]) }}"
