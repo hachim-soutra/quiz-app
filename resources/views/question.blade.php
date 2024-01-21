@@ -9,7 +9,7 @@
                     <div class="d-flex flex-column justify-content-between px-2">
                         <h2 class="text-deco">Take break <span class="countdown"></span>
                         </h2>
-                        <p class="sous-title">{{$break_text->value}}</p>
+                        <p class="sous-title">{{ $break_text->value }}</p>
 
                     </div>
                     <a href="{{ route('questions', ['token' => $answer->token, 'id' => $id, 'pass' => true]) }}"
@@ -23,11 +23,29 @@
 
                     </div>
                     <div class="d-flex flex-row justify-content-between align-items-center py-3 bg-white gap-2">
-                        @if ($answer->timer)
-                            <button class="btn btn-outline-dark" id="stopTimer" type="button">
-                                <i class="fa-regular fa-circle-pause"></i> Pause
-                            </button>
-                        @endif
+                        <div class="d-flex flex-row  justify-content-start align-items-center">
+                            @if ($answer->timer)
+                                <div class="my-2"
+                                    style="
+                                display: flex;
+                                align-self: end;
+                                justify-content: center;
+                                align-items: center;
+                                gap: 10px;
+                                font-size: 1.3rem;
+                                color: white;
+                            ">
+                                    <button class="btn btn-outline-success countdown-btn" disabled>
+                                        <i class="fa fa-regular fa-clock"></i>
+                                        <span class="countdown"></span>
+                                    </button>
+                                    <button class="btn btn-outline-dark" id="stopTimer" type="button">
+                                        <i class="fa-regular fa-circle-pause"></i> Pause
+                                    </button>
+                                </div>
+                                <input type="hidden" name="timer" id="timer">
+                            @endif
+                        </div>
                         <div class="d-flex flex-row justify-content-end align-items-center py-3 bg-white gap-2">
                             @if ($answer->getQuestion($id)['sort'] > 1)
                                 <form action="{{ route('question.prev', ['id' => $id, 'token' => $answer->token]) }}"
@@ -144,29 +162,9 @@
                             <button class="btn btn-primary border-success align-items-center btn-success" type="submit"><i
                                     class="fa fa-check ml-3" aria-hidden="true"></i> Next
                             </button>
-
-                            @if ($answer->timer)
-                                <div class="my-2"
-                                    style="
-                                display: flex;
-                                align-self: end;
-                                justify-content: center;
-                                align-items: center;
-                                gap: 10px;
-                                font-size: 1.3rem;
-                                color: white;
-                            ">
-                                    <button class="btn btn-outline-success countdown-btn" disabled>
-                                        <i class="fa fa-regular fa-clock"></i>
-                                        <span class="countdown"></span>
-                                    </button>
-                                </div>
-                                <input type="hidden" name="timer" id="timer">
-                            @endif
+                            <input type="hidden" name="timer" id="timer4">
                         </div>
                     </form>
-
-
                 @endif
 
             </div>
@@ -269,6 +267,7 @@
                         $('#timer1').val(timer2);
                         $('#timer2').val(timer2);
                         $('#timer3').val(timer2);
+                        $('#timer4').val(timer2);
                     }
                     if (timer2 === "0:00:10") {
                         $('.countdown-btn').addClass(" zoom-in-out");
