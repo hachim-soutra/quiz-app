@@ -2,12 +2,13 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserMiddleware
+class ClientMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,10 +17,14 @@ class UserMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->userable_type == 0)
+        if(Auth::user()->userable_type == User::CLIENT_TYPE)
         {
             return $next($request);
         }
-        return redirect()->back();
+        if(Auth::user()->userable_type == User::ADMIN_TYPE)
+        {
+            return redirect()->route('home');
+        }
+        abort(401);
     }
 }

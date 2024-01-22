@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\User;
+use App\Enum\PayementTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,8 +12,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('userable_type')->default(User::CLIENT_TYPE);
+        Schema::table('quizzes', function (Blueprint $table) {
+            $table->string('payement_type')->default(PayementTypeEnum::FREE->value);
         });
     }
 
@@ -22,8 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('userable_type');
+        Schema::table('quizzes', function (Blueprint $table) {
+            $table->dropColumn('payement_type');
         });
     }
 };

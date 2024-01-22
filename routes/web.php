@@ -132,11 +132,14 @@ Route::middleware(['auth','admin'])->group(function(){
     });
 });
 
-Route::middleware(['auth','user'])->group(function(){
-    Route::prefix('user')->middleware('auth')->group(function () {
-        Route::get('/home',[UserController::class,'index'])->name('home');
+Route::middleware(['auth','client'])->group(function(){
+    Route::prefix('client')->group(function () {
+        Route::get('/home',[UserController::class,'index'])->name('client.home');
         Route::get('/account',[UserController::class,'settings'])->name('account');
         Route::post('/update-account/{user}',[UserController::class,'updateAccount'])->name('update-account');
+        Route::get('/answers',[UserController::class,'answers'])->name('answers');
+        Route::post('/answer/destroy',[UserController::class,'destroy'])->name('answer.destroy');
+
     });
 });
 

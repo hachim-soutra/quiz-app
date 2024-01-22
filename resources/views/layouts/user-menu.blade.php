@@ -7,7 +7,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a href="{{ route('home') }}" class="nav-link text-dark px-2 {{ Request::is('home') ? 'active' : '' }}">
+    <a href="{{ route('answers') }}" class="nav-link text-dark px-2 {{ Request::is('answers') ? 'active' : '' }}">
         <i class="nav-icon fas fa-gift"></i>
         <p>Answers</p>
     </a>

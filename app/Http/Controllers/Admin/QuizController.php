@@ -291,6 +291,8 @@ class QuizController extends Controller
         $request->validate([
             'name' => 'required',
             'quiz_type' => 'required',
+            'payement_type' => 'required',
+            'price' => 'required_if:payement_type,==,payed',
             'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i:s',
             'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i:s|before:quiz_time',
             'nbr_questions_sequance' => 'required_if:quiz_type,==,3',
@@ -309,6 +311,8 @@ class QuizController extends Controller
         }
         $quiz->update([
             'quiz_type' => $request->quiz_type,
+            'payement_type' => $request->payement_type,
+            'price' => $request->price,
             'name' => $request->name,
             'description' => $request->description,
             'folder_id' => $request->folder === "null" ? NULL : $request->folder,

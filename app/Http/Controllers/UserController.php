@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,5 +37,18 @@ class UserController extends Controller
         return redirect()->back()->with('status', 'Profile Updated');
     }
 
-    
+    public function answers()
+    {
+        $answer = Answer::with("quiz")->where('email',Auth::user()->email)->get();
+        return view('user.answers')->with([ "answers"=> $answer]);
+    }
+
+    public function destroy(Request $request)
+    {
+        $answer = Answer::whereIn('id', $request->item)->get();
+        foreach($answer as $item) {
+            $item->delete();
+        };
+        return response()->json(['message'=>'answer(s) deleted Successfully'],200);
+    }
 }

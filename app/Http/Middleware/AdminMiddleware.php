@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,10 +17,14 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->userable_type == 1)
+        if(Auth::user()->userable_type == User::ADMIN_TYPE)
         {
-            return $next($request);
+            return $next($request); 
+        }
+        if(Auth::user()->userable_type == User::CLIENT_TYPE){
+            return redirect()->route('client.home');
         }
         abort(401);
+
     }
 }
