@@ -219,7 +219,7 @@ class QuizController extends Controller
             return [
                 'id' => $question->question?->id,
                 'name' => $question->question?->name,
-                'category' => $question->question?->questions_categorization->name,
+                'category' => $question->question?->questions_categorization?->name,
                 'image' => $question->question?->image,
                 'type' => $question->question?->question_type?->name,
                 'error' => $question->question?->error,
