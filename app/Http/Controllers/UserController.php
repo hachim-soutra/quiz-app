@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Answer;
+use App\Models\QuizTheme;
 use App\Models\User;
+use Harishdurga\LaravelQuiz\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,12 +13,18 @@ class UserController extends Controller
 {
     public function index()
     {
-        return view('user.home');
+        return view('client.home');
     }
 
     public function settings()
     {
-        return view('user.account');
+        return view('client.account');
+    }
+
+    public function quizzes()
+    {
+        $quizzes = Quiz::OrderBy('payement_type')->get();
+        return view('client.quizzes',['quizzes' => $quizzes]);
     }
 
     public function updateAccount(User $user, Request $request)
@@ -40,7 +48,7 @@ class UserController extends Controller
     public function answers()
     {
         $answer = Answer::with("quiz")->where('email',Auth::user()->email)->get();
-        return view('user.answers')->with([ "answers"=> $answer]);
+        return view('client.answers')->with([ "answers"=> $answer]);
     }
 
     public function destroy(Request $request)

@@ -1,9 +1,15 @@
 <!-- need to remove -->
 <li class="nav-item">
-    <a href="{{ route('home') }}" class="nav-link text-dark {{ Request::is('home') ? 'active' : '' }}"
+    <a href="{{ route('client.home') }}" class="nav-link text-dark {{ Request::is('home') ? 'active' : '' }}"
     style="padding-left: 10px;">
         <i class="nav-icon fas fa-home"></i>
         <p>Home</p>
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('client.quiz') }}" class="nav-link text-dark px-2 {{ Request::is('quiz.index') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-book"></i>
+        <p>Quizzes</p>
     </a>
 </li>
 <li class="nav-item">

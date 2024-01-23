@@ -313,11 +313,10 @@ class QuizController extends Controller
             $filename = time() . '.' . $extension;
             $file->move('images/', $filename);
         }
-        if ($request->payement_type == 'free') {
+        if($request->payement_type == 'free'){
             $request->merge([
                 'price' => null,
-            ]);
-        }
+            ]);        }
         $quiz->update([
             'quiz_type' => $request->quiz_type,
             'payement_type' => $request->payement_type,

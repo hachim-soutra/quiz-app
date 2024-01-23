@@ -135,6 +135,7 @@ Route::middleware(['auth','admin'])->group(function(){
 Route::middleware(['auth','client'])->group(function(){
     Route::prefix('client')->group(function () {
         Route::get('/home',[UserController::class,'index'])->name('client.home');
+        Route::get('/quiz',[UserController::class,'quizzes'])->name('client.quiz');
         Route::get('/account',[UserController::class,'settings'])->name('account');
         Route::post('/update-account/{user}',[UserController::class,'updateAccount'])->name('update-account');
         Route::get('/answers',[UserController::class,'answers'])->name('answers');

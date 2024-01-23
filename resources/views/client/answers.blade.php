@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="container-fluid">
-
         <section class="content-header mb-4">
             <div class="container-fluid">
                 <div class="row mb-2">
@@ -60,9 +59,7 @@
                     </div>
                 </div>
             </div>
-    </div>
-    </section>
-
+        </section>
     </div>
 @endsection
 @section('js')
