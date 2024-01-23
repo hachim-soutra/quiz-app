@@ -60,6 +60,31 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label for="">Payement type </label>
+                                                    <select name="payement_type" id="payement_type"
+                                                    class="form-control @error('payement_type') is-invalid @enderror">
+                                                    @foreach (App\Enum\PayementTypeEnum::cases() as $payementType)
+                                                        <option value="{{$payementType}}"
+                                                        {{ old('payement_type') ? 'selected' : $payementType->value }}>
+                                                        {{$payementType}}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('payement_type')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 quiz_price">
+                                            <div class="form-group">
+                                                <label for="">Price</label>
+                                                <input type="text" class="form-control @error('price') is-invalid @enderror" name="price" >
+                                                @error('price')
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
 
                                         <div class="col-sm-12">
                                             <div class="form-group">
@@ -160,6 +185,18 @@
             quizShow();
             $('#quiz_type').on('change', function() {
                 quizShow();
+            });
+            function payementProcess() {
+                if($('#payement_type').val() == 'free'){
+                    $('.quiz_price').hide();
+                }
+                if($('#payement_type').val() == 'payed'){
+                    $('.quiz_price').show();
+                }
+            }
+            payementProcess();
+            $('#payement_type').on('change', function() {
+                payementProcess();
             });
         });
     </script>

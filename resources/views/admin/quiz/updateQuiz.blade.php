@@ -85,10 +85,13 @@
                                                     @enderror
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
+                                        <div class="col-md-12 quiz_price ">
                                             <div class="form-group">
                                                 <label for="">Price</label>
-                                                <input type="text" class="form-control" name="price" id="quiz_price">
+                                                <input type="text" class="form-control @error('price') is-invalid @enderror" value="{{$item->price}}" name="price" id="price">
+                                                @error('price')
+                                                <div class="text-danger">{{ $message }}</div>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
@@ -213,12 +216,13 @@
             });
             function payementProcess() {
                 if($('#payement_type').val() == 'free'){
-                    $('#quiz_price').hide();
+                    $('.quiz_price').hide();
                 }
                 if($('#payement_type').val() == 'payed'){
-                    $('#quiz_price').show();
+                    $('.quiz_price').show();
                 }
             }
+            payementProcess();
             $('#payement_type').on('change', function() {
                 payementProcess();
             });

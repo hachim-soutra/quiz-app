@@ -48,6 +48,8 @@ class QuizController extends Controller
         $request->validate([
             'name' => 'required',
             'quiz_type' => 'required',
+            'payement_type' => 'required',
+            'price' => 'required_if:payement_type,==,payed',
             'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i:s',
             'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i:s|before:quiz_time',
             'nbr_questions_sequance' => 'required_if:quiz_type,==,3',
@@ -63,6 +65,8 @@ class QuizController extends Controller
         Quiz::create([
             'quiz_type' => $request->quiz_type,
             'name' => $request->name,
+            'payement_type' => $request->payement_type,
+            'price' => $request->price,
             'description' => $request->description,
             'folder_id' => $request->folder,
             'quiz_time' => $request->quiz_time,
@@ -71,7 +75,7 @@ class QuizController extends Controller
             'break_time' => $request->break_time,
             'slug' => Str::slug($request->name),
             'image' => $request->hasFile('image') ? $filename : "blank.png",
-            'is_published' => 1,
+            // 'is_published' => 1,
         ]);
         return redirect()->route('quiz.index')->withInput()->with('status', 'Your quiz has been added');
     }
@@ -308,6 +312,11 @@ class QuizController extends Controller
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
             $file->move('images/', $filename);
+        }
+        if ($request->payement_type == 'free') {
+            $request->merge([
+                'price' => null,
+            ]);
         }
         $quiz->update([
             'quiz_type' => $request->quiz_type,

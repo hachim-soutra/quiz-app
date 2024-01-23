@@ -58,7 +58,7 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown user-menu">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                            <span class="d-none d-md-inline">{{ Auth::user()->userable_type == 1 ? 'Admin' : 'User'}}</span>
+                            <span class="d-none d-md-inline">{{ Auth::user()->userable_type == App\Models\User::ADMIN_TYPE ? 'Admin' : 'User'}}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                             <!-- User image -->
