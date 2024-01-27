@@ -179,7 +179,6 @@
             justify-content: center;
         }
 
-        /* Define the rotation animation */
         @keyframes rotate {
             from {
                 transform: rotate(0deg);
@@ -190,10 +189,41 @@
             }
         }
 
-        /* Apply the rotation animation to the image */
+        /* Define the color change animation */
+        @keyframes colorChange {
+            0% {
+                border-color: #ff0000;
+                /* Red */
+            }
+
+            25% {
+                border-color: green;
+                /* Green */
+            }
+
+            50% {
+                border-color: orange;
+                /* Blue */
+            }
+
+            75% {
+                border-color: green;
+                /* Magenta */
+            }
+
+            100% {
+                border-color: #ff0000;
+                /* Red */
+            }
+        }
+
+        /* Apply the rotation animation to the element */
         .rotating-image {
-            animation: rotate 5s infinite linear;
+            position: relative;
+            border: 4px solid #ff0000;
+            /* Initial border color */
             border-radius: 50%;
+            animation: rotate 5s infinite linear, colorChange 2s infinite linear;
         }
     </style>
 </head>
@@ -205,7 +235,7 @@
                 <!-- Loading Spinner -->
                 <div class="loading-spinner active " id="loadingSpinner">
                     <img src="{{ asset('images/' . $logo->value) }}" alt="" width="300px"
-                        class=" rotating-image">
+                        class="rotating-image">
                 </div>
                 @yield('content')
             </div>
