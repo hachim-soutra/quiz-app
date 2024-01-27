@@ -193,6 +193,7 @@
         /* Apply the rotation animation to the image */
         .rotating-image {
             animation: rotate 5s infinite linear;
+            border-radius: 50%;
         }
     </style>
 </head>
