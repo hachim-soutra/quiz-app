@@ -22,6 +22,44 @@
                         <p class="sous-title">{{ $answer->quiz->description }}</p>
 
                     </div>
+                    @if ($answer->getQuestionsIgnored() || $answer->getQuestionsReview())
+                        <div class="w-100 d-flex flex-row justify-content-end align-items-center py-3 bg-white gap-2">
+
+                            @if (count($answer->getQuestionsIgnored()) > 0)
+                                <form action="{{ route('question.preview', ['token' => $answer->token]) }}" method="POST"
+                                    id="ignoredForm">
+                                    @csrf
+                                    <input type="hidden" name="timer" class="timer3">
+                                    <select name="question_id" id="ignoredInput" class="form-control">
+                                        <option disabled selected>ignored ({{ count($answer->getQuestionsIgnored()) }})
+                                        </option>
+                                        @foreach ($answer->getQuestionsIgnored() as $q)
+                                            <option value=" {{ $q['id'] }}" title="{{ $q['name'] }}">
+                                                {{ Str::limit($q['name'], 40, '...') }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </form>
+                            @endif
+                            @if (count($answer->getQuestionsReview()) > 0)
+                                <form action="{{ route('question.preview', ['token' => $answer->token]) }}"
+                                    id="reviewedForm" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="timer" class="timer3">
+                                    <select name="question_id" id="reviewedInput" class="form-control">
+                                        <option disabled selected>marked for review
+                                            ({{ count($answer->getQuestionsReview()) }})</option>
+                                        @foreach ($answer->getQuestionsReview() as $q)
+                                            <option value=" {{ $q['id'] }}" title="{{ $q['name'] }}">
+                                                {{ Str::limit($q['name'], 40, '...') }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </form>
+                            @endif
+
+                        </div>
+                    @endif
                     <div class="d-flex flex-row justify-content-between align-items-center py-3 bg-white gap-2">
                         <div class="d-flex flex-row  justify-content-start align-items-center">
                             @if ($answer->timer)
@@ -87,6 +125,10 @@
                             <div class="d-flex flex-row align-items-start question-title flex-column">
                                 @if ($answer->getQuestion($id)['value'] === 'review')
                                     <small class="text-primary"><i class="fa fa-solid fa-rotate-right"></i> Review
+                                        Question</small>
+                                @endif
+                                @if ($answer->getQuestion($id)['value'] === null)
+                                    <small class="text-primary"><i class="fa fa-solid fa-rotate-right"></i> ignored
                                         Question</small>
                                 @endif
                                 <h3 class="ml-2 d-block"> <i class="fa fa-question-circle" aria-hidden="true"></i>
@@ -159,8 +201,8 @@
                             </div>
                         </div>
                         <div class="d-flex flex-row justify-content-between align-items-center py-3 bg-white gap-2">
-                            <button class="btn btn-primary border-success align-items-center btn-success" type="submit"><i
-                                    class="fa fa-check ml-3" aria-hidden="true"></i> Next
+                            <button class="btn btn-primary border-success align-items-center btn-success"
+                                type="submit"><i class="fa fa-check ml-3" aria-hidden="true"></i> Next
                             </button>
                             <input type="hidden" name="timer" id="timer4">
                         </div>
@@ -268,6 +310,7 @@
                         $('#timer2').val(timer2);
                         $('#timer3').val(timer2);
                         $('#timer4').val(timer2);
+                        $('.timer3').val(timer2);
                     }
                     if (timer2 === "0:00:10") {
                         $('.countdown-btn').addClass(" zoom-in-out");
@@ -286,6 +329,13 @@
                     interval = setInterval(countdown, 1000);
                 });
 
+                $('#reviewedInput').change(function() {
+                    $('#reviewedForm').submit();
+                });
+
+                $('#ignoredInput').change(function() {
+                    $('#ignoredForm').submit();
+                });
             }
         </script>
     @endsection

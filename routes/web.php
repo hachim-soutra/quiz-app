@@ -80,7 +80,7 @@ Route::get('/answer/{token}', function ($token) {
     $below_target_text = Settings::where('name', 'below target text recap')->first();
     $above_target_text = Settings::where('name', 'above target text recap')->first();
     $count = 0;
-    $terms[] = $answer->target ."%";
+    $terms[] = $answer->target . "%";
     $below_target = preg_replace_callback('/\{{2}(.*?)\}{2}/', function ($match) use (&$count, $terms) {
         $return = !empty($terms[$count]) ? $terms[$count] : '';
         $count++;
@@ -95,6 +95,7 @@ Route::get('/answer/{token}', function ($token) {
 })->name('answer');
 
 Route::middleware('check.answer')->group(function () {
+    Route::post('/question/show/{token}', [App\Http\Controllers\Admin\QuestionController::class, 'preview'])->name('question.preview');
     Route::post('/question/ignore/{token}/{id}', [App\Http\Controllers\Admin\QuestionController::class, 'ignore'])->name('question.ignore');
     Route::post('/question/review/{token}/{id}', [App\Http\Controllers\Admin\QuestionController::class, 'review'])->name('question.review');
     Route::post('/question/prev/{token}/{id}', [App\Http\Controllers\Admin\QuestionController::class, 'prev'])->name('question.prev');

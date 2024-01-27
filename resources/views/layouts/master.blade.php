@@ -157,19 +157,69 @@
             font-weight: 900;
             color: red;
         }
+
+        /* Styles for the loading spinner */
+        .loading-spinner {
+            display: none;
+        }
+
+        .loading-spinner.active {
+            display: block;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Define the rotation animation */
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Apply the rotation animation to the image */
+        .rotating-image {
+            animation: rotate 5s infinite linear;
+        }
     </style>
 </head>
 
-<body>
+<body onload="checkCookies()">
     <div id="app">
         <main>
             <div class="d-flex align-items-center">
+                <!-- Loading Spinner -->
+                <div class="loading-spinner active " id="loadingSpinner">
+                    <img src="{{ asset('images/' . $logo->value) }}" alt="" width="300px"
+                        class=" rotating-image">
+                </div>
                 @yield('content')
             </div>
         </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
+    </script>
+    <script>
+        function checkCookies() {
+            setTimeout(function() {
+                var element = document.getElementById("loadingSpinner");
+                element.classList.remove("active");
+            }, 2000);
+        }
     </script>
     @yield('js')
 </body>

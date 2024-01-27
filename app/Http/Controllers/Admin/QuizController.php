@@ -219,13 +219,14 @@ class QuizController extends Controller
             return [
                 'id' => $question->question?->id,
                 'name' => $question->question?->name,
-                'category' => $question->question?->questions_categorization?->name,
+                'category' => $question->question?->questions_categorization?->name ?? "xxx",
                 'image' => $question->question?->image,
                 'type' => $question->question?->question_type?->name,
                 'error' => $question->question?->error,
                 'options' => $question->question?->options,
                 'corrects' => $question->question?->question_type?->name != "row answers" ? $question->question?->options->where('is_correct', 1)->pluck('id')->toArray() : $question->question?->options->pluck('value', 'id')->toArray(),
                 'value' => -1,
+                'skipped' => null,
                 'sort' => $sort,
             ];
         });
