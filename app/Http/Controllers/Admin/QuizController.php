@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\PayementTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Imports\QuestionImport;
 use App\Imports\QuizImport;
@@ -9,19 +10,28 @@ use App\Models\Answer;
 use Carbon\Carbon;
 use App\Models\QuizTheme;
 use App\Models\Settings;
+use App\Models\Order;
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
 use App\Models\QuestionsCategorization;
+use App\Services\StripeService;
 use Harishdurga\LaravelQuiz\Models\QuestionType;
 use Harishdurga\LaravelQuiz\Models\Quiz;
 use Harishdurga\LaravelQuiz\Models\QuizQuestion;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\File;
+use Laravel\Cashier\Cashier;
 use Str;
 
 class QuizController extends Controller
 {
+    public StripeService $stripeService;
+
+    public function __construct(StripeService $stripeService)
+    {
+        $this->stripeService = $stripeService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -62,6 +72,14 @@ class QuizController extends Controller
             $filename = time() . '.' . $extention;
             $file->move('images/', $filename);
         }
+        $price_token = null;
+        $productToken = null;
+        if ($request->payement_type == PayementTypeEnum::PAYED->value) {
+            $product = $this->stripeService->createProduct($request->name, $request->price);
+            $price_token = $product->default_price;
+            $productToken = $product->id;
+        }
+
         Quiz::create([
             'quiz_type' => $request->quiz_type,
             'name' => $request->name,
@@ -75,6 +93,8 @@ class QuizController extends Controller
             'break_time' => $request->break_time,
             'slug' => Str::slug($request->name),
             'image' => $request->hasFile('image') ? $filename : "blank.png",
+            'price_token' => $price_token,
+            'product_token' => $productToken
             // 'is_published' => 1,
         ]);
         return redirect()->route('quiz.index')->withInput()->with('status', 'Your quiz has been added');
@@ -313,10 +333,28 @@ class QuizController extends Controller
             $filename = time() . '.' . $extension;
             $file->move('images/', $filename);
         }
-        if($request->payement_type == 'free'){
+        $price_token = null;
+        $productToken = null;
+        if ($request->payement_type == PayementTypeEnum::FREE->value) {
             $request->merge([
                 'price' => null,
-            ]);        }
+            ]);
+        } else {
+            if ($quiz->payement_type == PayementTypeEnum::FREE->value) {
+                $product = $this->stripeService->createProduct($request->name, $request->price);
+                $price_token = $product->default_price;
+                $productToken = $product->id;
+            } elseif ($request->price != $quiz->price) {
+                $price = $this->stripeService->updateProductPrice($quiz->product_token, $request->price);
+                $price_token = $price->id;
+                $productToken = $quiz->product_token;
+                Order::where('quiz_id',$quiz->id)->update(['current_price' => $request->price]);
+            } else {
+                $productToken = $quiz->product_token;
+                $price_token = $quiz->price_token;
+            }
+        }
+
         $quiz->update([
             'quiz_type' => $request->quiz_type,
             'payement_type' => $request->payement_type,
@@ -332,6 +370,8 @@ class QuizController extends Controller
             'quiz_time_remind' => $request->quiz_time_remind,
             'nbr_questions_sequance' => $request->nbr_questions_sequance,
             'break_time' => $request->break_time,
+            'price_token' => $price_token,
+            'product_token' => $productToken,
         ]);
 
         return redirect()->route('quiz.index')->with('status', 'Quiz updated Successfully');
@@ -433,5 +473,11 @@ class QuizController extends Controller
             $quiz->moveOrderDown();
         }
         return redirect()->route('quiz.index')->with('status', 'Quiz has been sorting');
+    }
+
+    public function payments()
+    {
+        $orders = Order::with('quiz','user')->get();
+        return view('admin.orders.index',['orders' => $orders]);
     }
 }

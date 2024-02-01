@@ -10,47 +10,56 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('client.home') }}">Home</a></li>
                             <li class="breadcrumb-item active">Quizzes</li>
                         </ol>
                     </div>
                 </div>
             </div>
         </section>
-        <section class="content">
+        <section class="content-body">
             <div class="container-fluid">
                 <div class="row">
-                    @foreach ($quizzes as $quiz)
-                        <div class="col-md-4">
-                            <div class="card w-100 rounded">
-                                <div class="card-body">
-                                    <h6><span
-                                            class="badge float-right {{ $quiz->payement_type == 'payed' ? 'badge-warning' : 'badge-secondary' }} px-2 py-1">{{ $quiz->payement_type }}</span>
-                                        </h5>
-                                        <h2 class="card-title decor-text text-capitalize font-weight-bold">
-                                            {{ $quiz->name }}</h2>
-                                        <p class="card-text font-weight-light mt-5">{{ $quiz->description }}</p>
-                                        @if ($quiz->price)
-                                            <p class="card-text text-secondary text-bold">{{ $quiz->price }}$</p>
-                                        @endif
-                                        <a @if ($quiz->price) data-toggle="modal" data-target="#exampleModal" @else href="{{ route('quiz', ['slug' => $quiz->slug]) }}" @endif
-                                            class="btn btn-info rounded-pill px-4">Check Quiz</a>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-body">
-                                    <h3 class="text-center">You don't have access to this quiz ! </h3>
-                                </div>
-                                <div class="d-flex justify-content-end pt-0 px-3 pb-3">
-                                    <button type="button" class="btn btn-secondary rounded-pill mr-2 px-4" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-warning rounded-pill px-4">Buy It</button>
-                                  </div>
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body table-responsive px-2">
+                                <table class="table" id="myTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th>Type</th>
+                                            <th>Price</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($quizzes as $quiz)
+                                            <tr>
+                                                <td>{{ Str::limit($quiz->name,60, '...' )}}</td>
+                                                <td>{{ Str::limit($quiz->description, 60, '...') }}</td>
+                                                @if($quiz->orders->count())
+                                                    <td>{{$quiz->orders[0]->quiz_id == $quiz->id ? 'paid' : ''}}</td>
+                                                    <td>{{ $quiz->price ? $quiz->price.'$' : App\Enum\PayementTypeEnum::FREE }}</td>
+                                                    <td><a href="{{ route('quiz', ['slug' => $quiz->slug]) }}"
+                                                        class="btn btn-primary">Access Now</a></td>
+                                                @else
+                                                    <td>{{ $quiz->payement_type }}</td>
+                                                    <td>{{ $quiz->price ? $quiz->price.'$' : App\Enum\PayementTypeEnum::FREE }}</td>
+                                                    <td>
+                                                        @if($quiz->payement_type == 'free')
+                                                            <a href="{{ route('quiz', ['slug' => $quiz->slug]) }}"
+                                                            class="btn btn-primary">Access Now</a>
+                                                        @else
+                                                            <a @if ($quiz->price_token) href="{{ route('checkout', ['price_token' => $quiz->price_token, 'quiz_id' => $quiz->id]) }}" @endif
+                                                                class="btn btn-primary w-75">Buy Now</a>
+                                                        @endif
+                                                    </td>
+                                                @endif
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

@@ -76,7 +76,8 @@
                 dom: 'Bfrtip',
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
+                ],
+                renderer: {"header": "jqueryui"}
             });
             $('#btn-place').html(table.buttons().container());
             $(function(e) {

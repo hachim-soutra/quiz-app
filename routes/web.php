@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\UserController;
 use App\Models\Answer;
 use App\Models\Settings;
+use Illuminate\Http\Request;
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
 use Harishdurga\LaravelQuiz\Models\QuestionType;
@@ -17,6 +18,7 @@ use Harishdurga\LaravelQuiz\Models\QuizQuestion;
 use Harishdurga\LaravelQuiz\Models\Topic;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Laravel\Cashier\Cashier;
 
 /*
 |--------------------------------------------------------------------------
@@ -129,6 +131,7 @@ Route::middleware(['auth','admin'])->group(function(){
         Route::resource("settings", SettingsController::class);
         Route::get('/question/sort/{id}/{type}', [App\Http\Controllers\Admin\QuestionController::class, 'sort'])->name('question.sort');
         Route::resource("folder", FolderController::class);
+        Route::get('/orders', [QuizController::class, 'payments'])->name('orders');
     });
 });
 
@@ -140,7 +143,23 @@ Route::middleware(['auth','client'])->group(function(){
         Route::post('/update-account/{user}',[UserController::class,'updateAccount'])->name('update-account');
         Route::get('/answers',[UserController::class,'answers'])->name('answers');
         Route::post('/answer/destroy',[UserController::class,'destroy'])->name('answer.destroy');
-
+        // Route::get('/checkout/{price_token}/{quiz_id}', function (Request $request, $price_token, $quiz_id) {
+        //     $session = $request->user()->checkout($price_token, [
+        //         'success_url' => route('checkout-success').'?token={CHECKOUT_SESSION_ID}',
+        //         'cancel_url' => route('checkout-cancel'),
+        //         'mode' => 'payment',
+        //         'metadata' => [
+        //             'id' => $request->user()->id,
+        //             'quiz_id' => $quiz_id,
+        //         ],
+        //     ]);
+        //     dd(Cashier::stripe()->checkout->sessions->retrieve(
+        //         $session->id,[]));
+        //     return 'test';
+        // })->name('checkout');
+        Route::get('/checkout/{price_token}/{quiz_id}',[UserController::class,'checkout'])->name('checkout');
+        Route::get('checkout.success',[UserController::class,'checkoutSuccess'])->name('checkout-success');
+        Route::get('checkout.cancel',[UserController::class,'checkoutCancel'])->name('checkout-cancel');
     });
 });
 
