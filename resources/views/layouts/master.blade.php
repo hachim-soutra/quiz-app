@@ -228,7 +228,7 @@
     </style>
 </head>
 
-<body onload="checkCookies()">
+<body>
     <div id="app">
         <main>
             <div class="d-flex align-items-center">
@@ -245,12 +245,11 @@
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
     </script>
     <script>
-        function checkCookies() {
-            setTimeout(function() {
-                var element = document.getElementById("loadingSpinner");
-                element.classList.remove("active");
-            }, 2000);
-        }
+        setTimeout(function() {
+            var element = document.getElementById("loadingSpinner");
+            console.log("------------------------------");
+            element.classList.remove("active");
+        }, 2000);
     </script>
     @yield('js')
 </body>
