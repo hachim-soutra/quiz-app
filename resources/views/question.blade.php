@@ -87,7 +87,7 @@
                         <div class="d-flex flex-row justify-content-end align-items-center py-3 bg-white gap-2">
                             @if ($answer->getQuestion($id)['sort'] > 1)
                                 <form action="{{ route('question.prev', ['id' => $id, 'token' => $answer->token]) }}"
-                                    method="POST">
+                                    method="POST" class="m-0">
                                     @csrf
                                     <input type="hidden" name="timer" id="timer3">
                                     <button type="submit" class="btn btn-outline-dark align-items-center"><i
@@ -95,7 +95,7 @@
                                     </button>
                                 </form>
                             @endif
-                            <form method="POST"
+                            <form method="POST" class="m-0"
                                 action="{{ route('question.review', ['id' => $id, 'token' => $answer->token]) }}">
                                 @csrf
                                 <input type="hidden" name="timer" id="timer1">
@@ -103,7 +103,7 @@
                                     <i class="fa fa-solid fa-rotate-right"></i> Mark for review
                                 </button>
                             </form>
-                            <form method="POST"
+                            <form method="POST" class="m-0"
                                 action="{{ route('question.ignore', ['id' => $id, 'token' => $answer->token]) }}">
                                 @csrf
                                 <input type="hidden" name="timer" id="timer2">
@@ -112,7 +112,7 @@
                                 </button>
                             </form>
                             <a href="{{ route('quiz.expired', ['token' => $answer->token, 'status' => 'Terminate test']) }}"
-                                class="btn btn-outline-danger"><i class="fa-solid fa-fire"></i> Terminate Test</a>
+                                class="btn btn-outline-danger m-0"><i class="fa-solid fa-fire"></i> Terminate Test</a>
 
                         </div>
                     </div>
