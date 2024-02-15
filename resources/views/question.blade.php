@@ -328,21 +328,24 @@
                     $('#stop-modal').modal('hide');
                     interval = setInterval(countdown, 1000);
                 });
-
-                $('#reviewedInput').change(function() {
-                    $('#reviewedForm').submit();
-                });
-
-                $('#ignoredInput').change(function() {
-                    $('#ignoredForm').submit();
-                });
             }
-            window.scrollTo({
-                left: 0,
-                top: document.body.scrollHeight,
-                behavior: "smooth"
-            });
         </script>
     @endsection
 
 @endif
+<script>
+    window.onload = function() {
+        $('#reviewedInput').change(function() {
+            $('#reviewedForm').submit();
+        });
+
+        $('#ignoredInput').change(function() {
+            $('#ignoredForm').submit();
+        });
+        window.scrollTo({
+            left: 0,
+            top: document.body.scrollHeight,
+            behavior: "smooth"
+        });
+    }
+</script>
