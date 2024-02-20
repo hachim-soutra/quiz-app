@@ -260,6 +260,7 @@ class QuizController extends Controller
             "answers" => [],
             "questions_json" => $question_json,
             "email" => $request->email ?? "",
+            "user_id" => auth()?->user()?->id,
             "score" => 0,
             "timer" => $quiz->quiz_time ? Carbon::parse($quiz->quiz_time)->format('H:i:s') : null,
             "target" => $target->value,

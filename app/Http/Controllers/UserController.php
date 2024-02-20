@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Answer;
 use App\Models\Order;
+use App\Models\QuestionsCategorization;
 use App\Models\QuizTheme;
 use App\Models\User;
 use App\Services\StripeService;
@@ -23,12 +24,23 @@ class UserController extends Controller
     }
     public function index()
     {
-        return view('client.home');
-    }
+        $answer = Answer::with("quiz")->where('email', Auth::user()->email)->latest()->get();
+        $quiz = Quiz::latest()->get();
+        $categories = QuestionsCategorization::all();
+        $xValues = [];
+        $yValues = [];
+        $barColors = [];
+        foreach ($categories as $categorie) {
+            $xValues[] = $categorie->name;
+            $barColors[] = $categorie->color;
+            $yValues[] = $categorie->questions->count();
+        }
+        return view('client.home',['answer' => $answer, 'quiz' => $quiz, 'xValues' => $xValues, 'yValues' => $yValues, 'barColors' => $barColors]);    }
 
     public function settings()
     {
-        return view('client.account');
+        $orders = auth()->user()->orders()->with('quiz')->get();
+        return view('client.account',['orders' => $orders]);
     }
 
     public function checkout(Request $request, $price_token, $quiz_id)
@@ -103,6 +115,41 @@ class UserController extends Controller
     {
         $answer = Answer::with("quiz")->where('email', Auth::user()->email)->get();
         return view('client.answers')->with(["answers" => $answer]);
+    }
+
+    public function editProfil()
+    {
+        return view('client.edit_profil');
+    }
+
+    public function saveUpdatedProfil(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|min:3|max:50',
+            'email' => 'email',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extention = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extention;
+            $file->move('images/', $filename);
+        } else {
+            $filename = 'blank.png';
+        }
+
+        auth()->user()->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'image' => $filename,
+        ]);
+
+        return redirect()->back()->with('status', 'Profile Updated');
+    }
+
+    public function updatePassword()
+    {
+        return view('client.update_password');
     }
 
     public function destroy(Request $request)

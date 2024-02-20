@@ -1,5 +1,29 @@
 @extends('layouts.app')
+@section('style')
+    <style>
+        div.dt-buttons .dt-button , .dt-button:hover:not(.disabled) {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            border: none;
+            border-radius: 20px;
+            background-color: #343b7c !important;
+            color: white !important;
+        }
+        .button-show {
+            background-color: #343b7c;
+            color: white;
+            border-radius: 5px;
+        }
 
+        .button-show:hover {
+            color: white;
+        }
+
+        .progress {
+            height: 10px !important;
+        }
+    </style>
+@endsection
 @section('content')
     <div class="container-fluid">
         <section class="content-header mb-4">
@@ -21,40 +45,52 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                        <div class="card-body table-responsive p-0">
-                            <div class="d-flex justify-content-end">
-                                <button class="btn btn-outline-danger mb-3" id="deleteAllSelectedRecords">
-                                    <i class="fas fa-trash" style="margin-right: 7px;"></i>Delete selected rows</button>
-                            </div>
-                            <div id="btn-place" style="display: inline;"></div>
-                            <table class="table" id="myTable">
-                                <thead>
-                                    <tr>
-                                        <th><input type="checkbox" id="select_all_ids"></th>
-                                        <th>Quiz name</th>
-                                        <th>Email</th>
-                                        <th>Score</th>
-                                        <th>Date</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($answers as $answer)
+                        <div class="card bg-white p-4 border-0">
+                            <div class="card-body table-responsive p-0">
+                                <div class="d-flex justify-content-end">
+                                    <button class="btn btn-outline-danger mb-3" id="deleteAllSelectedRecords">
+                                        <i class="fas fa-trash" style="margin-right: 7px;"></i>Delete selected rows</button>
+                                </div>
+                                <div id="btn-place" style="display: inline;"></div>
+                                <table class="table table-striped" id="myTable">
+                                    <thead>
                                         <tr>
-                                            <td><input type="checkbox" value="{{ $answer->id }}" name="ids"
-                                                    class="checkbox_ids"></th>
-                                            <td>{{ Str::limit($answer->quiz?->name, 70, '...') }}</td>
-                                            <td>{{ Str::limit($answer->email, 70, '...') }}</td>
-                                            <td>{{ round($answer->score, 2) }}%</td>
-                                            <td>{{ $answer->created_at }}</td>
-                                            <td><a href="{{ route('answer', ['token' => $answer->token]) }}"
-                                                    class="btn btn-primary">
-                                                    <i class="fas fa-eye"></i>Show</a>
-                                            </td>
+                                            <th><input type="checkbox" id="select_all_ids"></th>
+                                            <th>Quiz name</th>
+                                            <th>Email</th>
+                                            <th>Score</th>
+                                            <th>Date</th>
+                                            <th>Action</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($answers as $answer)
+                                            <tr>
+                                                <td><input type="checkbox" value="{{ $answer->id }}" name="ids"
+                                                        class="checkbox_ids"></th>
+                                                <td>{{ Str::limit($answer->quiz?->name, 70, '...') }}</td>
+                                                <td>{{ Str::limit($answer->email, 70, '...') }}</td>
+                                                <td class="d-flex flex-column">
+                                                    <div class="text-center">{{ $answer->score }}%</div>
+                                                    <div class="progress progress-xxs">
+                                                        <div class="progress-bar progress-bar-danger progress-bar-striped"
+                                                            role="progressbar" aria-valuenow="{{ $answer->score }}"
+                                                            aria-valuemin="0" aria-valuemax="100"
+                                                            style="width: {{ $answer->score }}%; background-color: {{ $answer->score > 50 ? '#0d5db3' : ($answer->score < 50 ? '#b50d0d' : '#79828d') }}">
+                                                            <span class="sr-only">{{ $answer->score }}% Complete (warning)</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>{{ $answer->created_at }}</td>
+                                                <td><a href="{{ route('answer', ['token' => $answer->token]) }}"
+                                                        class="btn button-show">
+                                                        <i class="fas fa-eye mr-1"></i>Show</a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -77,7 +113,9 @@
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ],
-                renderer: {"header": "jqueryui"}
+                renderer: {
+                    "header": "jqueryui"
+                }
             });
             $('#btn-place').html(table.buttons().container());
             $(function(e) {
@@ -99,7 +137,7 @@
                         confirm: function() {
                             $.ajax({
                                 "type": "POST",
-                                "url": "{{ route('answer.destroy') }}",
+                                "url": "{{ route('client.answer.destroy') }}",
                                 success: function(result) {
                                     location.reload();
                                 },

@@ -25,7 +25,8 @@
                                     <label for="email">email :</label>
                                 </td>
                                 <td>
-                                    <input type="email" id="email" name="email"
+                                    <input type="email" id="email" name="email" value="{{ auth()->check() ? auth()->user()->email : ''}}"
+                                    placeholder="Enter your email" {{ auth()->check() ? 'disabled' : ''}}
                                         class="@error('email') is-invalid @enderror form-control">
                                     @error('email')
                                         <div class="text-danger">{{ $message }}</div>

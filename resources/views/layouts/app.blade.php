@@ -9,10 +9,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/1.7.0/jquery-confirm.min.css"
         integrity="sha512-aSZhdO9qRbI5Yvk2tJciP+L7R++CSmyZE3vekxHiW55tQb7dgXxpX0PXr188QfzThNGC8Nb7Wrn9fUCAD/KpyQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.min.css">
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.min.css">
+    {{-- <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css"
+        rel="stylesheet"
+      /> --}}
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200,500&display=swap');
+
         * {
             font-family: 'Century Gothic Paneuropean', sans-serif !important;
         }
@@ -40,13 +46,31 @@
         .white-space {
             white-space: nowrap;
         }
+
+        .img-circle {
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+        }
+
+        .link-style {
+            font-size: 17px;
+            color: #343b7c;
+            font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+            font-weight: 500;
+        }
+
+        .dropdown-menu{
+            border: none !important;
+            border-radius: 0.25rem !important;
+        }
     </style>
     @yield('style')
 
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
             <!-- Main Header -->
-            <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <nav class="main-header navbar navbar-expand navbar-white navbar-light pr-0">
                 <!-- Left navbar links -->
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -56,20 +80,20 @@
                 </ul>
 
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown user-menu">
+                    <li class="nav-item dropdown user-menu d-flex">
+                        <img src="{{ asset('images/' . Auth::user()->image) }}" class="img-circle elevation-2"
+                            alt="User Image">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                            <span class="d-none d-md-inline">{{ Auth::user()->userable_type == App\Models\User::ADMIN_TYPE ? 'Admin' : 'User'}}</span>
+                            <span class="d-none d-md-inline link-style">{{ Auth::user()->name }}</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                            <!-- User image -->
-                            <li class="p-5 text-center">
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            {{-- <div class="text-center">
                                 <p>
                                     {{ Auth::user()->email }}<br />
                                     <small>Member since {{ Auth::user()->created_at->format('M. Y') }}</small>
                                 </p>
-                            </li>
-                            <!-- Menu Footer-->
-                            <li class="user-footer">
+                            </div>
+                            <div class="user-footer">
                                 <a href="#" class="btn btn-default btn-flat float-right"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Sign out
@@ -77,8 +101,28 @@
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>
-                            </li>
-                        </ul>
+                            </div> --}}
+                            <a href="{{ route('client.edit-profil') }}"
+                                class="dropdown-item d-flex text-dark px-3 {{ Request::is('client.edit-profil') ? 'active' : '' }}">
+                                <i class="fa-solid fa-pen-to-square mr-2"></i>
+                                <p>Edit Profile</p>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="{{ route('client.update-password') }}"
+                                class="dropdown-item d-flex text-dark px-3 {{ Request::is('client.update-password') ? 'active' : '' }}">
+                                <i class="fa-solid fa-unlock mr-2"></i>
+                                <p>Update Password</p>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item d-flex align-items-center text-dark px-3"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fa-solid fa-right-from-bracket mr-2"></i>
+                                <p>Sign out</p>
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </div>
                     </li>
                 </ul>
             </nav>
@@ -110,6 +154,11 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/1.7.0/jquery-confirm.min.js"
             integrity="sha512-3rO4uA/MW2+0ttYBRkgnI8teWs5ZFT3jwFZksUnrr9ViTEQ6fSrxHARcJ/WTM8VLcMP/FFyBuEYihtFEwtFczw=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        {{-- <!-- MDB -->
+<script
+type="text/javascript"
+src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"
+></script> --}}
         @yield('js')
 
     </body>
