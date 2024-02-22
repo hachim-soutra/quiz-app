@@ -11,6 +11,7 @@ use App\Services\StripeService;
 use Harishdurga\LaravelQuiz\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Cashier\Cashier;
 
 class UserController extends Controller
@@ -20,8 +21,8 @@ class UserController extends Controller
     public function __construct(StripeService $stripeService)
     {
         $this->stripeService = $stripeService;
-        // elaaaaaaach
     }
+
     public function index()
     {
         $answer = Answer::with("quiz")->where('email', Auth::user()->email)->latest()->get();
@@ -35,18 +36,19 @@ class UserController extends Controller
             $barColors[] = $categorie->color;
             $yValues[] = $categorie->questions->count();
         }
-        return view('client.home',['answer' => $answer, 'quiz' => $quiz, 'xValues' => $xValues, 'yValues' => $yValues, 'barColors' => $barColors]);    }
+        return view('client.home', ['answer' => $answer, 'quiz' => $quiz, 'xValues' => $xValues, 'yValues' => $yValues, 'barColors' => $barColors]);
+    }
 
     public function settings()
     {
         $orders = auth()->user()->orders()->with('quiz')->get();
-        return view('client.account',['orders' => $orders]);
+        return view('client.account', ['orders' => $orders]);
     }
 
     public function checkout(Request $request, $price_token, $quiz_id)
     {
         $session = $request->user()->checkout($price_token, [
-            'success_url' => route('checkout-success').'?token={CHECKOUT_SESSION_ID}',
+            'success_url' => route('checkout-success') . '?token={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('checkout-cancel'),
             'mode' => 'payment',
             'metadata' => [
@@ -55,14 +57,13 @@ class UserController extends Controller
             ],
         ]);
 
-        $quiz = Quiz::where('id', $session->metadata['quiz_id'])->first();
         Order::create([
             'session_id' => $session->id,
             'quiz_id' => $session->metadata['quiz_id'],
             'client_id' => $session->metadata['id'],
             'status' => $session->payment_status,
             'amount_stripe' => $session->amount_total / 100,
-            'current_price' => $quiz->price,
+            'current_price' => $session->amount_total / 100,
             'currency' => $session->currency
         ]);
 
@@ -72,13 +73,16 @@ class UserController extends Controller
     public function checkoutSuccess(Request $request)
     {
         $session = Cashier::stripe()->checkout->sessions->retrieve(
-            $request->token,[]);
-        Order::where('session_id',$session->id)->where('status','unpaid')->update([
+            $request->token,
+            []
+        );
+        Order::where('session_id', $session->id)->where('status', 'unpaid')->update([
             'status' => 'paid',
         ]);
-        $quiz = Quiz::where('id',$session->metadata['quiz_id'])->first();
-        return view('checkout.success',['quiz' => $quiz]);
+        $quiz = Quiz::find($session->metadata['quiz_id']);
+        return view('checkout.success', ['quiz' => $quiz]);
     }
+
     public function checkoutCancel()
     {
         return redirect()->route('client.home')->with('status', 'Your payment is incomplet');
@@ -87,39 +91,31 @@ class UserController extends Controller
     public function quizzes()
     {
         $quizzes = Quiz::OrderBy('payement_type')->with(['orders' => function ($query) {
-            $query->where('client_id', auth()->id())
-            ->where('status', 'paid');
+            $query->where('client_id', auth()->id())->where('status', 'paid');
         }])->get();
         return view('client.quizzes', ['quizzes' => $quizzes]);
     }
 
-    public function updateAccount(User $user, Request $request)
+    public function updatePassword(Request $request)
     {
         $request->validate([
-            'name' => 'required|min:3|max:50',
-            'email' => 'email',
-            'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
-            'password_confirmation' => 'min:6'
+            'password' => 'min:6|confirmed',
         ]);
-
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password,
-            'updated_at' => now()
+        auth()->user()->update([
+            'password' => Hash::make($request->password)
         ]);
-        return redirect()->back()->with('status', 'Profile Updated');
+        return redirect()->back()->with('status', 'Password Updated successfully.');
     }
 
     public function answers()
     {
-        $answer = Answer::with("quiz")->where('email', Auth::user()->email)->get();
+        $answer = Auth::user()->answers;
         return view('client.answers')->with(["answers" => $answer]);
     }
 
-    public function editProfil()
+    public function edit()
     {
-        return view('client.edit_profil');
+        return view('client.edit');
     }
 
     public function saveUpdatedProfil(Request $request)
@@ -147,7 +143,7 @@ class UserController extends Controller
         return redirect()->back()->with('status', 'Profile Updated');
     }
 
-    public function updatePassword()
+    public function updatePasswordView()
     {
         return view('client.update_password');
     }
@@ -157,7 +153,7 @@ class UserController extends Controller
         $answer = Answer::whereIn('id', $request->item)->get();
         foreach ($answer as $item) {
             $item->delete();
-        };
-        return response()->json(['message' => 'answer(s) deleted Successfully'], 200);
+        }
+        return response()->json(['message' => 'Answer(s) deleted Successfully']);
     }
 }

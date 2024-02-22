@@ -1,7 +1,8 @@
 @extends('layouts.app')
 @section('style')
     <style>
-        div.dt-buttons .dt-button , .dt-button:hover:not(.disabled) {
+        div.dt-buttons .dt-button,
+        .dt-button:hover:not(.disabled) {
             overflow: hidden;
             text-overflow: ellipsis;
             border: none;
@@ -9,6 +10,7 @@
             background-color: #343b7c !important;
             color: white !important;
         }
+
         .button-show {
             background-color: #343b7c;
             color: white;
@@ -77,7 +79,9 @@
                                                             role="progressbar" aria-valuenow="{{ $answer->score }}"
                                                             aria-valuemin="0" aria-valuemax="100"
                                                             style="width: {{ $answer->score }}%; background-color: {{ $answer->score > 50 ? '#0d5db3' : ($answer->score < 50 ? '#b50d0d' : '#79828d') }}">
-                                                            <span class="sr-only">{{ $answer->score }}% Complete (warning)</span>
+                                                            <span class="sr-only">{{ $answer->score }}% Complete
+                                                                (warning)
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -111,11 +115,9 @@
             var table = $('#myTable').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
+                    'csv', 'excel', 'pdf', 'print'
                 ],
-                renderer: {
-                    "header": "jqueryui"
-                }
+                renderer: "jqueryui"
             });
             $('#btn-place').html(table.buttons().container());
             $(function(e) {

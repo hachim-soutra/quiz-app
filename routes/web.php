@@ -136,17 +136,23 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
 Route::middleware(['auth', 'client'])->group(function () {
     Route::prefix('client')->group(function () {
         Route::get('/home', [UserController::class, 'index'])->name('client.home');
+        Route::get('/edit', [UserController::class, 'edit'])->name('client.edit');
         Route::get('/quizzes', [UserController::class, 'quizzes'])->name('client.quizzes');
-        Route::get('/account', [UserController::class, 'settings'])->name('account');
-        Route::post('/update-account/{user}', [UserController::class, 'updateAccount'])->name('update-account');
         Route::get('/answers', [UserController::class, 'answers'])->name('answers');
+        Route::get('/account', [UserController::class, 'settings'])->name('account');
+        Route::get('/settings/update-password', [UserController::class, 'updatePasswordView'])->name('client.update-password');
+        Route::post('/update-password', [UserController::class, 'updatePassword'])->name('update-account');
+
         Route::post('/answer/destroy', [UserController::class, 'destroy'])->name('client.answer.destroy');
+
+        //info: checkout routes
         Route::get('/checkout/{price_token}/{quiz_id}', [UserController::class, 'checkout'])->name('checkout');
-        Route::get('checkout.success', [UserController::class, 'checkoutSuccess'])->name('checkout-success');
-        Route::get('checkout.cancel', [UserController::class, 'checkoutCancel'])->name('checkout-cancel');
-        Route::get('edit.profil', [UserController::class, 'editProfil'])->name('client.edit-profil');
-        Route::post('save.profil', [UserController::class, 'saveUpdatedProfil'])->name('client.save-profil');
-        Route::get('update.password', [UserController::class, 'updatePassword'])->name('client.update-password');
+        Route::get('/checkout-success', [UserController::class, 'checkoutSuccess'])->name('checkout-success');
+        Route::get('/checkout-cancel', [UserController::class, 'checkoutCancel'])->name('checkout-cancel');
+        //end checkout routes
+
+        Route::post('/save-profil', [UserController::class, 'saveUpdatedProfil'])->name('client.save-profil');
+
         Route::get('/quiz/{slug}', function ($slug) {
             $quiz = Quiz::whereSlug($slug)->firstOrFail();
             $logo = Settings::where("name", "logo")->first();
