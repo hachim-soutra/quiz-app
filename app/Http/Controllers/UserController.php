@@ -131,7 +131,7 @@ class UserController extends Controller
             $filename = time() . '.' . $extention;
             $file->move('images/', $filename);
         } else {
-            $filename = 'blank.png';
+            $filename = auth()->user()->image;
         }
 
         auth()->user()->update([

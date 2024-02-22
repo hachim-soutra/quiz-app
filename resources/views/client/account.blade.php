@@ -82,7 +82,7 @@
                         <div class="tab-pane fade active show" id="transactions">
                             <div class="card border-0 m-0">
                                 <div class="card-body table-responsive p-0">
-                                    <table class="table table-valign-middle">
+                                    <table class="table table-valign-middle" id="myTable">
                                         <thead>
                                             <tr>
                                                 <th>Quiz</th>
@@ -96,7 +96,7 @@
                                                     <td>
                                                         <img src="{{ $order->quiz->image == 'blank.png' ? asset('images/quiz-938x675.png') : asset('images/'.$order->quiz->image) }}"
                                                             class="img-circle img-size-32 mr-2">
-                                                        {{ $order->quiz->name }}
+                                                            {{ Str::limit($order->quiz->name, 70, '...') }}
                                                     </td>
                                                     <td><span class="text-success mr-1">{{ $order->amount_stripe }}</span> {{ $order->currency }}</td>
                                                     <td>{{ $order->updated_at }}</td>
@@ -110,7 +110,7 @@
                         <div class="tab-pane fade" id="purchases">
                             <div class="card border-0 m-0">
                                 <div class="card-body table-responsive p-0">
-                                    <table class="table table-valign-middle">
+                                    <table class="table table-valign-middle" id="myTable1">
                                         <thead>
                                             <tr>
                                                 <th>Quiz</th>
@@ -125,9 +125,9 @@
                                                     <td>
                                                         <img src="{{ $order->quiz->image == 'blank.png' ? asset('images/quiz-938x675.png') : asset('images/'.$order->quiz->image) }}"
                                                             class="img-circle img-size-32 mr-2">
-                                                        {{ Str::limit($order->quiz->name, 50, '...') }}
+                                                        {{ Str::limit($order->quiz->name, 100, '...') }}
                                                     </td>
-                                                    <td> {{ Str::limit($order->quiz->description, 30, '...') }}</td>
+                                                    <td> {{ Str::limit($order->quiz->description, 40, '...') }}</td>
                                                     <td><span class="text-success mr-1">{{ $order->amount_stripe }}</span> {{ $order->currency }}</td>
                                                     <td><a href="{{ route('quiz', ['slug' => $order->quiz->slug]) }}"
                                                         class="btn btn-access">Access Now</a></td>
@@ -144,4 +144,10 @@
             </div>
         </section>
     </div>
+@endsection
+@section('js')
+    <script>
+        var table = $('#myTable').DataTable();
+        var table = $('#myTable1').DataTable();
+    </script>
 @endsection
