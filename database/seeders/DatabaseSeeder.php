@@ -26,6 +26,23 @@ class DatabaseSeeder extends Seeder
         //         'label' => 'uncategorized',
         //     ]
         // ]);
-        Quiz::whereNull('folder_id')->update(['folder_id' => 9999]);
+        // Quiz::whereNull('folder_id')->update(['folder_id' => 9999]);
+        DB::table('settings')->insert([
+            [
+                'name' => 'Take break text',
+                'value' => '',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'above target text recap',
+                'value' => '',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'below target text recap',
+                'value' => '',
+                'type' => 'string'
+            ],
+        ]);
     }
 }

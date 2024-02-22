@@ -44,7 +44,12 @@ class QuestionController extends Controller
             }
             $break = true;
         }
-        return view('question')->with(["answer" => $answer, "break" => $break, "id" => $id]);
+        $break_text = Settings::where("name", "Take break text")->first();
+        if ($break) {
+            $answer->questions_json = $answer->setSkipped($question['sort']);
+            $answer->save();
+        }
+        return view('question')->with(["answer" => $answer, "break" => $break, "id" => $id, "break_text" => $break_text]);
     }
 
     public function ignore($token, $id, Request $request)
@@ -55,6 +60,14 @@ class QuestionController extends Controller
         $answer->timer = $answer->quiz->quiz_time ? $request->timer : null;
         $answer->save();
         return $this->redirectQuestion($answer, $id);
+    }
+
+    public function preview($token, Request $request)
+    {
+        $answer = Answer::with("quiz")->whereToken($token)->firstOrFail();
+        $answer->timer = $answer->quiz->quiz_time ? $request->timer : null;
+        $answer->save();
+        return redirect()->route('questions', ['token' => $answer->token, 'id' => $request->question_id]);
     }
 
     public function review($token, $id, Request $request)

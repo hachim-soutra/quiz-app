@@ -47,6 +47,11 @@ class Answer extends Model
         return collect($this->questions_json);
     }
 
+    public function getQuestionsIgnored()
+    {
+        return $this->getQuestions()->whereNull("value")->whereNull("skipped");
+    }
+
     public function getQuestionsReview()
     {
         return $this->getQuestions()->where("value", "review");
@@ -70,6 +75,18 @@ class Answer extends Model
         foreach ($this->questions_json as $q) {
             if ($q["value"] == -1) {
                 $q["value"] = null;
+            }
+            $qu[] = $q;
+        }
+        return $qu;
+    }
+
+    public function setSkipped($sort)
+    {
+        $qu = [];
+        foreach ($this->questions_json as $q) {
+            if ($q["sort"] <= $sort) {
+                $q["skipped"] = true;
             }
             $qu[] = $q;
         }

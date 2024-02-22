@@ -157,6 +157,74 @@
             font-weight: 900;
             color: red;
         }
+
+        /* Styles for the loading spinner */
+        .loading-spinner {
+            display: none;
+        }
+
+        .loading-spinner.active {
+            display: block;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Define the color change animation */
+        @keyframes colorChange {
+            0% {
+                border-color: #ff0000;
+                /* Red */
+            }
+
+            25% {
+                border-color: green;
+                /* Green */
+            }
+
+            50% {
+                border-color: orange;
+                /* Blue */
+            }
+
+            75% {
+                border-color: green;
+                /* Magenta */
+            }
+
+            100% {
+                border-color: #ff0000;
+                /* Red */
+            }
+        }
+
+        /* Apply the rotation animation to the element */
+        .rotating-image {
+            position: relative;
+            border: 4px solid #ff0000;
+            /* Initial border color */
+            border-radius: 50%;
+            animation: rotate 5s infinite linear, colorChange 2s infinite linear;
+        }
     </style>
 </head>
 
@@ -164,12 +232,24 @@
     <div id="app">
         <main>
             <div class="d-flex align-items-center">
+                <!-- Loading Spinner -->
+                <div class="loading-spinner active " id="loadingSpinner">
+                    <img src="{{ asset('images/' . $logo->value) }}" alt="" width="120px" height="120px"
+                        class="rotating-image">
+                </div>
                 @yield('content')
             </div>
         </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
+    </script>
+    <script>
+        setTimeout(function() {
+            var element = document.getElementById("loadingSpinner");
+            console.log("------------------------------");
+            element.classList.remove("active");
+        }, 2000);
     </script>
     @yield('js')
 </body>

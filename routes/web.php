@@ -85,10 +85,26 @@ Route::get('/answer/{token}', function ($token) {
     $answersByCatego = array_count_values($correctAnswers);
     $allQstByCatego = array_count_values($allQuestions);
 
-    return view('answer')->with(["answer" => $answer, "answersByCatego" => $answersByCatego, "allQstByCatego" => $allQstByCatego]);
+    // To replace the target tag with value
+    $below_target_text = Settings::where('name', 'below target text recap')->first();
+    $above_target_text = Settings::where('name', 'above target text recap')->first();
+    $count = 0;
+    $terms[] = $answer->target . "%";
+    $below_target = preg_replace_callback('/\{{2}(.*?)\}{2}/', function ($match) use (&$count, $terms) {
+        $return = !empty($terms[$count]) ? $terms[$count] : '';
+        $count++;
+        return $return;
+    }, $below_target_text->value);
+    $above_target = preg_replace_callback('/\{{2}(.*?)\}{2}/', function ($match) use (&$count, $terms) {
+        $return = !empty($terms[$count]) ? $terms[$count] : '';
+        $count++;
+        return $return;
+    }, $above_target_text->value);
+    return view('answer')->with(["answer" => $answer, "answersByCatego" => $answersByCatego, "allQstByCatego" => $allQstByCatego, "below_target" => $below_target, "above_target" => $above_target]);
 })->name('answer');
 
 Route::middleware('check.answer')->group(function () {
+    Route::post('/question/show/{token}', [App\Http\Controllers\Admin\QuestionController::class, 'preview'])->name('question.preview');
     Route::post('/question/ignore/{token}/{id}', [App\Http\Controllers\Admin\QuestionController::class, 'ignore'])->name('question.ignore');
     Route::post('/question/review/{token}/{id}', [App\Http\Controllers\Admin\QuestionController::class, 'review'])->name('question.review');
     Route::post('/question/prev/{token}/{id}', [App\Http\Controllers\Admin\QuestionController::class, 'prev'])->name('question.prev');

@@ -12,16 +12,14 @@
                     @endif
                     @if ($answer->score < intval($answer->target))
                         <p class="text-review">
-                            Thank you for completing the quiz, unfortunately your score is below target 😟, which is
-                            {{ $answer->target }}% of
-                            correct answers.<br />
+                            {{ $below_target }}
+                            <br />
                             Here below a quick summary of your assessment
                         </p>
                     @else
                         <p class="text-review">
-                            Thank you for completing the quiz, Well done 👍 your score is above target, which is
-                            {{ $answer->target }}% of
-                            correct answers.<br />
+                            {{ $above_target }}
+                            <br />
                             Here below a quick summary of your assessment
                         </p>
                     @endif
@@ -43,6 +41,8 @@
                         <canvas id="myChart2"></canvas>
                     </div>
                 </div>
+
+                <h2><strong class="text-deco">Quiz </strong>: {{ $answer->quiz->name }}</h2>
 
                 @csrf
                 @foreach ($answer->getQuestions()->sortBy('sort') as $question)
