@@ -21,6 +21,11 @@ class QuizTheme extends Model
 
     public function quizzes()
     {
-        return $this->hasMany(config('laravel-quiz.models.quiz'),'folder_id')->orderBy('name');
+        return $this->hasMany(config('laravel-quiz.models.quiz'), 'folder_id')->orderBy('name');
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('label', 'LIKE', "%$search%");
     }
 }

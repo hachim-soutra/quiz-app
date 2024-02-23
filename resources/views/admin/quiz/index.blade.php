@@ -10,10 +10,6 @@
             font-size: 16px;
         }
 
-        .bg-tr {
-            background-color: #ccccccff;
-        }
-
         thead {
             background-color: #cfe2f3;
             color: black;
@@ -71,6 +67,11 @@
                                     Quiz list
                                 </h3>
                                 <div class="card-tools d-flex">
+                                    <form action="{{ route('quiz.index') }}" method="GET" class="mr-3 d-flex">
+                                        <input class="form-control" type="text" name="q" placeholder="Search..."
+                                            value="{{ request('q') }}" />
+                                        <button class="btn btn btn-success ml-3" type="submit">Search</button>
+                                    </form>
                                     <a href="{{ route('quiz.add') }}" type="button" class="btn btn-success"
                                         style="margin-right: 13px;">
                                         Add
@@ -92,11 +93,12 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($folders as $folder)
-                                            <tr class="bg-tr">
+                                            <tr>
                                                 <td>
                                                     <input type="checkbox" name="accounting" id="accounting"
                                                         data-toggle="toggle" data-id="{{ $folder->id }}">
-                                                    <span class="text-16-bold">{{ $folder->label }}</span>
+                                                    <span class="text-16-bold">{{ $folder->label }}
+                                                        ({{ count($folder->quizzes) }})</span>
 
                                                     <table width="100%" class="hide hide-{{ $folder->id }}">
                                                         <thead>
@@ -160,6 +162,13 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>
+                                                {{ $folders->links() }}
+                                            </td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
 
@@ -210,9 +219,7 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            $('#myTable').DataTable({
-                responsive: true
-            });
+
             $(".hide").hide();
             $('[data-toggle="toggle"]').change(function() {
                 $(".hide-" + this.dataset.id).toggle();
