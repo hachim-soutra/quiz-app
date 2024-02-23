@@ -25,6 +25,8 @@
             height: 10px !important;
         }
     </style>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -117,46 +119,47 @@
                 buttons: [
                     'csv', 'excel', 'pdf', 'print'
                 ],
-                renderer: "jqueryui"
+                // renderer: "jqueryui",
             });
             $('#btn-place').html(table.buttons().container());
-            $(function(e) {
-                $("#select_all_ids").click(function() {
-                    $('.checkbox_ids').prop('checked', $(this).prop('checked'));
+            console.log('cc');
+
+            $("#select_all_ids").click(function() {
+                console.log('hey');
+                $('.checkbox_ids').prop('checked', $(this).prop('checked'));
+            });
+            $('#deleteAllSelectedRecords').click(function(e) {
+                e.preventDefault();
+                var all_ids = [];
+                $('input:checkbox[name=ids]:checked').each(function() {
+                    all_ids.push($(this).val());
                 });
-                $('#deleteAllSelectedRecords').click(function(e) {
-                    e.preventDefault();
-                    var all_ids = [];
-                    $('input:checkbox[name=ids]:checked').each(function() {
-                        all_ids.push($(this).val());
-                    });
-                    var obj = $.confirm({
-                        title: 'Confirm!',
-                        content: `Are you sure you want delete ${all_ids.length} answer(s) ?  `,
-                        confirmButtonClass: 'btn-info float-right px-3',
-                        cancelButtonClass: 'btn-danger mr-2',
-                        confirmButton: 'Ok',
-                        confirm: function() {
-                            $.ajax({
-                                "type": "POST",
-                                "url": "{{ route('client.answer.destroy') }}",
-                                success: function(result) {
-                                    location.reload();
-                                },
-                                "data": {
-                                    _token: '{{ csrf_token() }}',
-                                    item: all_ids
-                                },
-                            });
-                        },
-                        cancel: function() {}
-                    });
-                    obj.$el.find('.jconfirm-box').css({
-                        'top': '150%',
-                        'left': '50%',
-                        'margin-top': '-43px',
-                        'margin-left': '0px'
-                    });
+                var obj = $.confirm({
+                    title: 'Confirm!',
+                    content: `Are you sure you want delete ${all_ids.length} answer(s) ?  `,
+                    confirmButtonClass: 'btn-info float-right px-3',
+                    cancelButtonClass: 'btn-danger mr-2',
+                    confirmButton: 'Ok',
+                    confirm: function() {
+                        $.ajax({
+                            "type": "POST",
+                            "url": "{{ route('client.answer.destroy') }}",
+                            success: function(result) {
+                                location.reload();
+                            },
+                            "data": {
+                                _token: '{{ csrf_token() }}',
+                                item: all_ids
+                            },
+                        });
+                    },
+                    cancel: function() {}
+                });
+                obj.$el.find('.jconfirm-box').css({
+                    'top': '150%',
+                    'left': '50%',
+                    'margin-top': '-43px',
+                    'margin-left': '0px'
                 });
             });
         });
