@@ -107,7 +107,7 @@ class QuestionController extends Controller
     public function redirectQuestion($answer, $id, $type = "next")
     {
         if ($type === "next") {
-            $question = $answer->getQuestions()->where("sort", $answer->getQuestion($id)["sort"] + 1)->first();
+            $question = $answer->getQuestions()->whereNotNull("value")->where("sort", ">=", $answer->getQuestion($id)["sort"] + 1)->first();
         } else {
             $question = $answer->getQuestions()->where("sort", $answer->getQuestion($id)["sort"] - 1)->first();
         }
