@@ -77,9 +77,11 @@
                                         <i class="fa fa-regular fa-clock"></i>
                                         <span class="countdown"></span>
                                     </button>
-                                    <button class="btn btn-outline-dark" id="stopTimer" type="button">
-                                        <i class="fa-regular fa-circle-pause"></i> Pause
-                                    </button>
+                                    @if( $answer->quiz->quiz_type == '1' || $answer->quiz->quiz_type == '2' )
+                                        <button class="btn btn-outline-dark" id="stopTimer" type="button">
+                                            <i class="fa-regular fa-circle-pause"></i> Pause
+                                        </button>
+                                    @endif
                                 </div>
                                 <input type="hidden" name="timer" id="timer">
                             @endif
