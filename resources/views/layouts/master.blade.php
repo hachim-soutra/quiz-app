@@ -220,7 +220,7 @@
         /* Apply the rotation animation to the element */
         .rotating-image {
             position: relative;
-            border: 4px solid #ff0000;
+            /* border: 4px solid #ff0000; */
             /* Initial border color */
             border-radius: 50%;
             animation: rotate 5s infinite linear, colorChange 2s infinite linear;
@@ -234,7 +234,7 @@
             <div class="d-flex align-items-center">
                 <!-- Loading Spinner -->
                 <div class="loading-spinner active " id="loadingSpinner">
-                    <img src="{{ asset('images/' . $logo->value) }}" alt="" width="120px" height="120px"
+                    <img src="{{ asset('images/loading.gif') }}" alt="" width="500px" height="500px"
                         class="rotating-image">
                 </div>
                 @yield('content')

@@ -67,6 +67,20 @@
                             <form class="col-md-10" method="POST" action="{{ route('client.save-profil') }}"
                                 enctype="multipart/form-data">
                                 @csrf
+                                <div class="form-group row align-items-center justify-content-center">
+                                    {{-- <label for="exampleInputPassword1" class="text-secondary col-md-3">Profil Image</label> --}}
+                                    <img id="selectedAvatar" src="{{ asset('images/' . Auth::user()->image) }}"
+                                        class="rounded-circle mr-5" style="width: 200px; height: 200px; object-fit: cover;"
+                                        alt="example placeholder" />
+
+                                    <div class="btn rounded-pill mr-3" style="background-color: #343b7c; font-size: 17px;">
+                                        <i class="fas fa-edit text-white" aria-hidden="true"></i>
+                                        <input type="file" class="d-none" id="customFile2"
+                                            onchange="displaySelectedImage(event, 'selectedAvatar')" name="image"
+                                            value="{{ asset('images/' . Auth::user()->image) }}" />
+                                    </div>
+
+                                </div>
                                 <div class="form-group row align-items-center">
                                     <label for="exampleInputPassword1" class="text-secondary col-md-3">Full Name</label>
                                     <div class="input-group col-md-9 mb-3">
@@ -92,22 +106,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row align-items-center">
-                                    <label for="exampleInputPassword1" class="text-secondary col-md-3">Profil Image</label>
                                     <div class="d-flex col-md-9 align-items-center justify-content-between">
-                                        <img id="selectedAvatar" src="{{ asset('images/' . Auth::user()->image) }}"
-                                            class="rounded-circle mr-5"
-                                            style="width: 200px; height: 200px; object-fit: cover;"
-                                            alt="example placeholder" />
                                         <div class="d-flex justify-content-center align-items-center">
-                                            <div class="btn rounded-pill mr-3"
-                                                style="background-color: #343b7c; font-size: 17px;">
-                                                <label class="form-label text-white m-1 font-weight-normal"
-                                                    for="customFile2">Choose
-                                                    file</label>
-                                                <input type="file" class="d-none" id="customFile2"
-                                                    onchange="displaySelectedImage(event, 'selectedAvatar')" name="image"
-                                                    value="{{ asset('images/' . Auth::user()->image) }}" />
-                                            </div>
                                             <button type="submit"
                                                 class="btn btn-info button-save rounded-pill font-weight-normal">Save</button>
                                         </div>
