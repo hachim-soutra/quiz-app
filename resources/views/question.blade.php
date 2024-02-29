@@ -9,7 +9,7 @@
                     <div class="d-flex flex-column justify-content-between px-2">
                         <h2 class="text-deco">Take break <span class="countdown"></span>
                         </h2>
-                        <p class="sous-title">{{ $break_text->value }}</p>
+                        <h5 class="sous-title">{{ $break_text->value }}</h5>
 
                     </div>
                     <a href="{{ route('questions', ['token' => $answer->token, 'id' => $id, 'pass' => true]) }}"
@@ -215,8 +215,7 @@
             <div class="modal-dialog" role="document" style="top: 30%">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <h3>Votre test est mis en attente</h3>
-                        <p>......</p>
+                        <h5 class="sous-title mt-3">{{ $break_text->value }}</h5>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" id="start-timer">Reprendre le test</button>
