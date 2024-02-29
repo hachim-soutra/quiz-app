@@ -91,13 +91,15 @@ class QuestionController extends Controller
 
     public function next($token, int $question_id, Request $request)
     {
+        $answer = Answer::with("quiz")->whereToken($token)->firstOrFail();
+        $answer->timer = $answer->quiz->quiz_time ? $request->timer : null;
+        $answer->save();
+
         $request->validate([
             "question" => "required"
         ]);
-        $answer = Answer::with("quiz")->whereToken($token)->firstOrFail();
         $questions = $answer->setQuestion($question_id, $request->question);
         $answer->questions_json = $questions;
-        $answer->timer = $answer->quiz->quiz_time ? $request->timer : null;
         $answer->save();
         return $this->redirectQuestion($answer, $question_id);
     }
