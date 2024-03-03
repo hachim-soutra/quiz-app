@@ -47,6 +47,7 @@ class QuestionController extends Controller
         $break_text = Settings::where("name", "Take break text")->first();
         if ($break) {
             $answer->questions_json = $answer->setSkipped($question['sort']);
+            $answer->nbr_of_breaks = $question['sort'] / $answer->quiz->nbr_questions_sequance;
             $answer->save();
         }
         return view('question')->with(["answer" => $answer, "break" => $break, "id" => $id, "break_text" => $break_text]);
@@ -107,9 +108,9 @@ class QuestionController extends Controller
     public function redirectQuestion($answer, $id, $type = "next")
     {
         if ($type === "next") {
-            $question = $answer->getQuestions()->whereNotNull("value")->where("sort", ">=", $answer->getQuestion($id)["sort"] + 1)->first();
+            $question = $answer->getQuestions()->sortBy('sort')->whereNotNull("value")->where("sort", ">=", $answer->getQuestion($id)["sort"] + 1)->first();
         } else {
-            $question = $answer->getQuestions()->where("sort", $answer->getQuestion($id)["sort"] - 1)->first();
+            $question = $answer->getQuestions()->sortBy('sort')->where("sort", $answer->getQuestion($id)["sort"] - 1)->first();
         }
         if ($question) {
             return redirect()->route('questions', ['token' => $answer->token, 'id' => $question["id"]]);

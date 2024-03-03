@@ -87,7 +87,7 @@
                             @endif
                         </div>
                         <div class="d-flex flex-row justify-content-end align-items-center py-3 bg-white gap-2">
-                            @if ($answer->getQuestion($id)['sort'] > 1)
+                            @if ($answer->getQuestion($id)['sort'] > 1 && $answer->haveRightToPrev($answer->getQuestion($id)['sort']))
                                 <form action="{{ route('question.prev', ['id' => $id, 'token' => $answer->token]) }}"
                                     method="POST" class="m-0">
                                     @csrf
