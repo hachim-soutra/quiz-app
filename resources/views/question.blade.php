@@ -77,7 +77,7 @@
                                         <i class="fa fa-regular fa-clock"></i>
                                         <span class="countdown"></span>
                                     </button>
-                                    @if( $answer->quiz->quiz_type == '1' || $answer->quiz->quiz_type == '2' )
+                                    @if ($answer->quiz->quiz_type == '1' || $answer->quiz->quiz_type == '2')
                                         <button class="btn btn-outline-dark" id="stopTimer" type="button">
                                             <i class="fa-regular fa-circle-pause"></i> Pause
                                         </button>
@@ -228,12 +228,11 @@
     </div>
 @endsection
 
-@if ($break)
-    @section('js')
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script>
-            window.onload = function() {
-
+@section('js')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        window.onload = function() {
+            @if ($break)
                 var timerBreak = "{{ $answer->quiz->break_time }}";
 
                 function countdown() {
@@ -264,16 +263,9 @@
                     }
                 }
                 var interval = setInterval(countdown, 1000);
+            @endif
 
-            }
-        </script>
-    @endsection
-@endif
-@if ($answer->timer && !$break)
-    @section('js')
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script>
-            window.onload = function() {
+            @if ($answer->timer && !$break)
                 var timer2 = "{{ $answer->timer }}";
                 var breakQuestion = "{{ $break }}";
                 var timerReminer = "{{ $answer->quiz->quiz_time_remind }}";
@@ -298,10 +290,10 @@
                         minutes = (minutes < 0) ? 59 : minutes;
                         minutes = (minutes < 10) ? '0' + minutes : minutes;
                         $('.countdown').html(hours + ':' + minutes + ':' + seconds);
-
-                        let x1 = parseInt(timerReminder[0]) * 3600 + parseInt(timerReminder[1]) * 60 + parseInt(
-                            timerReminder[2]);
-                        let x2 = parseInt(timer[0]) * 3600 + parseInt(timer[1]) * 60 + parseInt(timer[2]);
+                        let x1 = parseInt(timerReminder[0]) * 3600 +
+                            parseInt(timerReminder[1]) * 60 + parseInt(timerReminder[2]);
+                        let x2 = parseInt(timer[0]) * 3600 +
+                            parseInt(timer[1]) * 60 + parseInt(timer[2]);
                         if (x1 >= x2) {
                             $('.countdown-btn').addClass('btn-outline-danger');
                         }
@@ -329,25 +321,21 @@
                     $('#stop-modal').modal('hide');
                     interval = setInterval(countdown, 1000);
                 });
-            }
-        </script>
-    @endsection
+            @endif
 
-@endif
-<script script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    window.onload = function() {
-        $('#reviewedInput').change(function() {
-            $('#reviewedForm').submit();
-        });
+            $('#reviewedInput').change(function() {
+                $('#reviewedForm').submit();
+            });
 
-        $('#ignoredInput').change(function() {
-            $('#ignoredForm').submit();
-        });
-        window.scrollTo({
-            left: 0,
-            top: document.body.scrollHeight,
-            behavior: "smooth"
-        });
-    }
-</script>
+            $('#ignoredInput').change(function() {
+                $('#ignoredForm').submit();
+            });
+            window.scrollTo({
+                left: 0,
+                top: document.body.scrollHeight,
+                behavior: "smooth"
+            });
+
+        }
+    </script>
+@endsection
