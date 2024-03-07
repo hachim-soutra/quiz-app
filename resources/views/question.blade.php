@@ -26,38 +26,17 @@
                         <div class="w-100 d-flex flex-row justify-content-end align-items-center py-3 bg-white gap-2">
 
                             @if (count($answer->getQuestionsIgnored()) > 0)
-                                <form action="{{ route('question.preview', ['token' => $answer->token]) }}" method="POST"
-                                    id="ignoredForm">
-                                    @csrf
-                                    <input type="hidden" name="timer" class="timer3">
-                                    <select name="question_id" id="ignoredInput" class="form-control">
-                                        <option disabled selected>ignored ({{ count($answer->getQuestionsIgnored()) }})
-                                        </option>
-                                        @foreach ($answer->getQuestionsIgnored() as $q)
-                                            <option value=" {{ $q['id'] }}" title="{{ $q['name'] }}">
-                                                {{ Str::limit($q['name'], 40, '...') }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </form>
+                                <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal"
+                                    data-bs-target="#ignoredQstModal">
+                                    ignored({{ count($answer->getQuestionsIgnored()) }})
+                                </button>
                             @endif
                             @if (count($answer->getQuestionsReview()) > 0)
-                                <form action="{{ route('question.preview', ['token' => $answer->token]) }}"
-                                    id="reviewedForm" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="timer" class="timer3">
-                                    <select name="question_id" id="reviewedInput" class="form-control">
-                                        <option disabled selected>marked for review
-                                            ({{ count($answer->getQuestionsReview()) }})</option>
-                                        @foreach ($answer->getQuestionsReview() as $q)
-                                            <option value=" {{ $q['id'] }}" title="{{ $q['name'] }}">
-                                                {{ Str::limit($q['name'], 40, '...') }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </form>
+                                <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal"
+                                    data-bs-target="#reviewQstModal">
+                                    marked for review({{ count($answer->getQuestionsReview()) }})
+                                </button>
                             @endif
-
                         </div>
                     @endif
                     <div class="d-flex flex-row justify-content-between align-items-center py-3 bg-white gap-2">
@@ -213,6 +192,66 @@
 
             </div>
         </div>
+        {{-- modal reviews questions --}}
+        <div class="modal fade" id="reviewQstModal" tabindex="-1" role="dialog" aria-labelledby="reviewQstModalTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form action="{{ route('question.preview', ['token' => $answer->token]) }}" id="reviewedForm"
+                            method="POST">
+                            @csrf
+                            <h4 class="text-center mb-3">Questions marked for review</h4>
+                            <input type="hidden" name="timer" class="timer3">
+                            <select name="question_id" id="reviewedInput" class="form-control custom-select"
+                                size="3">
+                                <option selected>Choose a question</option>
+                                @foreach ($answer->getQuestionsReview() as $q)
+                                    <option value=" {{ $q['id'] }}" title="{{ $q['name'] }}">
+                                        {{ Str::limit($q['name'], 40, '...') }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <div class="d-flex justify-content-end mt-3">
+                                <button type="button" class="btn btn-secondary me-2"
+                                    data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Confirm</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- modal ignored questions --}}
+        <div class="modal fade" id="ignoredQstModal" tabindex="-1" role="dialog"
+            aria-labelledby="ignoredQstModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form action="{{ route('question.preview', ['token' => $answer->token]) }}" method="POST"
+                            id="ignoredForm">
+                            @csrf
+                            <h4 class="text-center mb-3">Questions ignored</h4>
+                            <input type="hidden" name="timer" class="timer3">
+                            <select name="question_id" id="ignoredInput" class="form-control custom-select" size="3">
+                                <option disabled selected>ignored ({{ count($answer->getQuestionsIgnored()) }})
+                                </option>
+                                @foreach ($answer->getQuestionsIgnored() as $q)
+                                    <option value=" {{ $q['id'] }}" title="{{ $q['name'] }}">
+                                        {{ Str::limit($q['name'], 40, '...') }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <div class="d-flex justify-content-end mt-3">
+                                <button type="button" class="btn btn-secondary me-2"
+                                    data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Confirm</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="modal" tabindex="-1" role="dialog" id="stop-modal" data-bs-backdrop='static'>
             <div class="modal-dialog" role="document" style="top: 30%">
                 <div class="modal-content">
@@ -323,13 +362,6 @@
                 });
             @endif
 
-            $('#reviewedInput').change(function() {
-                $('#reviewedForm').submit();
-            });
-
-            $('#ignoredInput').change(function() {
-                $('#ignoredForm').submit();
-            });
             window.scrollTo({
                 left: 0,
                 top: document.body.scrollHeight,
