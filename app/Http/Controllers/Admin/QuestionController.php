@@ -33,6 +33,7 @@ class QuestionController extends Controller
         }
         $break = false;
         $question = $answer->getQuestion($id);
+        $break_text = Settings::where("name", "Take break text")->first();
         if (
             !$pass && $answer->quiz->nbr_questions_sequance
             && $answer->quiz->quiz_type == 3
@@ -40,11 +41,10 @@ class QuestionController extends Controller
             && $question['sort'] > 1
         ) {
             if ($answer->getQuestionsReview()->sortBy('sort')->first()) {
-                return redirect()->route('questions', ['token' => $answer->token, 'id' => $answer->getQuestionsReview()->sortBy('sort')->first()["id"]]);
+                return view('question')->with(["answer" => $answer, "break" => $break, "id" => $answer->getQuestionsReview()->sortBy('sort')->first()["id"], "break_text" => $break_text]);
             }
             $break = true;
         }
-        $break_text = Settings::where("name", "Take break text")->first();
         if ($break) {
             $answer->questions_json = $answer->setSkipped($question['sort']);
             $answer->nbr_of_breaks = $question['sort'] / $answer->quiz->nbr_questions_sequance;
