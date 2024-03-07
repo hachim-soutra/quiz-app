@@ -48,8 +48,12 @@ class Answer extends Model
         if ($this->quiz->quiz_type != 3) return true;
         // if there is no break show btn preview
         if (!$this->nbr_of_breaks) return true;
-        // if it's not the qst after break show preview
-        if ($this->nbr_of_breaks * $this->quiz->nbr_questions_sequance < $sort + 1) return true;
+        // if it's not the qst after break show preview (in case we take break after 1 questions or more)
+        if ($this->nbr_of_breaks * $this->quiz->nbr_questions_sequance < $sort - 1 && ($this->nbr_of_breaks * $this->quiz->nbr_questions_sequance) * 2 > $sort ) return true;
+        // if it's not the qst after break show preview (in case we take break after 2 questions)
+        if ($this->quiz->nbr_questions_sequance == 2) {
+            if ($this->nbr_of_breaks * $this->quiz->nbr_questions_sequance < $sort + 1) return true;
+        }
         // if sort more then break * nbr of sequences
         return $this->nbr_of_breaks * $this->quiz->nbr_questions_sequance < $sort - 1;
     }
