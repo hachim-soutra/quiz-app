@@ -26,6 +26,11 @@ class Answer extends Model
         return $this->belongsTo(Quiz::class, 'quiz_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function getScoreAttribute()
     {
         return $this->questions_json ? $this->nbr_of_correct * 100 / count($this->questions_json) : 0;

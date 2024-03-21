@@ -42,3 +42,9 @@
             <p>Archives</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('orders') }}" class="nav-link text-dark {{ Request::is('orders') ? 'active' : '' }}">
+        <i class="fa-solid fa-money-check-dollar"></i>
+        <p>Orders</p>
+    </a>
+</li>

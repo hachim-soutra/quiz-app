@@ -6,8 +6,10 @@ use App\Http\Controllers\Admin\QuestionsCategorizationController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\QuizController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\UserController;
 use App\Models\Answer;
 use App\Models\Settings;
+use Illuminate\Http\Request;
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
 use Harishdurga\LaravelQuiz\Models\QuestionType;
@@ -16,6 +18,7 @@ use Harishdurga\LaravelQuiz\Models\QuizQuestion;
 use Harishdurga\LaravelQuiz\Models\Topic;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Laravel\Cashier\Cashier;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,12 +31,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/login', function () {
+    if (!auth::user()) {
+        return redirect('/login');
+    }
+});
+
 Route::get('/', function () {
     $logo_home = Settings::where("name", "home page logo")->first();
     return view('welcome')->with(["logo_home" => $logo_home]);
 });
-
-Route::get('/quiz/{slug}', function ($slug) {
+// guest
+Route::middleware('quiz.guest')->get('/quiz/{slug}', function ($slug) {
     $quiz = Quiz::whereSlug($slug)->firstOrFail();
     $logo = Settings::where("name", "logo")->first();
     return view('quiz')->with(["quiz" => $quiz, "logo" => $logo]);
@@ -108,7 +117,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/quiz/create-answer/{id}', [QuizController::class, 'createAnswer'])->name('quiz.create-answer');
 Route::get('/quiz/expired/{token}/{status}', [QuizController::class, 'quizExpired'])->name('quiz.expired');
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     Route::get('/answer', [App\Http\Controllers\Admin\AnswerController::class, 'index'])->name('admin.answer');
     Route::post('/answer/delete', [App\Http\Controllers\Admin\AnswerController::class, 'destroy'])->name('answer.destroy');
     Route::get('/answer/deleted-answers', [App\Http\Controllers\Admin\AnswerController::class, 'deletedAnswers'])->name('answer.deleted-answers');
@@ -137,4 +146,33 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource("settings", SettingsController::class);
     Route::get('/question/sort/{id}/{type}', [App\Http\Controllers\Admin\QuestionController::class, 'sort'])->name('question.sort');
     Route::resource("folder", FolderController::class);
+    Route::get('/orders', [QuizController::class, 'payments'])->name('orders');
+});
+
+Route::middleware(['auth', 'client'])->group(function () {
+    Route::prefix('client')->group(function () {
+        Route::get('/home', [UserController::class, 'index'])->name('client.home');
+        Route::get('/edit', [UserController::class, 'edit'])->name('client.edit');
+        Route::get('/quizzes', [UserController::class, 'quizzes'])->name('client.quizzes');
+        Route::get('/answers', [UserController::class, 'answers'])->name('answers');
+        Route::get('/account', [UserController::class, 'settings'])->name('account');
+        Route::get('/settings/update-password', [UserController::class, 'updatePasswordView'])->name('client.update-password');
+        Route::post('/update-password', [UserController::class, 'updatePassword'])->name('update-account');
+
+        Route::post('/answer/destroy', [UserController::class, 'destroy'])->name('client.answer.destroy');
+
+        //info: checkout routes
+        Route::get('/checkout/{price_token}/{quiz_id}', [UserController::class, 'checkout'])->name('checkout');
+        Route::get('/checkout-success', [UserController::class, 'checkoutSuccess'])->name('checkout-success');
+        Route::get('/checkout-cancel', [UserController::class, 'checkoutCancel'])->name('checkout-cancel');
+        //end checkout routes
+
+        Route::post('/save-profil', [UserController::class, 'saveUpdatedProfil'])->name('client.save-profil');
+
+        Route::get('/quiz/{slug}', function ($slug) {
+            $quiz = Quiz::whereSlug($slug)->firstOrFail();
+            $logo = Settings::where("name", "logo")->first();
+            return view('quiz')->with(["quiz" => $quiz, "logo" => $logo]);
+        })->name('client.quiz');
+    });
 });

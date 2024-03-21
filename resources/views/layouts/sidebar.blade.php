@@ -7,7 +7,11 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
-                @include('layouts.menu')
+                @if(Auth::user()->userable_type == App\Models\User::ADMIN_TYPE )
+                    @include('layouts.menu')
+                @else
+                    @include('layouts.user-menu')
+                @endif
             </ul>
         </nav>
     </div>

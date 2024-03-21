@@ -9,6 +9,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "harishdurga/laravel-quiz": "^1.2",
         "infyomlabs/laravel-ui-adminlte": "^5.2",
+        "laravel/cashier": "^15.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
         "laravel/socialite": "^5.8",

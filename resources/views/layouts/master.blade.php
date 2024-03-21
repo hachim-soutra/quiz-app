@@ -221,6 +221,7 @@
         .rotating-image {
             position: relative;
             /* border: 4px solid #ff0000; */
+            /* border: 4px solid #ff0000; */
             /* Initial border color */
             /* border-radius: 50%; */
             /* animation: rotate 5s infinite linear, colorChange 2s infinite linear; */
