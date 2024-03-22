@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\UserController;
 use App\Models\Answer;
 use App\Models\Settings;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
@@ -30,12 +31,6 @@ use Laravel\Cashier\Cashier;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/login', function () {
-    if (!auth::user()) {
-        return redirect('/login');
-    }
-});
 
 Route::get('/', function () {
     $logo_home = Settings::where("name", "home page logo")->first();
@@ -114,10 +109,10 @@ Route::middleware('check.answer')->group(function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/quiz/create-answer/{id}', [QuizController::class, 'createAnswer'])->name('quiz.create-answer');
 Route::get('/quiz/expired/{token}/{status}', [QuizController::class, 'quizExpired'])->name('quiz.expired');
 Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/answer', [App\Http\Controllers\Admin\AnswerController::class, 'index'])->name('admin.answer');
     Route::post('/answer/delete', [App\Http\Controllers\Admin\AnswerController::class, 'destroy'])->name('answer.destroy');
     Route::get('/answer/deleted-answers', [App\Http\Controllers\Admin\AnswerController::class, 'deletedAnswers'])->name('answer.deleted-answers');

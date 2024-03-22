@@ -154,7 +154,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($answer->take(6) as $answer)
+                                @foreach ($answer as $answer)
                                     <tr>
                                         <td>
                                             <img src="{{ $answer->quiz->image == 'blank.png' ? asset('images/quiz-938x675.png') : asset('images/'.$answer->quiz->image) }}"

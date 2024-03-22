@@ -69,18 +69,21 @@
                                 @csrf
                                 <div class="form-group row align-items-center justify-content-center">
                                     {{-- <label for="exampleInputPassword1" class="text-secondary col-md-3">Profil Image</label> --}}
-                                    <img id="selectedAvatar" src="{{ asset('images/' . Auth::user()->image) }}"
+                                    <img id="selectedAvatar"
+                                        src="{{ asset(Auth::user()->image ? 'images/' . Auth::user()->image : 'images/user (1).png') }}"
                                         class="rounded-circle mr-5" style="width: 200px; height: 200px; object-fit: cover;"
                                         alt="example placeholder" />
 
-                                    <div class="btn rounded-pill mr-3" style="background-color: #343b7c; font-size: 17px;">
+                                    <label for="customFile2" class="btn rounded-pill mr-3"
+                                        style="background-color: #343b7c; font-size: 17px;">
                                         <i class="fas fa-edit text-white" aria-hidden="true"></i>
-                                        <input type="file" class="d-none" id="customFile2"
-                                            onchange="displaySelectedImage(event, 'selectedAvatar')" name="image"
-                                            value="{{ asset('images/' . Auth::user()->image) }}" />
-                                    </div>
+                                    </label>
+                                    <input type="file" class="d-none" id="customFile2"
+                                        onchange="displaySelectedImage(event, 'selectedAvatar')" name="image"
+                                        value="{{ asset(Auth::user()->image ? 'images/' . Auth::user()->image : 'images/user (1).png') }}" />
 
                                 </div>
+
                                 <div class="form-group row align-items-center">
                                     <label for="exampleInputPassword1" class="text-secondary col-md-3">Full Name</label>
                                     <div class="input-group col-md-9 mb-3">
@@ -132,6 +135,7 @@
         // displaySelectedImage({ target: document.getElementById('customFile2') }, 'selectedAvatar');
         // };
         function displaySelectedImage(event, elementId) {
+            console.log(elementId);
             const selectedImage = document.getElementById(elementId);
             const fileInput = event.target;
 

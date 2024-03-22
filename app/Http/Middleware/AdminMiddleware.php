@@ -19,7 +19,7 @@ class AdminMiddleware
     {
         if(Auth::user()->userable_type == User::ADMIN_TYPE)
         {
-            return $next($request); 
+            return $next($request);
         }
         if(Auth::user()->userable_type == User::CLIENT_TYPE){
             return redirect()->route('client.home');

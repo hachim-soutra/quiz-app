@@ -25,7 +25,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $answer = Answer::with("quiz")->where('email', Auth::user()->email)->latest()->get();
+        $answer = Auth::user()->answers()->latest()->limit(5)->get();
         $quiz = Quiz::latest()->get();
         $categories = QuestionsCategorization::all();
         $xValues = [];
@@ -41,7 +41,7 @@ class UserController extends Controller
 
     public function settings()
     {
-        $orders = auth()->user()->orders()->with('quiz')->get();
+        $orders = auth()->user()->orders()->with('quiz')->latest()->get();
         return view('client.account', ['orders' => $orders]);
     }
 
@@ -109,7 +109,7 @@ class UserController extends Controller
 
     public function answers()
     {
-        $answer = Auth::user()->answers;
+        $answer = Auth::user()->answers()->latest()->get();
         return view('client.answers')->with(["answers" => $answer]);
     }
 

@@ -129,7 +129,7 @@
                                                     </td>
                                                     <td> {{ Str::limit($order->quiz->description, 40, '...') }}</td>
                                                     <td><span class="text-success mr-1">{{ $order->amount_stripe }}</span> {{ $order->currency }}</td>
-                                                    <td><a href="{{ route('quiz', ['slug' => $order->quiz->slug]) }}"
+                                                    <td><a href="{{ route('client.quiz', ['slug' => $order->quiz->slug]) }}"
                                                         class="btn btn-access">Access Now</a></td>
                                                 </tr>
                                             @endforeach

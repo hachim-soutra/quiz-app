@@ -81,7 +81,7 @@
 
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown user-menu d-flex">
-                        <img src="{{ asset('images/' . Auth::user()->image) }}" class="img-circle elevation-2"
+                        <img src="{{ asset( Auth::user()->image ? 'images/' . Auth::user()->image : 'images/user (1).png') }}" class="img-circle elevation-2"
                             alt="User Image">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                             <span class="d-none d-md-inline link-style">{{ Auth::user()->name }}</span>
