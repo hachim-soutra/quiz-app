@@ -73,9 +73,18 @@ class RegisterController extends Controller
     }
 
     public function showRegistrationForm()
-{
-    $logo_home = Settings::where("name","home page logo")->first();
+    {
+        $logo_home = Settings::where("name", "home page logo")->first();
 
-    return view('auth.register', compact('logo_home'));
-}
+        return view('auth.register', compact('logo_home'));
+    }
+
+    public function redirectTo()
+    {
+        if (auth()->user()->userable_type == User::CLIENT_TYPE) {
+            return 'client/home';
+        } else {
+            return 'admin/home';
+        }
+    }
 }

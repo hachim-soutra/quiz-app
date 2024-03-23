@@ -49,7 +49,7 @@
             <div class="row bg-white mx-4 py-3">
                 <div class="col-md-3 d-flex justify-content-center pl-0">
                     <img id="selectedAvatar" src="{{ asset('images/' . Auth::user()->image) }}" class="rounded-circle"
-                        style="width: 145px; height: 145px; object-fit: cover;" alt="example placeholder" />
+                        style="width: 145px; height: 145px; object-fit: fill;" alt="example placeholder" />
                 </div>
                 <div class="col-md-9">
                     <h3 class="text-capitalize mt-4 mb-3 text-bold" style=" font-family: 'Oswald', sans-serif !important;">
