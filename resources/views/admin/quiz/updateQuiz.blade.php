@@ -69,28 +69,30 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="">Payement type
-                                                        {{ old('Payement_type') ? $item->payement_type : old('payement_type') }}</label>
-                                                        <select name="payement_type" id="payement_type"
-                                                        class="form-control @error('payement_type') is-invalid @enderror">
-                                                        @foreach (App\Enum\PayementTypeEnum::cases() as $payementType)
-                                                            <option value="{{$payementType}}"
+                                            <div class="form-group">
+                                                <label for="">Payement type
+                                                    {{ old('Payement_type') ? $item->payement_type : old('payement_type') }}</label>
+                                                <select name="payement_type" id="payement_type"
+                                                    class="form-control @error('payement_type') is-invalid @enderror">
+                                                    @foreach (App\Enum\PayementTypeEnum::cases() as $payementType)
+                                                        <option value="{{ $payementType }}"
                                                             {{ (!old('payement_type') ? $item->payement_type : old('payement_type')) == $payementType->value ? 'selected' : '' }}>
-                                                            {{$payementType}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @error('payement_type')
-                                                        <div class="text-danger">{{ $message }}</div>
-                                                    @enderror
+                                                            {{ $payementType }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('payement_type')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-md-12 quiz_price ">
                                             <div class="form-group">
                                                 <label for="">Price</label>
-                                                <input type="text" class="form-control @error('price') is-invalid @enderror" value="{{$item->price}}" name="price" id="price">
+                                                <input type="text"
+                                                    class="form-control @error('price') is-invalid @enderror"
+                                                    value="{{ $item->price }}" name="price" id="price">
                                                 @error('price')
-                                                <div class="text-danger">{{ $message }}</div>
+                                                    <div class="text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
@@ -127,7 +129,7 @@
                                                 <input type="time" name="quiz_time" step="1"
                                                     class="form-control @error('quiz_time') is-invalid @enderror"
                                                     value="{{ old('quiz_time') || !$item->quiz_time ? old('quiz_time') : Carbon\Carbon::parse($item->quiz_time)->format('H:i:s') }}">
-                                                <small>format: H:i:s</small>
+                                                <small>format: hh:mm:ss</small>
                                                 @error('quiz_time')
                                                     <div class="text-danger">{{ $message }}
                                                     </div>
@@ -141,7 +143,7 @@
                                                 <input type="time" step="1" name="quiz_time_remind"
                                                     value="{{ old('quiz_time_remind') || !$item->quiz_time_remind ? old('quiz_time_remind') : Carbon\Carbon::parse($item->quiz_time_remind)->format('H:i:s') }}"
                                                     class="form-control @error('quiz_time_remind') is-invalid @enderror" />
-                                                <small>format: H:i:s</small>
+                                                <small>format: hh:mm:ss</small>
                                                 @error('quiz_time_remind')
                                                     <div class="text-danger">{{ $message }}
                                                     </div>
@@ -166,7 +168,7 @@
                                                 <input type="time" step="1" name="break_time"
                                                     value="{{ old('break_time') || !$item->break_time ? old('break_time') : Carbon\Carbon::parse($item->break_time)->format('H:i:s') }}"
                                                     class="form-control @error('break_time') is-invalid @enderror">
-                                                <small>format: H:i:s</small>
+                                                <small>format: hh:mm:ss</small>
                                                 @error('break_time')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
@@ -214,11 +216,12 @@
             $('#quiz_type').on('change', function() {
                 quizShow();
             });
+
             function payementProcess() {
-                if($('#payement_type').val() == 'free'){
+                if ($('#payement_type').val() == 'free') {
                     $('.quiz_price').hide();
                 }
-                if($('#payement_type').val() == 'payed'){
+                if ($('#payement_type').val() == 'payed') {
                     $('.quiz_price').show();
                 }
             }

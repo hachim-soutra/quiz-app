@@ -116,7 +116,7 @@
                                                 <label for="name">Select timer</label>
                                                 <input type="time" name="quiz_time" value="{{ old('quiz_time') }}"
                                                     class="form-control @error('quiz_time') is-invalid @enderror" />
-                                                <small>format: H:i:s</small>
+                                                <small>format: hh:mm</small>
                                                 @error('quiz_time')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
@@ -128,7 +128,7 @@
                                                 <input type="time" name="quiz_time_remind"
                                                     value="{{ old('quiz_time_remind') }}"
                                                     class="form-control @error('quiz_time_remind') is-invalid @enderror" />
-                                                <small>format: H:i:s</small>
+                                                <small>format: hh:mm</small>
                                                 @error('quiz_time_remind')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
@@ -151,7 +151,7 @@
                                                 <label for="">Define break</label>
                                                 <input type="time" name="break_time" value="{{ old('break_time') }}"
                                                     class="form-control @error('break_time') is-invalid @enderror">
-                                                <small>format: H:i:s</small>
+                                                <small>format: hh:mm</small>
                                                 @error('break_time')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
