@@ -102,7 +102,7 @@
                                     @csrf
                                 </form>
                             </div> --}}
-                            <a href="{{ auth()->user()->userable_type == User::CLIENT_TYPE ? route('client.edit') : route('admin.edit') }}"
+                            <a href="{{ auth()->user()->userable_type == 'client' ? route('client.edit') : route('admin.edit') }}"
                                 class="dropdown-item d-flex text-dark px-3 {{ Request::is('client.edit') ? 'active' : '' }}">
                                 <i class="fa-solid fa-pen-to-square mr-2"></i>
                                 <p>Edit Profile</p>
