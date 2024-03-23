@@ -55,7 +55,9 @@
                                                 <label>Choose folder</label>
                                                 <select name="folder" class="form-control">
                                                     @foreach ($folders as $folder)
-                                                        <option value="{{$folder->id}}" {{$folder->label == 'uncategorized' ? 'selected' : ''}}>{{$folder->label}}</option>
+                                                        <option value="{{ $folder->id }}"
+                                                            {{ $folder->label == 'uncategorized' ? 'selected' : '' }}>
+                                                            {{ $folder->label }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -63,12 +65,12 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <label for="">Payement type </label>
-                                                    <select name="payement_type" id="payement_type"
+                                                <select name="payement_type" id="payement_type"
                                                     class="form-control @error('payement_type') is-invalid @enderror">
                                                     @foreach (App\Enum\PayementTypeEnum::cases() as $payementType)
-                                                        <option value="{{$payementType}}"
-                                                        {{ old('payement_type') ? 'selected' : $payementType->value }}>
-                                                        {{$payementType}}</option>
+                                                        <option value="{{ $payementType }}"
+                                                            {{ old('payement_type') ? 'selected' : $payementType->value }}>
+                                                            {{ $payementType }}</option>
                                                     @endforeach
                                                 </select>
                                                 @error('payement_type')
@@ -79,16 +81,18 @@
                                         <div class="col-md-12 quiz_price">
                                             <div class="form-group">
                                                 <label for="">Price (€)</label>
-                                                <input type="text" class="form-control @error('price') is-invalid @enderror" name="price" >
+                                                <input type="text"
+                                                    class="form-control @error('price') is-invalid @enderror"
+                                                    name="price">
                                                 @error('price')
-                                                        <div class="text-danger">{{ $message }}</div>
+                                                    <div class="text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
 
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label>Text <span class="text-danger">*</span></label>
+                                                <label>Title <span class="text-danger">*</span></label>
                                                 <textarea class="form-control @error('name') is-invalid @enderror" name="name">{{ old('name') }}</textarea>
                                                 @error('name')
                                                     <div class="text-danger">{{ $message }}</div>
@@ -112,6 +116,7 @@
                                                 <label for="name">Select timer</label>
                                                 <input type="time" name="quiz_time" value="{{ old('quiz_time') }}"
                                                     class="form-control @error('quiz_time') is-invalid @enderror" />
+                                                <small>format: H:i:s</small>
                                                 @error('quiz_time')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
@@ -123,6 +128,7 @@
                                                 <input type="time" name="quiz_time_remind"
                                                     value="{{ old('quiz_time_remind') }}"
                                                     class="form-control @error('quiz_time_remind') is-invalid @enderror" />
+                                                <small>format: H:i:s</small>
                                                 @error('quiz_time_remind')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
@@ -145,6 +151,7 @@
                                                 <label for="">Define break</label>
                                                 <input type="time" name="break_time" value="{{ old('break_time') }}"
                                                     class="form-control @error('break_time') is-invalid @enderror">
+                                                <small>format: H:i:s</small>
                                                 @error('break_time')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
@@ -186,11 +193,12 @@
             $('#quiz_type').on('change', function() {
                 quizShow();
             });
+
             function payementProcess() {
-                if($('#payement_type').val() == 'free'){
+                if ($('#payement_type').val() == 'free') {
                     $('.quiz_price').hide();
                 }
-                if($('#payement_type').val() == 'payed'){
+                if ($('#payement_type').val() == 'payed') {
                     $('.quiz_price').show();
                 }
             }
