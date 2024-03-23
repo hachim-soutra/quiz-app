@@ -78,7 +78,7 @@
                                         </div>
                                         <div class="col-md-12 quiz_price">
                                             <div class="form-group">
-                                                <label for="">Price</label>
+                                                <label for="">Price (€)</label>
                                                 <input type="text" class="form-control @error('price') is-invalid @enderror" name="price" >
                                                 @error('price')
                                                         <div class="text-danger">{{ $message }}</div>
