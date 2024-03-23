@@ -235,7 +235,7 @@
             <div class="d-flex align-items-center">
                 <!-- Loading Spinner -->
                 <div class="loading-spinner active " id="loadingSpinner">
-                    <img src="{{ asset('images/Loading_icon.gif') }}" alt="" width="420px" height="420px"
+                    <img src="{{ asset('images/Loading_icon.gif') }}" alt="" width="150px" height="auto"
                         class="rotating-image">
                 </div>
                 @yield('content')
