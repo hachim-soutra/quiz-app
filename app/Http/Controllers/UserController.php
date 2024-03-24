@@ -90,10 +90,11 @@ class UserController extends Controller
 
     public function quizzes()
     {
-        $quizzes = Quiz::OrderBy('payement_type')->with(['orders' => function ($query) {
+        $quizzes = Quiz::where('payement_type','like',request()->query("type") ? request()->query("type") : '%%')->OrderBy('payement_type')->with(['orders' => function ($query) {
             $query->where('client_id', auth()->id())->where('status', 'paid');
         }])->get();
-        return view('client.quizzes', ['quizzes' => $quizzes]);
+        $total_quizzes = Quiz::count();
+        return view('client.quizzes', ['quizzes' => $quizzes, 'total_quizzes' => $total_quizzes]);
     }
 
     public function updatePassword(Request $request)

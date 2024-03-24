@@ -32,6 +32,16 @@ use Laravel\Cashier\Cashier;
 |
 */
 
+Route::get('/test', function () {
+    $name = route();
+    function route($x)
+    {
+        return 'hello word '.$x;
+    }
+    return 'hey'.route('hachim').'bye'.$name;
+});
+
+
 Route::get('/', function () {
     $logo_home = Settings::where("name", "home page logo")->first();
     return view('welcome')->with(["logo_home" => $logo_home]);

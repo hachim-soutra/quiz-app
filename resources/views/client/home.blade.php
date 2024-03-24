@@ -46,7 +46,7 @@
                     <div class="icon">
                         <i class="fa-solid fa-chart-pie"></i>
                     </div>
-                    <a href="{{ route('client.quizzes') }}" class="small-box-footer">More info <i
+                    <a href="{{  route('client.quizzes').'?type='.App\Enum\PayementTypeEnum::FREE->value }}" class="small-box-footer">More info <i
                             class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                     <div class="icon">
                         <i class="fa-solid fa-sack-dollar"></i>
                     </div>
-                    <a href="{{ route('client.quizzes') }}" class="small-box-footer">More info <i
+                    <a href="{{ route('client.quizzes').'?type='.App\Enum\PayementTypeEnum::PAYED->value }}" class="small-box-footer">More info <i
                             class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
@@ -219,7 +219,7 @@
                     </div>
 
                     <div class="card-footer text-center">
-                        <a href="{{ route('client.quizzes') }}" class="uppercase">View All Quizzes</a>
+                        <a href="{{ route('client.quizzes') . '?type=' . App\Enum\PayementTypeEnum::PAYED->value }}" class="uppercase">View All Quizzes</a>
                     </div>
 
                 </div>
