@@ -1,16 +1,6 @@
 @extends('layouts.app')
 @section('style')
     <style>
-        div.dt-buttons .dt-button,
-        .dt-button:hover:not(.disabled) {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            border: none;
-            border-radius: 20px;
-            background-color: #343b7c !important;
-            color: white !important;
-        }
-
         .button-show {
             background-color: #343b7c;
             color: white;
@@ -55,7 +45,6 @@
                                     <button class="btn btn-outline-danger mb-3" id="deleteAllSelectedRecords">
                                         <i class="fas fa-trash" style="margin-right: 7px;"></i>Delete selected rows</button>
                                 </div>
-                                <div id="btn-place" style="display: inline;"></div>
                                 <table class="table table-striped" id="myTable">
                                     <thead>
                                         <tr>
@@ -91,6 +80,8 @@
                                                 <td><a href="{{ route('answer', ['token' => $answer->token]) }}"
                                                         class="btn button-show">
                                                         <i class="fas fa-eye mr-1"></i>Show</a>
+                                                    <a href="" class="btn button-show">
+                                                        <i class="fa-solid fa-upload mr-1"></i>Export</a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -105,27 +96,11 @@
     </div>
 @endsection
 @section('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
-    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.4.0/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.4.0/js/buttons.flash.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.4.0/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.4.0/js/buttons.print.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            var table = $('#myTable').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    'csv', 'excel', 'pdf', 'print'
-                ],
-                // renderer: "jqueryui",
-            });
-            $('#btn-place').html(table.buttons().container());
-            console.log('cc');
+            var table = $('#myTable').DataTable();
 
             $("#select_all_ids").click(function() {
-                console.log('hey');
                 $('.checkbox_ids').prop('checked', $(this).prop('checked'));
             });
             $('#deleteAllSelectedRecords').click(function(e) {

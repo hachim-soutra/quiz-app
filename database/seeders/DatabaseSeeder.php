@@ -29,17 +29,12 @@ class DatabaseSeeder extends Seeder
         // Quiz::whereNull('folder_id')->update(['folder_id' => 9999]);
         DB::table('settings')->insert([
             [
-                'name' => 'Take break text',
+                'name' => 'chart color when it\'s below target',
                 'value' => '',
                 'type' => 'string'
             ],
             [
-                'name' => 'above target text recap',
-                'value' => '',
-                'type' => 'string'
-            ],
-            [
-                'name' => 'below target text recap',
+                'name' => 'chart color when it\'s above target',
                 'value' => '',
                 'type' => 'string'
             ],

@@ -113,6 +113,10 @@
                         @endif
                     </div>
                 @endforeach
+
+                @if(auth()->check() && auth()->user()->userable_type == \App\Models\User::CLIENT_TYPE)
+                    <a href="{{ route('client.home') }}" class="btn text-white float-right my-3" style="background-color: #343b7c; float: right;">Back to dashboard</a>
+                @endif
             </div>
         </div>
     </div>
@@ -133,7 +137,7 @@
                 data: {
                     labels: ['correct', 'incorrect', 'ignored'],
                     datasets: [{
-                        backgroundColor: ['green', 'red', 'orange'],
+                        backgroundColor: [ "{{$correct_color}}"," {{$incorrect_color}}", "{{$ignored_color}}"],
                         data: [{{ $answer->nbr_of_correct }}, {{ $answer->nbr_of_incorrect }},
                             {{ $answer->nbr_of_ignored }}
                         ]
@@ -158,9 +162,9 @@
                         data: values,
                         backgroundColor: values.map((item) => {
                             if (item < {{ $answer->target }}) {
-                                return 'red';
+                                return "{{ $color_below_target }}";
                             } else {
-                                return 'green';
+                                return "{{ $color_above_target }}";
                             }
                         }),
                         borderWidth: 1,
