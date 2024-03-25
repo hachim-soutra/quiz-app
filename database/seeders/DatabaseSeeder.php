@@ -29,6 +29,21 @@ class DatabaseSeeder extends Seeder
         // Quiz::whereNull('folder_id')->update(['folder_id' => 9999]);
         DB::table('settings')->insert([
             [
+                'name' => 'correct answers color',
+                'value' => '',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'incorrect answers color',
+                'value' => '',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'ignored answers color',
+                'value' => '',
+                'type' => 'string'
+            ],
+            [
                 'name' => 'chart color when it\'s below target',
                 'value' => '',
                 'type' => 'string'
