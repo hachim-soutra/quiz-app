@@ -51,7 +51,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12 p-5 bg-white">
-                        <form class="container m-auto" method="POST" action="{{ route('update-account') }}"
+                        <form class="container m-auto" method="POST" action="{{ auth()->user()->userable_type == 'client' ? route('client.update-account') : route('admin.update-account') }}"
                             enctype="multipart/form-data">
                             @csrf
                             <div class="form-group row align-items-center">

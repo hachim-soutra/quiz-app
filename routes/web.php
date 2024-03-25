@@ -131,6 +131,8 @@ Route::post('/quiz/create-answer/{id}', [QuizController::class, 'createAnswer'])
 Route::get('/quiz/expired/{token}/{status}', [QuizController::class, 'quizExpired'])->name('quiz.expired');
 Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     Route::get('/edit', [UserController::class, 'edit'])->name('admin.edit');
+    Route::get('/settings/update-password', [UserController::class, 'updatePasswordView'])->name('admin.update-password');
+    Route::post('/update-password', [UserController::class, 'updatePassword'])->name('admin.update-account');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/answer', [App\Http\Controllers\Admin\AnswerController::class, 'index'])->name('admin.answer');
     Route::post('/answer/delete', [App\Http\Controllers\Admin\AnswerController::class, 'destroy'])->name('answer.destroy');
@@ -171,7 +173,7 @@ Route::middleware(['auth', 'client'])->group(function () {
         Route::get('/answers', [UserController::class, 'answers'])->name('answers');
         Route::get('/account', [UserController::class, 'settings'])->name('account');
         Route::get('/settings/update-password', [UserController::class, 'updatePasswordView'])->name('client.update-password');
-        Route::post('/update-password', [UserController::class, 'updatePassword'])->name('update-account');
+        Route::post('/update-password', [UserController::class, 'updatePassword'])->name('client.update-account');
 
         Route::post('/answer/destroy', [UserController::class, 'destroy'])->name('client.answer.destroy');
 

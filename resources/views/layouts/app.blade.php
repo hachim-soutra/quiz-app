@@ -108,7 +108,7 @@
                                 <p>Edit Profile</p>
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a href="{{ route('client.update-password') }}"
+                            <a href="{{ auth()->user()->userable_type == 'client' ? route('client.update-password') : route('admin.update-password') }}"
                                 class="dropdown-item d-flex text-dark px-3 {{ Request::is('client.update-password') ? 'active' : '' }}">
                                 <i class="fa-solid fa-unlock mr-2"></i>
                                 <p>Update Password</p>
