@@ -34,13 +34,10 @@
                 </div>
 
                 <div class="row d-flex my-5 ">
-                    <div class="col-6">
-                        <canvas id="myChart"></canvas>
-                    </div>
-                    <div class="col-6">
-                        <canvas id="myChart2"></canvas>
-                    </div>
+                    <div class="col-6" id="chartdiv" style="height: 400px;"></div>
+                    <div class="col-6" id="chartmixeddiv" style="height: 400px;"></div>
                 </div>
+
 
                 <h2><strong class="text-deco">Quiz </strong>: {{ $answer->quiz->name }}</h2>
 
@@ -114,8 +111,9 @@
                     </div>
                 @endforeach
 
-                @if(auth()->check() && auth()->user()->userable_type == \App\Models\User::CLIENT_TYPE)
-                    <a href="{{ route('client.home') }}" class="btn text-white float-right my-3" style="background-color: #343b7c; float: right;">Back to dashboard</a>
+                @if (auth()->check() && auth()->user()->userable_type == \App\Models\User::CLIENT_TYPE)
+                    <a href="{{ route('client.home') }}" class="btn text-white float-right my-3"
+                        style="background-color: #343b7c; float: right;">Back to dashboard</a>
                 @endif
             </div>
         </div>
@@ -123,6 +121,9 @@
 @endsection
 @section('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {
             var answer = @json($answersByCatego);
@@ -131,69 +132,112 @@
 
                 return Object.values(answer)[index] * 100 / x
             });
+            am4core.ready(function() {
 
-            new Chart(document.getElementById('myChart'), {
-                type: "pie",
-                data: {
-                    labels: ['correct', 'incorrect', 'ignored'],
-                    datasets: [{
-                        backgroundColor: [ "{{$correct_color}}"," {{$incorrect_color}}", "{{$ignored_color}}"],
-                        data: [{{ $answer->nbr_of_correct }}, {{ $answer->nbr_of_incorrect }},
-                            {{ $answer->nbr_of_ignored }}
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    title: {
-                        display: false,
-                        text: ""
-                    }
+                // Themes begin
+                am4core.useTheme(am4themes_animated);
+                // Themes end
+
+                var chart = am4core.create("chartdiv", am4charts.PieChart3D);
+                chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+                // disable chart logo
+                if (chart.logo) {
+                    chart.logo.disabled = true;
                 }
-            });
 
-            var mixedChart = new Chart(document.getElementById('myChart2'), {
-                type: 'bar',
-                data: {
-                    labels: Object.keys(answer),
-                    datasets: [{
-                        label: 'Percent',
-                        data: values,
-                        backgroundColor: values.map((item) => {
-                            if (item < {{ $answer->target }}) {
-                                return "{{ $color_below_target }}";
-                            } else {
-                                return "{{ $color_above_target }}";
-                            }
-                        }),
-                        borderWidth: 1,
-                        order: 2
-                    }, {
-                        label: 'Target',
-                        data: Array(values.length).fill({{ $answer->target }}),
-                        type: 'line',
-                        fill: false,
-                        borderDash: [5, 5],
-                        backgroundColor: "white",
-                        borderColor: "black",
-                        tension: 0.1,
-                        order: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
+                chart.legend = new am4charts.Legend();
+
+                chart.data = [{
+                        answers: "Correct",
+                        pourcentage: {{ $answer->nbr_of_correct }},
+                        color: "{{ $correct_color }}"
                     },
-                    title: {
-                        display: true,
-                        text: '% of correct answers by categories'
+                    {
+                        answers: "Incorrect",
+                        pourcentage: {{ $answer->nbr_of_incorrect }},
+                        color: "{{ $incorrect_color }}"
+                    },
+                    {
+                        answers: "Ignored",
+                        pourcentage: {{ $answer->nbr_of_ignored }},
+                        color: "{{ $ignored_color }}"
+                    }
+                ];
+
+                var series = chart.series.push(new am4charts.PieSeries3D());
+                series.dataFields.value = "pourcentage";
+                series.dataFields.category = "answers";
+                series.slices.template.propertyFields.fill = "color";
+
+                // mixed chart
+                var chart2 = am4core.create("chartmixeddiv", am4charts.XYChart3D);
+
+                // disable chart logo
+                if (chart2.logo) {
+                    chart2.logo.disabled = true;
+                }
+
+                // Add data
+                chart2.data = [];
+                var chartData = chart2.data;
+                for (var i = 0; i < Object.keys(answer).length; i++) {
+                    var newValues = {
+                        "category": Object.keys(answer)[i],
+                        "value1": values[i],
+                        "value2": {{ $answer->target }}
+                    }
+                    chartData.push(newValues);
+                }
+
+                // Create axes
+                var categoryAxis = chart2.xAxes.push(new am4charts.CategoryAxis());
+                categoryAxis.dataFields.category = "category";
+
+                var valueAxis = chart2.yAxes.push(new am4charts.ValueAxis());
+
+                // Create series
+                var columnSeries = chart2.series.push(new am4charts.ColumnSeries3D());
+                columnSeries.dataFields.valueY = "value1";
+                columnSeries.dataFields.categoryX = "category";
+                columnSeries.name = "Categories";
+                columnSeries.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+
+                // Function to set color for each column based on its value
+                function columnsColor(dataItem) {
+                    if (dataItem < chartData[0].value2) {
+                        return "{{ $color_below_target }}";
+                    } else {
+                        return "{{ $color_above_target }}";
                     }
                 }
+
+                // Set column fill color
+                columnSeries.columns.template.adapter.add("fill", function(fill, target) {
+                    return am4core.color(columnsColor(target.dataItem.valueY));
+                });
+
+                // Create series
+                var lineSeries = chart2.series.push(new am4charts.LineSeries());
+                lineSeries.dataFields.valueY = "value2";
+                lineSeries.dataFields.categoryX = "category";
+                lineSeries.name = "Target";
+                lineSeries.strokeWidth = 3;
+                lineSeries.stroke = am4core.color("#dc3545");
+                lineSeries.bullets.push(new am4charts.CircleBullet());
+                lineSeries.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+
+
+                // Add legend
+                chart2.legend = new am4charts.Legend();
+                // chart.legend.data = [{
+                //     "name": "categories",
+                //     "fill": am4core.color("#28a745")
+                // }];
+
+                // Add cursor
+                chart2.cursor = new am4charts.XYCursor();
+
             });
         });
     </script>
