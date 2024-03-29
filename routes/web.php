@@ -32,16 +32,6 @@ use Laravel\Cashier\Cashier;
 |
 */
 
-Route::get('/test', function () {
-    $name = route();
-    function route($x)
-    {
-        return 'hello word '.$x;
-    }
-    return 'hey'.route('hachim').'bye'.$name;
-});
-
-
 Route::get('/', function () {
     $logo_home = Settings::where("name", "home page logo")->first();
     return view('welcome')->with(["logo_home" => $logo_home]);
@@ -56,11 +46,11 @@ Route::middleware('quiz.guest')->get('/quiz/{slug}', function ($slug) {
 Route::get('/answer/{token}', function ($token) {
     $answer = Answer::whereToken($token)->with(['quiz', 'quiz.questions', 'quiz.questions.question', 'quiz.questions.question.question_type'])->firstOrFail();
     // chart colors
-    $correct_color = Settings::where('name','correct answers color')->first();
-    $incorrect_color = Settings::where('name','incorrect answers color')->first();
-    $ignored_color = Settings::where('name','ignored answers color')->first();
-    $color_below_target = Settings::where('name','chart color when it\'s below target')->first();
-    $color_above_target = Settings::where('name','chart color when it\'s above target')->first();
+    $correct_color = Settings::where('name', 'correct answers color')->first();
+    $incorrect_color = Settings::where('name', 'incorrect answers color')->first();
+    $ignored_color = Settings::where('name', 'ignored answers color')->first();
+    $color_below_target = Settings::where('name', 'chart color when it\'s below target')->first();
+    $color_above_target = Settings::where('name', 'chart color when it\'s above target')->first();
 
     $correct = 0;
     $incorrect = 0;
@@ -112,8 +102,10 @@ Route::get('/answer/{token}', function ($token) {
         $count++;
         return $return;
     }, $above_target_text->value);
-    return view('answer')->with(["answer" => $answer, "answersByCatego" => $answersByCatego, "allQstByCatego" => $allQstByCatego, "below_target" => $below_target, "above_target" => $above_target,
-     "correct_color" => $correct_color->value, "incorrect_color" => $incorrect_color->value, "ignored_color" => $ignored_color->value, "color_below_target" => $color_below_target->value, "color_above_target" => $color_above_target->value]);
+    return view('answer')->with([
+        "answer" => $answer, "answersByCatego" => $answersByCatego, "allQstByCatego" => $allQstByCatego, "below_target" => $below_target, "above_target" => $above_target,
+        "correct_color" => $correct_color->value, "incorrect_color" => $incorrect_color->value, "ignored_color" => $ignored_color->value, "color_below_target" => $color_below_target->value, "color_above_target" => $color_above_target->value
+    ]);
 })->name('answer');
 
 Route::middleware('check.answer')->group(function () {

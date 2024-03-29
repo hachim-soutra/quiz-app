@@ -1,4 +1,5 @@
 @extends('layouts.master')
+
 @section('content')
     <div class="d-flex justify-content-center row w-100 m-0">
         <img src="{{ asset('images/' . $answer->quiz->image) }}" alt="" width="100%" class="cover border-bottom p-0">
@@ -39,32 +40,10 @@
                             @endif
                         </div>
                     @endif
-                    <div class="d-flex flex-row justify-content-between align-items-center py-3 bg-white gap-2">
-                        <div class="d-flex flex-row  justify-content-start align-items-center">
-                            @if ($answer->timer)
-                                <div class="my-2"
-                                    style="
-                                display: flex;
-                                align-self: end;
-                                justify-content: center;
-                                align-items: center;
-                                gap: 10px;
-                                font-size: 1.3rem;
-                                color: white;
-                            ">
-                                    <button class="btn btn-outline-success countdown-btn" disabled>
-                                        <i class="fa fa-regular fa-clock"></i>
-                                        <span class="countdown"></span>
-                                    </button>
-                                    @if ($answer->quiz->quiz_type == '1' || $answer->quiz->quiz_type == '2')
-                                        <button class="btn btn-outline-dark" id="stopTimer" type="button">
-                                            <i class="fa-regular fa-circle-pause"></i> Pause
-                                        </button>
-                                    @endif
-                                </div>
-                                <input type="hidden" name="timer" id="timer">
-                            @endif
-                        </div>
+                    <div class="d-flex flex-row justify-content-between align-items-center py-3 bg-white gap-2"
+                        style=" flex-direction: column !important;
+                    align-items: flex-start !important;
+                    justify-content: flex-start !important;">
                         <div class="d-flex flex-row justify-content-end align-items-center py-3 bg-white gap-2">
                             @if ($answer->getQuestion($id)['sort'] > 1 && $answer->haveRightToPrev($answer->getQuestion($id)['sort']))
                                 <form action="{{ route('question.prev', ['id' => $id, 'token' => $answer->token]) }}"
@@ -95,6 +74,42 @@
                             <a href="{{ route('quiz.expired', ['token' => $answer->token, 'status' => 'Terminate test']) }}"
                                 class="btn btn-outline-danger m-0"><i class="fa-solid fa-fire"></i> Terminate Test</a>
 
+                        </div>
+
+                        <div class="d-flex flex-row  justify-content-start align-items-center w-100 gap-3">
+                            <h5 class="font-weight-bold mb-0 " style="font-weight: 600;">
+                                {{ $qst_sort }}/{{ $total_qst }}</h5>
+                            <div class="progress my-2 w-100">
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: {{ ($qst_sort / $total_qst) * 100 }}%; background-color: #343b7c;"
+                                    aria-valuenow="{{ ($qst_sort / $total_qst) * 100 }}" aria-valuemin="0"
+                                    aria-valuemax="100"></div>
+                            </div>
+                            @if ($answer->timer)
+                                <div class="my-2"
+                                    style="
+                                display: flex;
+                                align-self: end;
+                                justify-content: center;
+                                align-items: center;
+                                gap: 10px;
+                                font-size: 1.3rem;
+                                color: white;
+                            ">
+                                    <button class="btn btn-outline-success countdown-btn d-flex align-items-center" disabled
+                                        style="gap: 5px;">
+                                        <i class="fa fa-regular fa-clock"></i>
+                                        <span class="countdown"></span>
+                                    </button>
+                                    @if ($answer->quiz->quiz_type == '1' || $answer->quiz->quiz_type == '2')
+                                        <button class="btn btn-outline-dark d-flex align-items-center" id="stopTimer"
+                                            type="button" style="gap: 5px;">
+                                            <i class="fa-regular fa-circle-pause"></i> Pause
+                                        </button>
+                                    @endif
+                                </div>
+                                <input type="hidden" name="timer" id="timer">
+                            @endif
                         </div>
                     </div>
 
@@ -233,7 +248,8 @@
                             @csrf
                             <h4 class="text-center mb-3">Questions ignored</h4>
                             <input type="hidden" name="timer" class="timer3">
-                            <select name="question_id" id="ignoredInput" class="form-control custom-select" size="3">
+                            <select name="question_id" id="ignoredInput" class="form-control custom-select"
+                                size="3">
                                 <option disabled selected>ignored ({{ count($answer->getQuestionsIgnored()) }})
                                 </option>
                                 @foreach ($answer->getQuestionsIgnored() as $q)

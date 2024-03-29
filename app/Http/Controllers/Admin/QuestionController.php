@@ -50,7 +50,9 @@ class QuestionController extends Controller
             $answer->nbr_of_breaks = $question['sort'] / $answer->quiz->nbr_questions_sequance;
             $answer->save();
         }
-        return view('question')->with(["answer" => $answer, "break" => $break, "id" => $id, "break_text" => $break_text]);
+        $total_qst = $answer->getQuestions()->count();
+        $qst_sort = $question['sort'];
+        return view('question')->with(["answer" => $answer, "break" => $break, "id" => $id, "break_text" => $break_text, "total_qst" => $total_qst, "qst_sort" => $qst_sort]);
     }
 
     public function ignore($token, $id, Request $request)
