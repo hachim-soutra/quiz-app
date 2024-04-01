@@ -50,7 +50,6 @@
                                         <tr>
                                             <th><input type="checkbox" id="select_all_ids"></th>
                                             <th>Quiz name</th>
-                                            <th>Email</th>
                                             <th>Score</th>
                                             <th>Date</th>
                                             <th>Action</th>
@@ -62,9 +61,8 @@
                                                 <td><input type="checkbox" value="{{ $answer->id }}" name="ids"
                                                         class="checkbox_ids"></th>
                                                 <td>{{ Str::limit($answer->quiz?->name, 70, '...') }}</td>
-                                                <td>{{ Str::limit($answer->email, 70, '...') }}</td>
                                                 <td class="d-flex flex-column">
-                                                    <div class="text-center">{{ $answer->score }}%</div>
+                                                    <div class="text-center">{{ round($answer->score, 2) }}%</div>
                                                     <div class="progress progress-xxs">
                                                         <div class="progress-bar progress-bar-danger progress-bar-striped"
                                                             role="progressbar" aria-valuenow="{{ $answer->score }}"
@@ -80,7 +78,7 @@
                                                 <td><a href="{{ route('answer', ['token' => $answer->token]) }}"
                                                         class="btn button-show">
                                                         <i class="fas fa-eye mr-1"></i>Show</a>
-                                                    <a href="" class="btn button-show">
+                                                    <a href="{{ route('view-pdf', [ 'token' => $answer->token ])}}" class="btn button-show">
                                                         <i class="fa-solid fa-upload mr-1"></i>Export</a>
                                                 </td>
                                             </tr>
