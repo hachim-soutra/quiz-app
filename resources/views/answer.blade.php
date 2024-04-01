@@ -230,14 +230,6 @@
                 lineSeries.bullets.push(new am4charts.CircleBullet());
                 lineSeries.tooltipText = "{categoryX}: [bold]{valueY}[/]";
 
-
-                // Add legend
-                chart2.legend = new am4charts.Legend();
-                // chart.legend.data = [{
-                //     "name": "categories",
-                //     "fill": am4core.color("#28a745")
-                // }];
-
                 // Add cursor
                 chart2.cursor = new am4charts.XYCursor();
 
