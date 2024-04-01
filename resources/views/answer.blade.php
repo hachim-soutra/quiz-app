@@ -113,7 +113,10 @@
 
                 @if (auth()->check() && auth()->user()->userable_type == \App\Models\User::CLIENT_TYPE)
                     <a href="{{ route('client.home') }}" class="btn text-white float-right my-3"
-                        style="background-color: #343b7c; float: right;">Back to dashboard</a>
+                        style="background-color: #343b7c; float: right;">
+                        <i class="fa-solid fa-share"></i>
+                        Go to dashboard
+                    </a>
                 @endif
             </div>
         </div>

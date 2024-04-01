@@ -87,6 +87,15 @@
                                                                                     width="150" class="mt-3 rounded">
                                                                             </div>
                                                                         </div>
+                                                                    @elseif ($item->type == 'color')
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <label for="">Color</label>
+                                                                            <input type="color" name="value"
+                                                                                value="{{ old('value') ? old('value') : $item->value }}"
+                                                                                class="form-control">
+                                                                        </div>
+                                                                    </div>
                                                                     @else
                                                                         <div class="col-sm-12">
                                                                             <div class="form-group">
@@ -96,7 +105,7 @@
                                                                                     class="form-control">
                                                                             </div>
                                                                         </div>
-                                                                    
+
                                                                     @endif
                                                                     <div class="col-12 d-flex justify-content-end gap-5">
                                                                         <button type="button" class="btn btn-default mr-3"
@@ -104,7 +113,7 @@
                                                                         <button type="submit"
                                                                             class="btn btn-primary">Update</button>
                                                                     </div>
-                                                                    
+
                                                                 </div>
                                                             </form>
                                                         </div>

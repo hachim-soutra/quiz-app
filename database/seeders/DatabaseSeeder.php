@@ -31,27 +31,27 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'correct answers color',
                 'value' => '',
-                'type' => 'string'
+                'type' => 'color'
             ],
             [
                 'name' => 'incorrect answers color',
                 'value' => '',
-                'type' => 'string'
+                'type' => 'color'
             ],
             [
                 'name' => 'ignored answers color',
                 'value' => '',
-                'type' => 'string'
+                'type' => 'color'
             ],
             [
                 'name' => 'chart color when it\'s below target',
                 'value' => '',
-                'type' => 'string'
+                'type' => 'color'
             ],
             [
                 'name' => 'chart color when it\'s above target',
                 'value' => '',
-                'type' => 'string'
+                'type' => 'color'
             ],
         ]);
     }

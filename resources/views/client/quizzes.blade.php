@@ -108,14 +108,14 @@
                         </ol>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="d-flex justify-content-start align-items-center ml-3">
-                        <p class="text-bold mr-4 mb-0">{{ count($quizzes) }} of {{ $total_quizzes }} items</p>
+                <div class="row m-0">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <p class="text-bold mb-0">{{ count($quizzes) }} of {{ $total_quizzes }} quizzes</p>
                         <div class="dropdown">
                             <button class="btn btn-light dropdown-toggle filter-input" type="button"
                                 id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Filter
-                                <i class="fa-solid fa-magnifying-glass"></i>
+                                Filter By Status
+                                <i class="fa-solid fa-chevron-down"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                                 <a href="{{ route('client.quizzes') }}"

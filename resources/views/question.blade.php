@@ -40,11 +40,11 @@
                             @endif
                         </div>
                     @endif
-                    <div class="d-flex flex-row justify-content-between align-items-center py-3 bg-white gap-2"
+                    <div class="d-flex flex-row justify-content-between align-items-center bg-white"
                         style=" flex-direction: column !important;
                     align-items: flex-start !important;
                     justify-content: flex-start !important;">
-                        <div class="d-flex flex-row justify-content-end align-items-center py-3 bg-white gap-2">
+                        <div class="d-flex flex-row justify-content-end align-items-center bg-white gap-2 w-100">
                             @if ($answer->getQuestion($id)['sort'] > 1 && $answer->haveRightToPrev($answer->getQuestion($id)['sort']))
                                 <form action="{{ route('question.prev', ['id' => $id, 'token' => $answer->token]) }}"
                                     method="POST" class="m-0">
