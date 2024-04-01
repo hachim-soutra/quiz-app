@@ -75,7 +75,7 @@
                                                     </div>
                                                 </td>
                                                 <td>{{ $answer->created_at }}</td>
-                                                <td class="d-flex"><a href="{{ route('answer', ['token' => $answer->token]) }}"
+                                                <td class="white space"><a href="{{ route('answer', ['token' => $answer->token]) }}"
                                                         class="btn button-show">
                                                         <i class="fas fa-eye mr-1"></i>Show</a>
                                                     <a href="" class="btn button-show">
