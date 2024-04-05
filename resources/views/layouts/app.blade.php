@@ -64,6 +64,40 @@
             border: none !important;
             border-radius: 0.25rem !important;
         }
+
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+            background-color: transparent;
+            margin-left: 3px;
+        }
+
+        .dataTables_wrapper .dataTables_length select {
+            border: 1px solid !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+        }
+
+        .dataTables_wrapper {
+            padding: 0;
+            padding-top: 10px;
+            background-color: rgba(0, 0, 0, .03);
+        }
+
+        table.dataTable thead th {
+            border: none !important;
+        }
+
+        div#myTable_length {
+            padding-left: 20px !important;
+            padding-top: 10px !important;
+        }
+
+        .dataTables_filter {
+            padding-right: 20px;
+            padding-top: 10px;
+        }
     </style>
     @yield('style')
 
@@ -81,8 +115,8 @@
 
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown user-menu d-flex">
-                        <img src="{{ asset( Auth::user()->image ? 'images/' . Auth::user()->image : 'images/user (1).png') }}" class="img-circle elevation-2"
-                            alt="User Image">
+                        <img src="{{ asset(Auth::user()->image ? 'images/' . Auth::user()->image : 'images/user (1).png') }}"
+                            class="img-circle elevation-2" alt="User Image">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                             <span class="d-none d-md-inline link-style">{{ Auth::user()->name }}</span>
                         </a>
@@ -154,8 +188,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/1.7.0/jquery-confirm.min.js"
             integrity="sha512-3rO4uA/MW2+0ttYBRkgnI8teWs5ZFT3jwFZksUnrr9ViTEQ6fSrxHARcJ/WTM8VLcMP/FFyBuEYihtFEwtFczw=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
         {{-- <!-- MDB -->
 <script
 type="text/javascript"

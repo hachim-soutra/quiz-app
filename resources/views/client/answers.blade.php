@@ -45,7 +45,7 @@
                                     <button class="btn btn-outline-danger mb-3" id="deleteAllSelectedRecords">
                                         <i class="fas fa-trash" style="margin-right: 7px;"></i>Delete selected rows</button>
                                 </div>
-                                <table class="table table-striped" id="myTable">
+                                <table class="table" id="myTable">
                                     <thead>
                                         <tr>
                                             <th><input type="checkbox" id="select_all_ids"></th>

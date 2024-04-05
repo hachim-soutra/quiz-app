@@ -68,7 +68,7 @@
                                 </h3>
                                 <div class="card-tools d-flex">
                                     <form action="{{ route('quiz.index') }}" method="GET" class="mr-3 d-flex">
-                                        <input class="form-control" type="text" name="q" placeholder="Search..."
+                                        <input type="text" name="q" placeholder="Search..."
                                             value="{{ request('q') }}" />
                                         <button class="btn btn btn-success ml-3" type="submit">Search</button>
                                     </form>
