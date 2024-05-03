@@ -73,9 +73,10 @@
         }
 
         .text-review {
-            margin: 1rem 14rem;
+            margin: 1rem 0rem;
             font-size: 19px;
             text-align: center;
+            width: 100%;
         }
 
         .bg-success-1 {
@@ -111,14 +112,14 @@
             filter: brightness(0);
         }
 
-        #answer input[type="checkbox"]:checked,
-        #answer input[type="radio"]:checked {
+        #divToExport input[type="checkbox"]:checked,
+        #divToExport input[type="radio"]:checked {
             filter: brightness(1);
         }
 
-        #answer .bg-danger-1 input[type="radio"]:checked,
-        #answer .text-danger input[type="checkbox"]:checked,
-        #answer .text-danger input[type="radio"]:checked {
+        #divToExport .bg-danger-1 input[type="radio"]:checked,
+        #divToExport .text-danger input[type="checkbox"]:checked,
+        #divToExport .text-danger input[type="radio"]:checked {
             filter: brightness(1) !important;
             background: url("{{ url('check-red.png') }}") no-repeat left center !important;
             background-size: 20px !important;

@@ -98,11 +98,13 @@
                                                     <input type="checkbox" name="accounting" id="accounting"
                                                         data-toggle="toggle" data-id="{{ $folder->id }}">
                                                     <span class="text-16-bold">{{ $folder->label }}
-                                                        ({{ count($folder->quizzes) }})</span>
+                                                        ({{ count($folder->quizzes) }})
+                                                    </span>
 
                                                     <table width="100%" class="hide hide-{{ $folder->id }}">
                                                         <thead>
                                                             <tr bg="red">
+                                                                <th></th>
                                                                 <th>Title</th>
                                                                 <th>Description</th>
                                                                 <th>Questions</th>
@@ -112,7 +114,16 @@
                                                         <tbody>
                                                             @foreach ($folder->quizzes as $item)
                                                                 <tr>
-                                                                    <td title="{{ $item->name }}">{!! Str::limit($item->name, 70, '...') !!}
+                                                                    @if ($item->payement_type == App\Enum\PayementTypeEnum::FREE->value)
+                                                                        <td class="p-0"><img
+                                                                                src="{{ asset('images/Free.png') }}"
+                                                                                width="60px" height="60px"
+                                                                                alt=""></td>
+                                                                    @else
+                                                                        <td></td>
+                                                                    @endif
+                                                                    <td title="{{ $item->name }}">
+                                                                        {!! Str::limit($item->name, 70, '...') !!}
                                                                     </td>
                                                                     <td title="{{ $item->description }}">
                                                                         {!! Str::limit($item->description, 70, '...') !!}</td>
@@ -147,11 +158,10 @@
                                                                                 class="fas fa-edit"></i>Update</a>
 
 
-                                                                        <a data-toggle="modal"
-                                                                            data-target="#modal-delete-{{ $item->id }}"
+                                                                        {{-- <a href="{{ route('quiz.destroy', ['slug' => $item->slug]) }}"
                                                                             class="btn btn-danger">
                                                                             <i class="fas fa-trash"></i> Delete
-                                                                        </a>
+                                                                        </a> --}}
 
                                                                     </td>
                                                                 </tr>
@@ -202,7 +212,8 @@
                                 </div>
 
                                 <div class="col-12 d-flex justify-content-end gap-5">
-                                    <button type="button" class="btn btn-default mr-3" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-default mr-3"
+                                        data-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Import</button>
                                 </div>
                             </div>

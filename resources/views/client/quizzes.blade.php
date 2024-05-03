@@ -151,7 +151,7 @@
                                     @elseif($quiz->payement_type == App\Enum\PayementTypeEnum::PAYED->value)
                                         @if ($quiz->orders->count())
                                             @if ($quiz->orders[0]->status == 'paid')
-                                                <div class="ribbon text-lg text-capitalize bg-success"> PAID </div>
+                                                <div class="ribbon text-lg text-capitalize bg-success"> Payed </div>
                                             @endif
                                         @else
                                             <div class="ribbon text-lg text-capitalize bg-secondary">

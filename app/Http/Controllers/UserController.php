@@ -6,8 +6,12 @@ use App\Models\Answer;
 use App\Models\Order;
 use App\Models\QuestionsCategorization;
 use App\Models\QuizTheme;
+use App\Models\Settings;
 use App\Models\User;
 use App\Services\StripeService;
+use Barryvdh\DomPDF\PDF as DomPDFPDF;
+use PDF;
+use Dompdf\Options;
 use Harishdurga\LaravelQuiz\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -90,7 +94,7 @@ class UserController extends Controller
 
     public function quizzes()
     {
-        $quizzes = Quiz::where('payement_type','like',request()->query("type") ? request()->query("type") : '%%')->OrderBy('payement_type')->with(['orders' => function ($query) {
+        $quizzes = Quiz::where('payement_type', 'like', request()->query("type") ? request()->query("type") : '%%')->OrderBy('payement_type')->with(['orders' => function ($query) {
             $query->where('client_id', auth()->id())->where('status', 'paid');
         }])->get();
         $total_quizzes = Quiz::count();
@@ -157,4 +161,58 @@ class UserController extends Controller
         }
         return response()->json(['message' => 'Answer(s) deleted Successfully']);
     }
+
+    public function viewPDF($token)
+    {
+        $answer = Answer::whereToken($token)->with(['quiz', 'quiz.questions', 'quiz.questions.question', 'quiz.questions.question.question_type'])->firstOrFail();
+        // To replace the target tag with value
+        $below_target_text = Settings::where('name', 'below target text recap')->first();
+        $above_target_text = Settings::where('name', 'above target text recap')->first();
+        $count = 0;
+        $terms[] = $answer->target . "%";
+        $below_target = preg_replace_callback('/\{{2}(.*?)\}{2}/', function ($match) use (&$count, $terms) {
+            $return = !empty($terms[$count]) ? $terms[$count] : '';
+            $count++;
+            return $return;
+        }, $below_target_text->value);
+        $above_target = preg_replace_callback('/\{{2}(.*?)\}{2}/', function ($match) use (&$count, $terms) {
+            $return = !empty($terms[$count]) ? $terms[$count] : '';
+            $count++;
+            return $return;
+        }, $above_target_text->value);
+
+return view('pdf.quizRecap',['answer' =>  $answer, 'below_target' => $below_target, 'above_target' => $above_target ]);
+        $options = new Options();
+        $options->setIsRemoteEnabled(true);
+        $pdf = PDF::loadView('pdf.quizRecap', ['answer' =>  $answer, 'below_target' => $below_target, 'above_target' => $above_target ])
+            ->setPaper('a4', 'portrait')
+            ->setOptions(['isRemoteEnabled' => true]);
+
+        return $pdf->stream();
+    }
+
+    // public function downloadPDF($token)
+    // {
+    //     $answer = Answer::whereToken($token)->with(['quiz', 'quiz.questions', 'quiz.questions.question', 'quiz.questions.question.question_type'])->firstOrFail();
+    //     // To replace the target tag with value
+    //     $below_target_text = Settings::where('name', 'below target text recap')->first();
+    //     $above_target_text = Settings::where('name', 'above target text recap')->first();
+    //     $count = 0;
+    //     $terms[] = $answer->target . "%";
+    //     $below_target = preg_replace_callback('/\{{2}(.*?)\}{2}/', function ($match) use (&$count, $terms) {
+    //         $return = !empty($terms[$count]) ? $terms[$count] : '';
+    //         $count++;
+    //         return $return;
+    //     }, $below_target_text->value);
+    //     $above_target = preg_replace_callback('/\{{2}(.*?)\}{2}/', function ($match) use (&$count, $terms) {
+    //         $return = !empty($terms[$count]) ? $terms[$count] : '';
+    //         $count++;
+    //         return $return;
+    //     }, $above_target_text->value);
+
+    //     $pdf = PDF::loadView('pdf.quizRecap', ['answer' =>  $answer, 'below_target' => $below_target, 'above_target' => $above_target ])
+    //     ->setPaper('a4', 'portrait');
+
+    //     return $pdf->download('quiz-recap.pdf');
+    // }
 }

@@ -43,6 +43,9 @@ Route::middleware('quiz.guest')->get('/quiz/{slug}', function ($slug) {
     return view('quiz')->with(["quiz" => $quiz, "logo" => $logo]);
 })->name('quiz');
 
+Route::get('view-pdf/{token}', [UserController::class, 'viewPDF'])->name('view-pdf');
+Route::get('download-pdf/{token}', [UserController::class, 'downloadPDF'])->name('download-pdf');
+
 Route::get('/answer/{token}', function ($token) {
     $answer = Answer::whereToken($token)->with(['quiz', 'quiz.questions', 'quiz.questions.question', 'quiz.questions.question.question_type'])->firstOrFail();
     // chart colors
@@ -127,7 +130,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     Route::post('/update-password', [UserController::class, 'updatePassword'])->name('admin.update-account');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/answer', [App\Http\Controllers\Admin\AnswerController::class, 'index'])->name('admin.answer');
-    Route::post('/answer/delete', [App\Http\Controllers\Admin\AnswerController::class, 'destroy'])->name('answer.destroy');
+    Route::get('/answer/delete', [App\Http\Controllers\Admin\AnswerController::class, 'destroy'])->name('answer.destroy');
     Route::get('/answer/deleted-answers', [App\Http\Controllers\Admin\AnswerController::class, 'deletedAnswers'])->name('answer.deleted-answers');
     Route::get('/answer/restore-answer/{id}', [App\Http\Controllers\Admin\AnswerController::class, 'restoreAnswer'])->name('answer.restore-answer');
     Route::delete('/answer/permanent-delete/{id}', [App\Http\Controllers\Admin\AnswerController::class, 'permanentDelete'])->name('answer.permanent-delete');

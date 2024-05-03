@@ -86,7 +86,7 @@
                                     aria-valuemax="100"></div>
                             </div>
                             @if ($answer->timer)
-                                <div class="my-2"
+                                <div class="my-2 "
                                     style="
                                 display: flex;
                                 align-self: end;
@@ -96,10 +96,10 @@
                                 font-size: 1.3rem;
                                 color: white;
                             ">
-                                    <button class="btn btn-outline-success countdown-btn d-flex align-items-center" disabled
+                                    <button class="btn btn-outline-success countdown-btn d-flex align-items-center " disabled
                                         style="gap: 5px;">
                                         <i class="fa fa-regular fa-clock"></i>
-                                        <span class="countdown"></span>
+                                        <span class="countdown fw-bold"></span>
                                     </button>
                                     @if ($answer->quiz->quiz_type == '1' || $answer->quiz->quiz_type == '2')
                                         <button class="btn btn-outline-dark d-flex align-items-center" id="stopTimer"

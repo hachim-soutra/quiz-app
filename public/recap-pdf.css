@@ -1,0 +1,52 @@
+* {
+    font-family: 'Century Gothic Paneuropean', sans-serif;
+}
+
+h5.mt-1.ml-2 {
+    font-weight: 500;
+}
+
+.question-title h3 {
+    font-size: 24px !important;
+}
+
+label.radio {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    appearance: none;
+    background-color: #fff;
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 1px solid currentColor;
+}
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+    background: url("{{ url('check.png') }}") no-repeat left center;
+    background-size: 20px;
+    border: none;
+    filter: brightness(0);
+}
+
+#answer input[type="checkbox"]:checked,
+#answer input[type="radio"]:checked {
+    filter: brightness(1);
+}
+
+#answer .bg-danger-1 input[type="radio"]:checked,
+#answer .text-danger input[type="checkbox"]:checked,
+#answer .text-danger input[type="radio"]:checked {
+    filter: brightness(1) !important;
+    background: url("{{ url('check-red.png') }}") no-repeat left center !important;
+    background-size: 20px !important;
+    border: none !important;
+}
+

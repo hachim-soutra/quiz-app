@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="d-flex justify-content-center row w-100 m-0" id="answer">
+    <div class="d-flex justify-content-center row w-100 m-0" id="divToExport">
         <img src="{{ asset('images/' . $answer->quiz->image) }}" alt="" width="100%" class="cover border-bottom p-0">
         <div class="col-md-10 col-lg-10">
             <img src="{{ asset('images/' . $logo->value) }}" alt="" width="300px" class="profil">
@@ -33,9 +33,9 @@
                     @endif
                 </div>
 
-                <div class="row d-flex my-5 ">
-                    <div class="col-6" id="chartdiv" style="height: 400px;"></div>
-                    <div class="col-6" id="chartmixeddiv" style="height: 400px;"></div>
+                <div class="row d-flex my-5 mx-5" style="height: 300px; width: 88%;">
+                    <div class="col-6" id="chartdiv"></div>
+                    <div class="col-6" id="chartmixeddiv"></div>
                 </div>
 
 
@@ -112,7 +112,12 @@
                 @endforeach
 
                 @if (auth()->check() && auth()->user()->userable_type == \App\Models\User::CLIENT_TYPE)
-                    <a href="{{ route('client.home') }}" class="btn text-white float-right my-3"
+                    <button type="button" class="btn text-white float-right my-3 btn-pdf"
+                        style="background-color: #343b7c; float: right;" onclick="generatePDF()">
+                        <i class="fa-solid fa-print"></i>
+                        Export Pdf
+                    </button>
+                    <a href="{{ route('client.home') }}" class="btn text-white float-right my-3 me-3 btn-pdf"
                         style="background-color: #343b7c; float: right;">
                         <i class="fa-solid fa-share"></i>
                         Go to dashboard
@@ -127,6 +132,8 @@
     <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {
             var answer = @json($answersByCatego);
@@ -228,12 +235,66 @@
                 lineSeries.strokeWidth = 3;
                 lineSeries.stroke = am4core.color("#dc3545");
                 lineSeries.bullets.push(new am4charts.CircleBullet());
-                lineSeries.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+                lineSeries.tooltipText = "{name}: [bold]{valueY}[/]";
 
                 // Add cursor
                 chart2.cursor = new am4charts.XYCursor();
 
             });
         });
+
+        function generatePDF() {
+
+            buttons = document.querySelectorAll('.btn-pdf');
+            // Hide buttons export to pdf and go to dash to not print in pdf
+            for (var i = 0; i < buttons.length; i += 1) {
+                buttons[i].style.display = 'none';
+            }
+
+            // Choose the element id which you want to export.
+            var element = document.getElementById('divToExport');
+            const {
+                width,
+                height
+            } = document.body.getBoundingClientRect();
+
+            var opt = {
+                margin: [20, 0.5, 20, 0.5],
+                filename: 'Quiz-recap.pdf',
+                image: {
+                    type: 'jpeg',
+                    quality: 0.98
+                },
+                html2canvas: {
+                    scale: 2,
+                    onclone: (element) => {
+                        const svgElements = Array.from(element.querySelectorAll('svg'));
+                        svgElements.forEach(s => {
+                            const bBox = s.getBBox();
+                            s.setAttribute("x", bBox.x);
+                            s.setAttribute("y", bBox.y);
+                            s.setAttribute("width", bBox.width);
+                            s.setAttribute("height", bBox.height);
+                        })
+                    }
+                },
+                jsPDF: {
+                    unit: 'pt',
+                    format: [1000, 1000],
+                    orientation: 'portrait',
+                    precision: '12',
+
+                }
+            };
+
+            html2pdf().set(opt).from(element).save().then(function(pdf) {
+                // show buttons after printing pdf
+                for (var i = 0; i < buttons.length; i += 1) {
+                    buttons[i].style.display = 'block';
+                }
+            });
+
+
+        }
     </script>
 @endsection

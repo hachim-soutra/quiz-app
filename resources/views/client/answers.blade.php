@@ -78,7 +78,9 @@
                                                 <td class="white space"><a href="{{ route('answer', ['token' => $answer->token]) }}"
                                                         class="btn button-show">
                                                         <i class="fas fa-eye mr-1"></i>Show</a>
-                                                    <a href="" class="btn button-show">
+                                                    <a href="{{ route('view-pdf', ['token' => $answer->token]) }}" class="btn button-show">
+                                                        <i class="fa-solid fa-upload mr-1"></i>Export</a>
+                                                    <a href="{{ route('download-pdf', ['token' => $answer->token]) }}" class="btn button-show">
                                                         <i class="fa-solid fa-upload mr-1"></i>Export</a>
                                                 </td>
                                             </tr>

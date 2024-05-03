@@ -42,7 +42,7 @@
                                     <tbody>
                                         @foreach ($settings as $item)
                                             <tr>
-                                                <td>{{ $item->name }}</td>
+                                                <td class="text-capitalize">{{ $item->name }}</td>
                                                 <td>
                                                     @if ($item->type == 'img')
                                                         <img src="{{ asset('images/' . $item->value) }}" width="150"
