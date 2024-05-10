@@ -306,7 +306,7 @@
                         pdf.setFontType('bold');
                         //Add you content in place of example here
                         pdf.text('https://quizzes.pminlife.com => {{ $answer->quiz->name }}', pdf.internal.pageSize
-                            .getWidth() - 20, 20, { align: "right"});
+                            .getWidth() - 20, 15, { align: "right"});
                         pdf.text('page ' + i, pdf.internal.pageSize
                             .getWidth() / 2 - 20, pdf.internal.pageSize.getHeight() -
                             10);
