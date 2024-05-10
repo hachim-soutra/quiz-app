@@ -38,10 +38,10 @@
                     <div class="col-6" id="chartmixeddiv"></div>
                 </div>
 
-                <div class="d-flex w-100 align-items-center justify-content-between">
+                <div class="d-flex w-100 align-items-start justify-content-between">
                     <h2><strong class="text-deco">Quiz </strong>: {{ $answer->quiz->name }}</h2>
                     @if (auth()->check() && auth()->user()->userable_type == \App\Models\User::CLIENT_TYPE)
-                        <div>
+                        <div style="display: flex; gap: 12px;white-space: nowrap;">
                             <button type="button" class="btn text-white float-right my-3 btn-pdf"
                                 style="background-color: #343b7c; float: right;" onclick="generatePDF()">
                                 <i class="fa-solid fa-print"></i>
@@ -264,6 +264,7 @@
             } = document.body.getBoundingClientRect();
 
             var opt = {
+                margin: [20, 0.5, 20, 0.5],
                 pagebreak: {
                     mode: ['avoid-all', 'css', 'legacy']
                 },
@@ -304,9 +305,8 @@
                         pdf.setTextColor(150);
                         pdf.setFontType('bold');
                         //Add you content in place of example here
-                        pdf.text('https://quizzes.pminlife.com => {{ $answer->quiz->name }}', pdf.internal.pageSize
-                            .getWidth() / 2 - 150, 40);
-                        pdf.text('page ' + i,  pdf.internal.pageSize
+                        pdf.text('https://quizzes.pminlife.com => {{ $answer->quiz->name }}', 20, 10);
+                        pdf.text('page ' + i, pdf.internal.pageSize
                             .getWidth() / 2 - 20, pdf.internal.pageSize.getHeight() -
                             10);
                     }
