@@ -115,9 +115,16 @@
                                                             @foreach ($folder->quizzes as $item)
                                                                 <tr>
                                                                     @if ($item->payement_type == App\Enum\PayementTypeEnum::FREE->value)
-                                                                        <td class="d-flex justify-content-center align-items-center">🆓</td>
+                                                                        <td
+                                                                            class="d-flex justify-content-center align-items-center">
+                                                                            🆓</td>
+                                                                    @elseif ($item->payement_type == App\Enum\PayementTypeEnum::PAYED->value)
+                                                                        <td
+                                                                            class="d-flex justify-content-center align-items-center">
+                                                                            💰</td>
                                                                     @else
-                                                                    <td class="d-flex justify-content-center align-items-center">💰</td>
+                                                                        <td
+                                                                            class="d-flex justify-content-center align-items-center">🎓</td>
                                                                     @endif
                                                                     <td title="{{ $item->name }}">
                                                                         {!! Str::limit($item->name, 70, '...') !!}
@@ -209,8 +216,7 @@
                                 </div>
 
                                 <div class="col-12 d-flex justify-content-end gap-5">
-                                    <button type="button" class="btn btn-default mr-3"
-                                        data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-default mr-3" data-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Import</button>
                                 </div>
                             </div>
