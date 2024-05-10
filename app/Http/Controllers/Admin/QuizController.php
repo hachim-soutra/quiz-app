@@ -67,13 +67,17 @@ class QuizController extends Controller
             'name' => 'required',
             'quiz_type' => 'required',
             'payement_type' => 'required',
-            'price' => 'required_if:payement_type,==,payed',
-            'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i:s',
-            'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i:s|before:quiz_time',
-            'nbr_questions_sequance' => 'required_if:quiz_type,==,3',
-            'break_time' => 'required_if:quiz_type,==,3'
+            'price' => 'required_if:payement_type,==,paid,numeric'
         ]);
 
+        if ($request->quiz_type != 1) {
+            $request->validate([
+                'quiz_time' => 'date_format:H:i:s',
+                'quiz_time_remind' => 'date_format:H:i:s,before:quiz_time',
+                'nbr_questions_sequance' => 'required_if:quiz_type,==,3',
+                'break_time' => 'required_if:quiz_type,==,3'
+            ]);
+        }
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extention = $file->getClientOriginalExtension();
@@ -278,8 +282,6 @@ class QuizController extends Controller
         return redirect()->route('questions', ['token' => $answer->token, 'id' => $question["id"]]);
     }
 
-
-
     public function removeQuestion(string $id)
     {
         $question = Question::whereId($id)->firstOrFail();
@@ -326,12 +328,17 @@ class QuizController extends Controller
             'name' => 'required',
             'quiz_type' => 'required',
             'payement_type' => 'required',
-            'price' => 'required_if:payement_type,==,payed',
-            'quiz_time' => 'required_with:quiz_time_remind|nullable|date_format:H:i:s',
-            'quiz_time_remind' => 'required_with:quiz_time|nullable|date_format:H:i:s|before:quiz_time',
-            'nbr_questions_sequance' => 'required_if:quiz_type,==,3',
-            'break_time' => 'required_if:quiz_type,==,3'
+            'price' => 'required_if:payement_type,==,paid,numeric'
         ]);
+
+        if ($request->quiz_type != 1) {
+            $request->validate([
+                'quiz_time' => 'date_format:H:i:s',
+                'quiz_time_remind' => 'date_format:H:i:s,before:quiz_time',
+                'nbr_questions_sequance' => 'required_if:quiz_type,==,3',
+                'break_time' => 'required_if:quiz_type,==,3'
+            ]);
+        }
         $quiz = Quiz::findOrFail($id);
         if ($request->hasFile('image')) {
             $destination = 'images/' . $quiz->image;
@@ -358,7 +365,7 @@ class QuizController extends Controller
                 $price = $this->stripeService->updateProductPrice($quiz->product_token, $request->price);
                 $price_token = $price->id;
                 $productToken = $quiz->product_token;
-                Order::where('quiz_id',$quiz->id)->update(['current_price' => $request->price]);
+                Order::where('quiz_id', $quiz->id)->update(['current_price' => $request->price]);
             } else {
                 $productToken = $quiz->product_token;
                 $price_token = $quiz->price_token;
@@ -487,7 +494,7 @@ class QuizController extends Controller
 
     public function payments()
     {
-        $orders = Order::with('quiz','user')->get();
-        return view('admin.orders.index',['orders' => $orders]);
+        $orders = Order::with('quiz', 'user')->get();
+        return view('admin.orders.index', ['orders' => $orders]);
     }
 }

@@ -134,7 +134,7 @@
                         </div>
                     </div>
                     <div class="card-body p-3 bg-white">
-                        <table class="table">
+                        <table class="table" id="myTable">
                             <thead>
                                 <tr>
                                     <th>Title</th>
@@ -142,7 +142,7 @@
                                     <th>Category</th>
                                     <th>Answers</th>
                                     <th>Comment if wrong answer</th>
-                                    <th colspan="4">Action</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -161,7 +161,7 @@
                                             </a>
                                         </td>
                                         <td title="{{ $item->question->error }}">{!! Str::limit($item->question->error, 70, '...') !!}</td>
-                                        <td>
+                                        <td class="text-nowrap">
 
                                             <form method="POST"
                                                 action="{{ route('quiz.duplicate-question', ['id' => $quiz->id, 'qst_id' => $item->question->id]) }}"
@@ -172,19 +172,15 @@
                                                     Duplicate
                                                 </button>
                                             </form>
-                                        </td>
 
-                                        <td>
                                             <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
                                                 class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
-                                        </td>
-                                        <td>
+
                                             <a data-toggle="modal" data-target="#modal-delete-{{ $item->id }}"
                                                 class="btn btn-danger">
                                                 <i class="fas fa-trash"></i> Delete
                                             </a>
-                                        </td>
-                                        <td>
+
                                             @if ($item->question->image)
                                                 <form method="POST"
                                                     action="{{ route('quiz.remove-question-img', ['id' => $item->question->id]) }}"
@@ -391,4 +387,9 @@
         </section>
 
     </div>
+@endsection
+@section('js')
+    <script type="text/javascript">
+        $('#myTable').DataTable();
+    </script>
 @endsection

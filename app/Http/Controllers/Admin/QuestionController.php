@@ -51,7 +51,7 @@ class QuestionController extends Controller
             $answer->save();
         }
         $total_qst = $answer->getQuestions()->count();
-        $qst_sort = $question['sort'];
+        $qst_sort = $question['sort'] -1;
         return view('question')->with(["answer" => $answer, "break" => $break, "id" => $id, "break_text" => $break_text, "total_qst" => $total_qst, "qst_sort" => $qst_sort]);
     }
 
