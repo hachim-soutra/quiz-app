@@ -38,8 +38,24 @@
                     <div class="col-6" id="chartmixeddiv"></div>
                 </div>
 
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                    <h2><strong class="text-deco">Quiz </strong>: {{ $answer->quiz->name }}</h2>
+                    @if (auth()->check() && auth()->user()->userable_type == \App\Models\User::CLIENT_TYPE)
+                        <div>
+                            <button type="button" class="btn text-white float-right my-3 btn-pdf"
+                                style="background-color: #343b7c; float: right;" onclick="generatePDF()">
+                                <i class="fa-solid fa-print"></i>
+                                Export Pdf
+                            </button>
+                            <a href="{{ route('client.home') }}" class="btn text-white float-right my-3 me-3 btn-pdf"
+                                style="background-color: #343b7c; float: right;">
+                                <i class="fa-solid fa-share"></i>
+                                Go to dashboard
+                            </a>
+                        </div>
+                    @endif
+                </div>
 
-                <h2><strong class="text-deco">Quiz </strong>: {{ $answer->quiz->name }}</h2>
 
                 @csrf
                 @foreach ($answer->getQuestions()->sortBy('sort') as $question)
@@ -110,19 +126,6 @@
                         @endif
                     </div>
                 @endforeach
-
-                @if (auth()->check() && auth()->user()->userable_type == \App\Models\User::CLIENT_TYPE)
-                    <button type="button" class="btn text-white float-right my-3 btn-pdf"
-                        style="background-color: #343b7c; float: right;" onclick="generatePDF()">
-                        <i class="fa-solid fa-print"></i>
-                        Export Pdf
-                    </button>
-                    <a href="{{ route('client.home') }}" class="btn text-white float-right my-3 me-3 btn-pdf"
-                        style="background-color: #343b7c; float: right;">
-                        <i class="fa-solid fa-share"></i>
-                        Go to dashboard
-                    </a>
-                @endif
             </div>
         </div>
     </div>
@@ -179,6 +182,7 @@
                 series.dataFields.value = "pourcentage";
                 series.dataFields.category = "answers";
                 series.slices.template.propertyFields.fill = "color";
+                series.startAngle = 0;
                 series.endAngle = 360;
 
                 // mixed chart
@@ -260,7 +264,9 @@
             } = document.body.getBoundingClientRect();
 
             var opt = {
-                margin: [20, 0.5, 20, 0.5],
+                pagebreak: {
+                    mode: ['avoid-all', 'css', 'legacy']
+                },
                 filename: 'Quiz-recap.pdf',
                 image: {
                     type: 'jpeg',
@@ -288,14 +294,26 @@
                 }
             };
 
-            html2pdf().set(opt).from(element).save().then(function(pdf) {
-                // show buttons after printing pdf
-                for (var i = 0; i < buttons.length; i += 1) {
-                    buttons[i].style.display = 'block';
-                }
-            });
+            html2pdf().set(opt).from(element).toPdf().get('pdf')
+                .then(function(pdf) {
+                    var totalPages = pdf.internal.getNumberOfPages();
 
-
+                    for (let i = 1; i <= totalPages; i++) {
+                        pdf.setPage(i);
+                        pdf.setFontSize(10);
+                        pdf.setTextColor(150);
+                        pdf.setFontType('bold');
+                        //Add you content in place of example here
+                        pdf.text('https://quizzes.pminlife.com => {{ $answer->quiz->name }}', pdf.internal.pageSize
+                            .getWidth() / 2 - 150, 40);
+                        pdf.text('page ' + i,  pdf.internal.pageSize
+                            .getWidth() / 2 - 20, pdf.internal.pageSize.getHeight() -
+                            10);
+                    }
+                    for (var x = 0; x < buttons.length; x += 1) {
+                        buttons[x].style.display = 'block';
+                    }
+                }).save();
         }
     </script>
 @endsection
