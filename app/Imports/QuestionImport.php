@@ -49,6 +49,7 @@ class QuestionImport implements ToModel, WithStartRow, WithCustomCsvSettings
             'name' => $row[0],
             'question_type_id' => $row[1],
             'error' => $row[4],
+            'categorie_id' => $row[5],
             'is_active' => true,
         ]);
         QuizQuestion::create([
