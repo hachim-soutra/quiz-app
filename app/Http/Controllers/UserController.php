@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\PayementTypeEnum;
 use App\Models\Answer;
 use App\Models\Order;
 use App\Models\QuestionsCategorization;
@@ -94,7 +95,7 @@ class UserController extends Controller
 
     public function quizzes()
     {
-        $quizzes = Quiz::where('payement_type', 'like', request()->query("type") ? request()->query("type") : '%%')->OrderBy('payement_type')->with(['orders' => function ($query) {
+        $quizzes = Quiz::where('payement_type', '!=', PayementTypeEnum::NONAPPLICABLE->value)->where('payement_type', 'like', request()->query("type") ? request()->query("type") : '%%')->OrderBy('payement_type')->with(['orders' => function ($query) {
             $query->where('client_id', auth()->id())->where('status', 'paid');
         }])->get();
         $total_quizzes = Quiz::count();

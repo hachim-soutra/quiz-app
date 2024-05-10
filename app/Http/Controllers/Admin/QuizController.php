@@ -352,12 +352,12 @@ class QuizController extends Controller
         }
         $price_token = null;
         $productToken = null;
-        if ($request->payement_type == PayementTypeEnum::FREE->value) {
+        if (in_array($request->payement_type, [PayementTypeEnum::FREE->value, PayementTypeEnum::NONAPPLICABLE->value])) {
             $request->merge([
                 'price' => null,
             ]);
         } else {
-            if ($quiz->payement_type == PayementTypeEnum::FREE->value) {
+            if (in_array($quiz->payement_type, [PayementTypeEnum::FREE->value, PayementTypeEnum::NONAPPLICABLE->value])) {
                 $product = $this->stripeService->createProduct($request->name, $request->price);
                 $price_token = $product->default_price;
                 $productToken = $product->id;
