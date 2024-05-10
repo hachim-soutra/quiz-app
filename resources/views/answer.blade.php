@@ -179,6 +179,7 @@
                 series.dataFields.value = "pourcentage";
                 series.dataFields.category = "answers";
                 series.slices.template.propertyFields.fill = "color";
+                series.endAngle = 360;
 
                 // mixed chart
                 var chart2 = am4core.create("chartmixeddiv", am4charts.XYChart3D);

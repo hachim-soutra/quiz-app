@@ -71,28 +71,31 @@
                         </div>
                     </div>
                     <div class="card-body p-3 bg-white">
-                        <table class="table">
+                        <table class="table" id="myTable">
                             <thead>
                                 <tr>
                                     <th>Answer</th>
                                     <th>{{ $question->question_type->name === 'row answers' ? 'Response' : 'Correct' }}</th>
-                                    <th colspan="2">Action</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($question->options as $item)
                                     <tr>
-                                        <td title="{{ $item->name }}">{!! Str::limit($item->name, 100, '...') !!}</td>
-                                        @if ($question->question_type->name !== 'row answers')
-                                            <td>{{ $item->is_correct ? 'Yes' : 'NO' }}</td>
-                                        @else
-                                            <td>{{ $item->value }}</td>
-                                        @endif
-                                        <td>
-                                            <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
-                                                class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
+                                        <td title="{{ $item->name }}">
+                                            {!! Str::limit($item->name, 100, '...') !!}
                                         </td>
                                         <td>
+                                            @if ($question->question_type->name !== 'row answers')
+                                                {{ $item->is_correct ? 'Yes' : 'NO' }}
+                                            @else
+                                                {{ $item->value }}
+                                            @endif
+                                        </td>
+                                        <td class="text-nowrap">
+                                            <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
+                                                class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
+
                                             <a data-toggle="modal" data-target="#modal-delete-{{ $item->id }}"
                                                 class="btn btn-danger">
                                                 <i class="fas fa-trash"></i> Delete
@@ -194,76 +197,13 @@
                             </tbody>
                         </table>
                     </div>
-                    {{-- @foreach ($quiz->questions as $question)
-                        @if ($question->question)
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title d-flex align-items-center justify-content-between w-100">
-                                            Question : {{ $question->question->name }}
-                                            <form method="POST"
-                                                action="{{ route('quiz.delete-question', ['id' => $question->question->id]) }}">
-                                                @csrf
-                                                <button type="button" class="btn btn-success">Update</button>
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
-
-                                        </h3>
-                                    </div>
-                                    <div class="card-body">
-                                        @if ($question->question->options)
-                                            <div class="card-body table-responsive p-0 mb-5">
-                                                <table class="table table-hover text-nowrap">
-                                                    <thead>
-                                                        <th>answers</th>
-                                                        <th>coorect</th>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($question->question->options as $option)
-                                                            <tr>
-                                                                <td width="80%">{{ $option->name }}</td>
-                                                                <td>{{ $option->is_correct ? 'Yes' : 'NO' }}</td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @endif
-                                        <form method="POST"
-                                            action="{{ route('quiz.add-option', ['id' => $question->question->id]) }}">
-                                            <div class="row">
-                                                <div class="col-sm-2">
-                                                    <div class="form-group">
-                                                        <label>Correct answer</label>
-                                                        <select name="is_correct" id="is_correct" class="form-control">
-                                                            <option value="0" selected>No</option>
-                                                            <option value="1">Yes</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    @csrf
-                                                    <div class="form-group">
-                                                        <label>Answer</label>
-                                                        <input type="text" name="name" class="form-control"
-                                                            placeholder="Enter ...">
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <label style="opacity: 0">xx</label>
-                                                    <button type="submit" class="btn btn-primary form-control">Add</button>
-                                                </div>
-                                            </div>
-                                        </form>
-
-                                    </div>
-
-                                </div>
-                            </div>
-                        @endif
-                    @endforeach --}}
                 </div>
             </div>
         </section>
     </div>
+@endsection
+@section('js')
+    <script type="text/javascript">
+        $('#myTable').DataTable();
+    </script>
 @endsection

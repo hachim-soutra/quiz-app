@@ -32,7 +32,7 @@
                                 <form method="POST" action="{{ route('quiz.store') }}" enctype="multipart/form-data">
                                     <div class="row">
                                         @csrf
-                                        <div class="col-sm-12">
+                                        <div class="col-6">
                                             <div class="form-group">
                                                 <label for="">Quiz type</label>
                                                 <select name="quiz_type" id="quiz_type"
@@ -49,8 +49,7 @@
                                                 @enderror
                                             </div>
                                         </div>
-
-                                        <div class="col-sm-12">
+                                        <div class="col-6">
                                             <div class="form-group">
                                                 <label>Choose folder</label>
                                                 <select name="folder" class="form-control">
@@ -62,7 +61,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12">
+                                        <div class="col-6">
                                             <div class="form-group">
                                                 <label for="">Payement type </label>
                                                 <select name="payement_type" id="payement_type"
@@ -78,7 +77,8 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        <div class="col-md-12 quiz_price">
+
+                                        <div class="col-md-6 quiz_price">
                                             <div class="form-group">
                                                 <label for="">Price (€)</label>
                                                 <input type="text"
@@ -114,7 +114,8 @@
                                         <div class="col-sm-6  quiz_time_group">
                                             <div class="form-group">
                                                 <label for="name">Select timer</label>
-                                                <input type="time" name="quiz_time" step="1" value="{{ old('quiz_time') }}"
+                                                <input type="time" name="quiz_time" step="1"
+                                                    value="{{ old('quiz_time') }}"
                                                     class="form-control @error('quiz_time') is-invalid @enderror" />
                                                 <small>format: hh:mm:ss</small>
                                                 @error('quiz_time')
@@ -149,7 +150,8 @@
                                         <div class="col-sm-6 quiz_break_grp">
                                             <div class="form-group">
                                                 <label for="">Define break</label>
-                                                <input type="time" name="break_time" step="1" value="{{ old('break_time') }}"
+                                                <input type="time" name="break_time" step="1"
+                                                    value="{{ old('break_time') }}"
                                                     class="form-control @error('break_time') is-invalid @enderror">
                                                 <small>format: hh:mm:ss</small>
                                                 @error('break_time')
