@@ -115,12 +115,9 @@
                                                             @foreach ($folder->quizzes as $item)
                                                                 <tr>
                                                                     @if ($item->payement_type == App\Enum\PayementTypeEnum::FREE->value)
-                                                                        <td class="p-0"><img
-                                                                                src="{{ asset('images/Free.png') }}"
-                                                                                width="60px" height="60px"
-                                                                                alt=""></td>
+                                                                        <td class="d-flex justify-content-center align-items-center">🆓</td>
                                                                     @else
-                                                                        <td></td>
+                                                                    <td class="d-flex justify-content-center align-items-center">💰</td>
                                                                     @endif
                                                                     <td title="{{ $item->name }}">
                                                                         {!! Str::limit($item->name, 70, '...') !!}
