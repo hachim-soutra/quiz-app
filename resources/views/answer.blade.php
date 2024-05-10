@@ -42,12 +42,12 @@
                     <h2><strong class="text-deco">Quiz </strong>: {{ $answer->quiz->name }}</h2>
                     @if (auth()->check() && auth()->user()->userable_type == \App\Models\User::CLIENT_TYPE)
                         <div style="display: flex; gap: 12px;white-space: nowrap;">
-                            <button type="button" class="btn text-white float-right my-3 btn-pdf"
+                            <button type="button" class="btn text-white float-right btn-pdf"
                                 style="background-color: #343b7c; float: right;" onclick="generatePDF()">
                                 <i class="fa-solid fa-print"></i>
                                 Export Pdf
                             </button>
-                            <a href="{{ route('client.home') }}" class="btn text-white float-right my-3 me-3 btn-pdf"
+                            <a href="{{ route('client.home') }}" class="btn text-white float-right me-3 btn-pdf"
                                 style="background-color: #343b7c; float: right;">
                                 <i class="fa-solid fa-share"></i>
                                 Go to dashboard
