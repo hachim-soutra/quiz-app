@@ -114,7 +114,7 @@
                                         <div class="col-sm-6  quiz_time_group">
                                             <div class="form-group">
                                                 <label for="name">Select timer</label>
-                                                <input type="time" name="quiz_time" step="1"
+                                                <input type="time" name="quiz_time" 
                                                     value="{{ old('quiz_time') }}"
                                                     class="form-control @error('quiz_time') is-invalid @enderror" />
                                                 <small>format: hh:mm</small>
@@ -127,7 +127,7 @@
                                             <div class="form-group">
                                                 <label for="name">Warning select timer</label>
                                                 <input type="time" name="quiz_time_remind"
-                                                    value="{{ old('quiz_time_remind') }}" step="1"
+                                                    value="{{ old('quiz_time_remind') }}"
                                                     class="form-control @error('quiz_time_remind') is-invalid @enderror" />
                                                 <small>format: hh:mm</small>
                                                 @error('quiz_time_remind')
@@ -150,7 +150,7 @@
                                         <div class="col-sm-6 quiz_break_grp">
                                             <div class="form-group">
                                                 <label for="">Define break</label>
-                                                <input type="time" name="break_time" step="1"
+                                                <input type="time" name="break_time"
                                                     value="{{ old('break_time') }}"
                                                     class="form-control @error('break_time') is-invalid @enderror">
                                                 <small>format: hh:mm</small>
