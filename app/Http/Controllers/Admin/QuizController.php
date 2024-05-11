@@ -72,8 +72,8 @@ class QuizController extends Controller
 
         if ($request->quiz_type != 1) {
             $request->validate([
-                'quiz_time' => 'date_format:H:i:s',
-                'quiz_time_remind' => 'date_format:H:i:s,before:quiz_time',
+                'quiz_time' => 'date_format:H:i',
+                'quiz_time_remind' => 'date_format:H:i,before:quiz_time',
                 'nbr_questions_sequance' => 'required_if:quiz_type,==,3',
                 'break_time' => 'required_if:quiz_type,==,3'
             ]);
@@ -333,8 +333,8 @@ class QuizController extends Controller
 
         if ($request->quiz_type != 1) {
             $request->validate([
-                'quiz_time' => 'date_format:H:i:s',
-                'quiz_time_remind' => 'date_format:H:i:s,before:quiz_time',
+                'quiz_time' => 'date_format:H:i',
+                'quiz_time_remind' => 'date_format:H:i,before:quiz_time',
                 'nbr_questions_sequance' => 'required_if:quiz_type,==,3',
                 'break_time' => 'required_if:quiz_type,==,3'
             ]);
