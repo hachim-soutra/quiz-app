@@ -268,7 +268,7 @@
                 pagebreak: {
                     mode: ['avoid-all', 'css', 'legacy']
                 },
-                filename: 'Quiz-recap.pdf',
+                filename: 'Quiz recap  {{ $answer->quiz->name }}.pdf',
                 image: {
                     type: 'jpeg',
                     quality: 0.98

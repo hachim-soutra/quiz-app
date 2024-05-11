@@ -47,9 +47,9 @@ class QuestionImport implements ToModel, WithStartRow, WithCustomCsvSettings
         $max = $quiz->questions()->max('order');
         $question = Question::create([
             'name' => $row[0],
-            'question_type_id' => $row[1],
+            'question_type_id' => $row[2],
             'error' => $row[4],
-            'categorie_id' => $row[5],
+            'categorie_id' => $row[1],
             'is_active' => true,
         ]);
         QuizQuestion::create([
@@ -58,9 +58,9 @@ class QuestionImport implements ToModel, WithStartRow, WithCustomCsvSettings
             'order' => $max + 1
         ]);
 
-        $optionsAnswer = explode(",", $row[3]);
+        $optionsAnswer = explode(",", $row[4]);
 
-        foreach (explode("@", $row[2]) as $key => $value) {
+        foreach (explode("@", $row[3]) as $key => $value) {
             QuestionOption::create([
                 'question_id' => $question->id,
                 'name' => $value,

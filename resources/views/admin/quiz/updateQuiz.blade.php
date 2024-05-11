@@ -126,10 +126,10 @@
                                         <div class="col-sm-6 quiz_time_group">
                                             <div class="form-group">
                                                 <label>Select timer</label>
-                                                <input type="time" name="quiz_time" step="1"
+                                                <input type="time" name="quiz_time"
                                                     class="form-control @error('quiz_time') is-invalid @enderror"
                                                     value="{{ old('quiz_time') || !$item->quiz_time ? old('quiz_time') : Carbon\Carbon::parse($item->quiz_time)->format('H:i:s') }}">
-                                                <small>format: hh:mm:ss</small>
+                                                <small>format: hh:mm</small>
                                                 @error('quiz_time')
                                                     <div class="text-danger">{{ $message }}
                                                     </div>
@@ -140,10 +140,10 @@
                                             <div class="form-group">
                                                 <label for="">Warning select
                                                     timer</label>
-                                                <input type="time" step="1" name="quiz_time_remind"
+                                                <input type="time"  name="quiz_time_remind"
                                                     value="{{ old('quiz_time_remind') || !$item->quiz_time_remind ? old('quiz_time_remind') : Carbon\Carbon::parse($item->quiz_time_remind)->format('H:i:s') }}"
                                                     class="form-control @error('quiz_time_remind') is-invalid @enderror" />
-                                                <small>format: hh:mm:ss</small>
+                                                <small>format: hh:mm</small>
                                                 @error('quiz_time_remind')
                                                     <div class="text-danger">{{ $message }}
                                                     </div>
@@ -165,10 +165,10 @@
                                         <div class="col-sm-6 quiz_break_grp">
                                             <div class="form-group">
                                                 <label for="">Define break</label>
-                                                <input type="time" step="1" name="break_time"
+                                                <input type="time"  name="break_time"
                                                     value="{{ old('break_time') || !$item->break_time ? old('break_time') : Carbon\Carbon::parse($item->break_time)->format('H:i:s') }}"
                                                     class="form-control @error('break_time') is-invalid @enderror">
-                                                <small>format: hh:mm:ss</small>
+                                                <small>format: hh:mm</small>
                                                 @error('break_time')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
