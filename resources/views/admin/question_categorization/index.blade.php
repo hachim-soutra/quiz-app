@@ -31,7 +31,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    categories
+                                    Categories
                                 </h3>
                                 <div class="card-tools">
                                     <a href="{{ route('categorie.create') }}" type="button" class="btn btn-success"
@@ -54,7 +54,7 @@
                                         @foreach ($categories as $categorie)
                                             <tr>
                                                 <td>{{ $categorie->id }}</td>
-                                                <td title="{{ $categorie->name }}">{!! Str::limit($categorie->name, 70, '...') !!}</td>
+                                                <td class="text-capitalize" title="{{ $categorie->name }}">{!! Str::limit($categorie->name, 70, '...') !!}</td>
                                                 <td title="{{ $categorie->color }}">{!! Str::limit($categorie->color, 70, '...') !!}</td>
                                                 <td>
                                                     <a type="button" class="btn btn-primary" data-toggle="modal"

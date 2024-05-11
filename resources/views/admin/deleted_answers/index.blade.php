@@ -55,7 +55,7 @@
                                 <tbody>
                                     @foreach ($answers as $answer)
                                         <tr>
-                                            <td>{{ $answer->quiz?->name }}</td>
+                                            <td class="text-capitalize">{{ $answer->quiz?->name }}</td>
                                             <td>{{ $answer->email }}</td>
                                             <td>{{ round($answer->score, 2) }}%</td>
                                             <td>{{ $answer->created_at }}</td>

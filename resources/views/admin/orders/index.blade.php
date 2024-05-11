@@ -39,7 +39,7 @@
                                     <tbody>
                                         @foreach ($orders as $order)
                                             <tr>
-                                                <td>{{ $order->quiz->name }}</td>
+                                                <td class="text-capitalize">{{ $order->quiz->name }}</td>
                                                 <td>{{ $order->user->name }}</td>
                                                 <td>{{ $order->user->email }}</td>
                                                 <td>{{ $order->amount_stripe }}</td>

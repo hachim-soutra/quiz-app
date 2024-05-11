@@ -118,7 +118,7 @@
                                     @endphp
 
                                     @foreach ($combinedData as $name => $color)
-                                        <li><i class="far fa-circle" style="color: {{ $color }}"></i>
+                                        <li class="text-capitalize"><i class="far fa-circle" style="color: {{ $color }}"></i>
                                             {{ $name }}</li>
                                     @endforeach
                                 </ul>

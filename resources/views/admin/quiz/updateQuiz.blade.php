@@ -39,7 +39,7 @@
                                                 <label for="">Quiz type
                                                     {{ old('quiz_type') ? $item->quiz_type : old('quiz_type') }}</label>
                                                 <select name="quiz_type" id="quiz_type"
-                                                    class="form-control @error('quiz_type') is-invalid @enderror">
+                                                    class="form-control text-capitalize @error('quiz_type') is-invalid @enderror">
                                                     <option value="1"
                                                         {{ (!old('quiz_type') ? $item->quiz_type : old('quiz_type')) == 1 ? 'selected' : '' }}>
                                                         simple quiz</option>
@@ -58,7 +58,7 @@
                                         <div class="col-6">
                                             <div class="control-form">
                                                 <label for="">Folder</label>
-                                                <select name="folder" class="form-control">
+                                                <select name="folder" class="form-control text-capitalize">
                                                     <option value="null">--------------</option>
                                                     @foreach ($folders as $folder)
                                                         <option value="{{ $folder->id }}"
@@ -73,7 +73,7 @@
                                                 <label for="">Payement type
                                                     {{ old('Payement_type') ? $item->payement_type : old('payement_type') }}</label>
                                                 <select name="payement_type" id="payement_type"
-                                                    class="form-control @error('payement_type') is-invalid @enderror">
+                                                    class="form-control text-capitalize @error('payement_type') is-invalid @enderror">
                                                     @foreach (App\Enum\PayementTypeEnum::cases() as $payementType)
                                                         <option value="{{ $payementType }}"
                                                             {{ (!old('payement_type') ? $item->payement_type : old('payement_type')) == $payementType->value ? 'selected' : '' }}>
@@ -117,7 +117,7 @@
                                         <div class="col-sm-12">
 
                                             <div class="form-group">
-                                                <label>upload image</label>
+                                                <label>Upload image</label>
                                                 <input type="file" class="form-control" name="image">
                                                 <img src="{{ asset('images/' . $item->image) }}" width="150"
                                                     alt="img" class="mt-3 rounded">
@@ -221,7 +221,7 @@
                 if ($('#payement_type').val() == 'free') {
                     $('.quiz_price').hide();
                 }
-                if ($('#payement_type').val() == 'payed') {
+                if ($('#payement_type').val() == 'paid') {
                     $('.quiz_price').show();
                 }
             }

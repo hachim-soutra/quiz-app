@@ -97,7 +97,7 @@
                                                 <td>
                                                     <input type="checkbox" name="accounting" id="accounting"
                                                         data-toggle="toggle" data-id="{{ $folder->id }}">
-                                                    <span class="text-16-bold">{{ $folder->label }}
+                                                    <span class="text-16-bold text-capitalize">{{ $folder->label }}
                                                         ({{ count($folder->quizzes) }})
                                                     </span>
 

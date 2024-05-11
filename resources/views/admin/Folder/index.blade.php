@@ -58,7 +58,7 @@
                                     <tbody>
                                         @foreach ($folders as $folder)
                                             <tr>
-                                                <td>{{ $folder->label }}</td>
+                                                <td class="text-capitalize">{{ $folder->label }}</td>
                                                 <td>{{ count($folder->quizzes) }}</td>
                                                 <td>
                                                     <a data-toggle="modal" data-target="#modal-update-{{ $folder->id }}"
