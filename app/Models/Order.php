@@ -9,7 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['session_id','quiz_id','client_id','status','amount_stripe','current_price','currency'];
+    protected $fillable = ['session_id','product_id','product_type','client_id','status','amount_stripe','current_price','currency'];
 
 
     public function user()
@@ -17,8 +17,8 @@ class Order extends Model
         return $this->belongsTo(User::class ,'client_id');
     }
 
-    public function quiz()
+    public function product()
     {
-        return $this->belongsTo(config('laravel-quiz.models.quiz'));
+        return $this->belongsTo(Product::class,'product_id');
     }
 }

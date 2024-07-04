@@ -1,5 +1,13 @@
 @extends('layouts.app')
 
+@section('style')
+    <style>
+        th, td {
+            text-align: center;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="container-fluid">
         <section class="content-header">
@@ -26,12 +34,11 @@
                                 <table class="table" id="myTable">
                                     <thead>
                                         <tr>
-                                            <th>Quiz</th>
+                                            <th>Product</th>
+                                            <th>Type</th>
                                             <th>Client Name</th>
                                             <th>Client Email</th>
                                             <th>Purchase Price</th>
-                                            <th>Current Price</th>
-                                            <th>Currency</th>
                                             <th>Status</th>
                                             <th>Date</th>
                                         </tr>
@@ -39,12 +46,11 @@
                                     <tbody>
                                         @foreach ($orders as $order)
                                             <tr>
-                                                <td class="text-capitalize">{{ $order->quiz->name }}</td>
+                                                <td class="text-capitalize">{{ $order->product->name }}</td>
+                                                <td>{{ $order->product->type }}</td>
                                                 <td>{{ $order->user->name }}</td>
                                                 <td>{{ $order->user->email }}</td>
-                                                <td>{{ $order->amount_stripe }}</td>
-                                                <td>{{ $order->current_price }}</td>
-                                                <td>{{ $order->currency }}</td>
+                                                <td class="text-center">{{ $order->amount_stripe }} {{ $order->currency }}</td>
                                                 <td>{{ $order->status }}</td>
                                                 <td>{{ $order->updated_at }}</td>
                                             </tr>

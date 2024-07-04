@@ -1,98 +1,5 @@
 @extends('layouts.app')
 
-@section('style')
-    <style>
-        .card .overlay {
-            width: 100%;
-            height: 230px;
-            border-radius: 10px 10px 0 0;
-            top: 0;
-            left: 0;
-            opacity: 0;
-            transition: 0.3s;
-            background-color: rgb(34 33 33 / 75%);
-        }
-
-        .card:hover .overlay {
-            opacity: 1;
-        }
-
-        .button-color {
-            background-color: #051036;
-            color: white;
-        }
-
-        .button-access {
-            border-radius: 25px;
-            margin-left: -7px;
-            font-weight: 600;
-        }
-
-        .card-title {
-            margin-bottom: 0.75rem;
-            font-weight: 600;
-            font-size: 17px;
-        }
-
-        .price-desc {
-            font-size: 16px;
-            color: #f2bb13;
-            margin-bottom: 12px;
-            font-weight: 700;
-        }
-
-        .description {
-            color: white;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 12px;
-        }
-
-        .card-rounded {
-            border-radius: 10px !important;
-            width: 100%;
-            margin: 10px;
-        }
-
-        .card-img,
-        .card-img-top {
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            height: 230px;
-            width: 100%;
-            object-fit: cover;
-        }
-
-        .card-body::after {
-            display: none;
-        }
-
-        .dropdown-toggle::after {
-            display: none;
-        }
-
-        .btn-light:hover {
-            background-color: #051036;
-            color: white;
-        }
-
-        .filter-input {
-            display: flex;
-            align-items: center;
-            gap: 35px;
-            height: 33px;
-            background-color: #051036;
-            color: white;
-        }
-
-        .btn-light:not(:disabled):not(.disabled):active,
-        .show>.btn-light.dropdown-toggle {
-            background-color: #051036;
-            color: white;
-        }
-    </style>
-@endsection
-
 @section('content')
     <div class="container-fluid">
         <section class="content-header mb-4">
@@ -132,6 +39,11 @@
                                     class="dropdown-item d-flex text-dark px-3 {{ Request::is('client.update-password') ? 'active' : '' }}">
                                     <p>Paid</p>
                                 </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="{{ route('client.quizzes') . '?type=' . 'payed' }}"
+                                    class="dropdown-item d-flex text-dark px-3 {{ Request::is('client.update-password') ? 'active' : '' }}">
+                                    <p>Payed</p>
+                                </a>
                             </div>
 
                         </div>
@@ -149,10 +61,10 @@
                                         <div class="ribbon text-lg text-capitalize bg-info"> {{ $quiz->payement_type }}
                                         </div>
                                     @elseif($quiz->payement_type == App\Enum\PayementTypeEnum::PAYED->value)
-                                        @if ($quiz->orders->count())
-                                            @if ($quiz->orders[0]->status == 'paid')
-                                                <div class="ribbon text-lg text-capitalize bg-success"> Payed </div>
-                                            @endif
+                                        @if ($quiz->promos && $quiz->promoIsPayed($orders_promos))
+                                            <div class="ribbon text-lg text-capitalize bg-success"> Payed </div>
+                                        @elseif ($quiz->product?->orders?->count())
+                                            <div class="ribbon text-lg text-capitalize bg-success"> Payed </div>
                                         @else
                                             <div class="ribbon text-lg text-capitalize bg-secondary">
                                                 {{ $quiz->payement_type }} </div>
@@ -172,14 +84,16 @@
                                         <a href="{{ route('client.quiz', ['slug' => $quiz->slug]) }}" target="_blank"
                                             class="btn d-block button-access button-color">Access now</a>
                                     @elseif($quiz->payement_type == App\Enum\PayementTypeEnum::PAYED->value)
-                                        @if ($quiz->orders->count())
-                                            @if ($quiz->orders[0]->status == 'paid')
-                                                <a href="{{ route('client.quiz', ['slug' => $quiz->slug]) }}"
-                                                    target="_blank" class="btn d-block  button-access button-color">Access
-                                                    now</a>
-                                            @endif
+                                        @if ($quiz->product?->orders?->count())
+                                            <a href="{{ route('client.quiz', ['slug' => $quiz->slug]) }}" target="_blank"
+                                                class="btn d-block  button-access button-color">Access
+                                                now</a>
+                                        @elseif($quiz->promos && $quiz->promoIsPayed($orders_promos))
+                                            <a href="{{ route('client.quiz', ['slug' => $quiz->slug]) }}" target="_blank"
+                                                class="btn d-block  button-access button-color">Access
+                                                now</a>
                                         @else
-                                            <a @if ($quiz->price_token) href="{{ route('checkout', ['price_token' => $quiz->price_token, 'quiz_id' => $quiz->id]) }}" target="_blank" @endif
+                                            <a @if ($quiz->price_token) href="{{ route('checkout', ['price_token' => $quiz->price_token, 'product_id' => $quiz->product->id, 'product_type' => $quiz->product->productable_type, 'query' => 'null']) }}" target="_blank" @endif
                                                 class="btn d-block button-access button-color">Buy now</a>
                                         @endif
                                     @endif

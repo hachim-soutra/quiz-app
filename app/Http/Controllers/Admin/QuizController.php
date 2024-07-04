@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\Models\QuizTheme;
 use App\Models\Settings;
 use App\Models\Order;
+use App\Models\Product;
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
 use App\Models\QuestionsCategorization;
@@ -92,7 +93,7 @@ class QuizController extends Controller
             $productToken = $product->id;
         }
 
-        Quiz::create([
+        $quiz = Quiz::create([
             'quiz_type' => $request->quiz_type,
             'name' => $request->name,
             'payement_type' => $request->payement_type,
@@ -109,6 +110,10 @@ class QuizController extends Controller
             'product_token' => $productToken
             // 'is_published' => 1,
         ]);
+
+        $product = new Product();
+        $quiz->product()->save($product);
+
         return redirect()->route('quiz.index')->withInput()->with('status', 'Your quiz has been added');
     }
 
@@ -399,7 +404,8 @@ class QuizController extends Controller
      */
     public function destroy(string $id)
     {
-        $quiz = Quiz::whereSlug($id)->firstOrFail();
+        $quiz = Quiz::whereId($id)->firstOrFail();
+        $quiz->product()->delete();
         $quiz->delete();
         return redirect()->back()->with('status', 'Quiz deleted Successfully');
     }
@@ -494,7 +500,7 @@ class QuizController extends Controller
 
     public function payments()
     {
-        $orders = Order::with('quiz', 'user')->get();
+        $orders = Order::whereHas('product')->with(['product', 'user'])->get();
         return view('admin.orders.index', ['orders' => $orders]);
     }
 }

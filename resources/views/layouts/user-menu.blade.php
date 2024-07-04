@@ -12,6 +12,12 @@
     </a>
 </li>
 <li class="nav-item">
+    <a href="{{ route('client.promos') }}" class="nav-link text-dark {{ Request::is('promo') ? 'active' : '' }}">
+        <i class="fa-solid fa-bullhorn"></i>
+        <p>Promos</p>
+    </a>
+</li>
+<li class="nav-item">
     <a href="{{ route('answers') }}" class="nav-link text-dark px-2 {{ Request::is('answers') ? 'active' : '' }}">
         <i class="nav-icon fas fa-gift"></i>
         <p>Answers</p>
@@ -23,3 +29,4 @@
         <p>Profile</p>
     </a>
 </li>
+

@@ -162,10 +162,10 @@
                                                                                 class="fas fa-edit"></i>Update</a>
 
 
-                                                                        {{-- <a href="{{ route('quiz.destroy', ['slug' => $item->slug]) }}"
+                                                                        <a href="{{ route('quiz.delete', ['id' => $item->id]) }}"
                                                                             class="btn btn-danger">
-                                                                            <i class="fas fa-trash"></i> Delete
-                                                                        </a> --}}
+                                                                            <i class="fas fa-trash"></i> Delete {{$item->id}}
+                                                                        </a>
 
                                                                     </td>
                                                                 </tr>
