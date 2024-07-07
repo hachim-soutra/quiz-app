@@ -31,8 +31,9 @@ class PromoController extends Controller
         $quizzes = $request->select_quizzes;
 
         $request->validate([
-            'title' => 'required',
+            'title' => ['required', 'unique:promos, title'],
             'price' => 'required',
+            'select_quizzes' => 'required|min:1'
         ]);
 
         if ($request->hasFile('image')) {
@@ -68,8 +69,9 @@ class PromoController extends Controller
     public function update(Request $request, Promo $promo)
     {
         $request->validate([
-            'title' => 'required',
+            'title' => ['required', 'unique:promos, title'.$promo->id],
             'price' => 'required',
+            'select_quizzes' => 'required|min:1'
         ]);
 
         $quizzes = $request->select_quizzes;
