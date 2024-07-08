@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Answer;
 use App\Models\Settings;
 use Harishdurga\LaravelQuiz\Models\Question;
-use Harishdurga\LaravelQuiz\Models\Quiz;
-use Harishdurga\LaravelQuiz\Models\QuizQuestion;
+use App\Models\Quiz;
+use App\Models\QuizQuestion;
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
@@ -51,7 +51,7 @@ class QuestionController extends Controller
             $answer->save();
         }
         $total_qst = $answer->getQuestions()->count();
-        $qst_sort = $question['sort'] -1;
+        $qst_sort = $question['sort'] - 1;
         return view('question')->with(["answer" => $answer, "break" => $break, "id" => $id, "break_text" => $break_text, "total_qst" => $total_qst, "qst_sort" => $qst_sort]);
     }
 

@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Product;
-use Harishdurga\LaravelQuiz\Models\Quiz;
+use App\Models\Quiz;
 use Illuminate\Console\Command;
 
 class UpdateQuizzesWithProducts extends Command

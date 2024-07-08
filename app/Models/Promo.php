@@ -10,7 +10,7 @@ class Promo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'price', 'active', 'image', 'price_token', 'product_token'];
+    protected $guarded = [];
 
     protected $casts = [
         'active' => 'boolean',

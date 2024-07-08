@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use Harishdurga\LaravelQuiz\Models\Quiz;
+use App\Models\Quiz;
 use Illuminate\Console\Command;
 
 class QuizSort extends Command

@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Promo;
 use App\Models\Product;
 use App\Models\QuestionsCategorization;
+use App\Models\Quiz;
 use App\Models\QuizTheme;
 use App\Models\Settings;
 use App\Models\User;
@@ -15,7 +16,6 @@ use App\Services\StripeService;
 use Barryvdh\DomPDF\PDF as DomPDFPDF;
 use PDF;
 use Dompdf\Options;
-use Harishdurga\LaravelQuiz\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -121,13 +121,15 @@ class UserController extends Controller
         }
         // get just quizzes payed by the client
         else if ($request->query("type") == 'payed') {
-            $quizzes = Quiz::whereHas('product.orders', function ($query) {
-                $query->where('client_id', auth()->id())->where('status', 'paid');
+            $ordersIds = auth()->user()->orders()->where('status', 'paid')->pluck('product_id')->toArray();
+            $quizzes = Quiz::with('product')->whereHas('product', function ($xx) use ($ordersIds) {
+                $xx->produwhereIn('id', [39]);
             })->get();
+
+            dd($quizzes);
         }
         // get all quizzes free, payed and paid
-        else if (!$request->query("type"))
-        {
+        else if (!$request->query("type")) {
             $quizzes = Quiz::where('payement_type', '!=', PayementTypeEnum::NONAPPLICABLE->value)->OrderBy('payement_type')->with(['product.orders' => function ($query) {
                 $query->where('client_id', auth()->id())->where('status', 'paid');
             }])->get();
@@ -135,11 +137,11 @@ class UserController extends Controller
         // get free or paid quizzes (it's depend on query sended)
         else {
             $quizzes = Quiz::where('payement_type', '!=', PayementTypeEnum::NONAPPLICABLE->value)->where('payement_type', 'like', request()->query("type"))->OrderBy('payement_type')->with(['product.orders' => function ($query) {
-                $query->where('client_id', '!=' , auth()->id());
+                $query->where('client_id', '!=', auth()->id());
             }])->get();
         }
 
-        $orders_promos = Order::where('status','paid')->where('product_type', Promo::class)->pluck('product_id')->toArray();
+        $orders_promos = Order::where('status', 'paid')->where('product_type', Promo::class)->pluck('product_id')->toArray();
         $total_quizzes = Quiz::count();
         return view('client.quizzes', ['quizzes' => $quizzes, 'total_quizzes' => $total_quizzes, 'orders_promos' => $orders_promos]);
     }

@@ -164,9 +164,8 @@
 
                                                                         <a href="{{ route('quiz.delete', ['id' => $item->id]) }}"
                                                                             class="btn btn-danger">
-                                                                            <i class="fas fa-trash"></i> Delete {{$item->id}}
+                                                                            <i class="fas fa-trash"></i> Delete
                                                                         </a>
-
                                                                     </td>
                                                                 </tr>
                                                             @endforeach

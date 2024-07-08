@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use Harishdurga\LaravelQuiz\Models\Quiz;
+use App\Models\Quiz;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 use Maatwebsite\Excel\Concerns\WithStartRow;

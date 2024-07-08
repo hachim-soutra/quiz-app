@@ -1,4 +1,12 @@
 @extends('layouts.app')
+@section('style')
+    <style>
+        .btn:hover {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+@endsection
 
 @section('content')
     <div class="container-fluid">

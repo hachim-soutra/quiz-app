@@ -5,6 +5,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <style>
+        table.dataTable thead th {
+            padding: 8px 10px;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -34,7 +39,7 @@
                                     Promos
                                 </div>
                                 <div class="card-tools">
-                                    <a type="button" class="btn btn-success" data-toggle="modal"
+                                    <a id="btn-add" type="button" class="btn btn-success" data-toggle="modal"
                                         data-target="#modal-add">Add</a>
                                 </div>
                             </div>
@@ -59,7 +64,13 @@
                                                 <td class="text-capitalize">{!! Str::limit($promo->description, 70, '...') !!}</td>
                                                 <td class="text-capitalize">{{ count($promo->quizzes) }}</td>
                                                 <td>{{ $promo->price }}</td>
-                                                <td>{{ $promo->active ? 'Active' : 'Not active' }}</td>
+                                                <td>
+                                                    @if ($promo->active)
+                                                        <span class="badge badge-success">Active</span>
+                                                    @else
+                                                        <span class="badge badge-danger">Not active</span>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     <a data-toggle="modal" data-target="#modal-update-{{ $promo->id }}"
                                                         class="btn btn-primary">
@@ -236,7 +247,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="modal fade" id="modal-add" aria-modal="true" role="dialog">
+                        <div class="modal fade" id="modal-add">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -283,7 +294,7 @@
                                                     <div class="form-group">
                                                         <label>quizzes :</label>
                                                         <select name="select_quizzes[]"
-                                                            class="form-control select2 select2-hidden-accessible"
+                                                            class="form-control select2 select2-hidden-accessible @error('price') is-invalid @enderror"
                                                             multiple="" data-placeholder="Select a quiz"
                                                             style="width: 100%;" tabindex="-1" aria-hidden="true">
                                                             @foreach ($quiz as $item)
@@ -293,6 +304,9 @@
                                                             @endforeach
 
                                                         </select>
+                                                        @error('select_quizzes')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="">Image</label>

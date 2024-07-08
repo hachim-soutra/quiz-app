@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->integer('product_id')->unsigned()->change();
-            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 

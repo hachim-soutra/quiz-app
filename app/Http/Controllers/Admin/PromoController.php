@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\PayementTypeEnum;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PromoRequest;
 use App\Models\Product;
 use App\Models\Promo;
 use App\Services\StripeService;
-use Harishdurga\LaravelQuiz\Models\Quiz;
+use App\Models\Quiz;
 use Illuminate\Support\Facades\File;
 
 class PromoController extends Controller
@@ -20,22 +22,15 @@ class PromoController extends Controller
     }
     public function index()
     {
-        $promos = Promo::with("quizzes")->orderBy('title')->get();
-        $quiz = Quiz::all();
+        $promos = Promo::with("quizzes")->get();
+        $quiz = Quiz::where("payement_type", PayementTypeEnum::PAYED)->get();
 
         return view('admin.promos.index', compact('promos', 'quiz'));
     }
 
-    public function store(Request $request)
+    public function store(PromoRequest $request)
     {
         $quizzes = $request->select_quizzes;
-
-        $request->validate([
-            'title' => ['required', 'unique:promos, title'],
-            'price' => 'required',
-            'select_quizzes' => 'required|min:1'
-        ]);
-
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extention = $file->getClientOriginalExtension();
@@ -66,14 +61,8 @@ class PromoController extends Controller
         return redirect()->back()->with('status', 'Promotion created successfully');
     }
 
-    public function update(Request $request, Promo $promo)
+    public function update(PromoRequest $request, Promo $promo)
     {
-        $request->validate([
-            'title' => ['required', 'unique:promos, title'.$promo->id],
-            'price' => 'required',
-            'select_quizzes' => 'required|min:1'
-        ]);
-
         $quizzes = $request->select_quizzes;
 
         if ($request->hasFile('image')) {

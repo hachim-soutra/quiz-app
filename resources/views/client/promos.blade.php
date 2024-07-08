@@ -1,5 +1,12 @@
 @extends('layouts.app')
-
+@section('style')
+    <style>
+        .btn:hover {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+@endsection
 @section('content')
     <div class="container-fluid">
         <section class="content-header mb-4">
@@ -44,7 +51,7 @@
                                         <a href="{{ route('client.quizzes') }}?{{ $query }}"
                                             class="btn d-block button-access button-color">Access now</a>
                                     @else
-                                        <a @if ($promo->price_token) href="{{ route('checkout', ['price_token' => $promo->price_token, 'product_id' => $promo->product->id, 'product_type' => $promo->product->productable_type, 'query' => $query ])}}" target="_blank" @endif
+                                        <a @if ($promo->price_token) href="{{ route('checkout', ['price_token' => $promo->price_token, 'product_id' => $promo->product->id, 'product_type' => $promo->product->productable_type, 'query' => $query]) }}" target="_blank" @endif
                                             class="btn d-block button-access button-color">Buy now</a>
                                     @endif
                                 </div>
