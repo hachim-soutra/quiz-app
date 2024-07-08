@@ -24,11 +24,11 @@ class StripeService
         ]);
         return $product;
     }
-    public function updateProduct($productId, $priceToken)
+    public function updateProduct(string $productId, string $priceToken)
     {
-        $product = $this->stripe->products->update([
+        $product = $this->stripe->products->update(
             $productId,
-            ['default_price' => $priceToken]
+            [['default_price' => $priceToken]
         ]);
         return $product;
     }
@@ -41,5 +41,14 @@ class StripeService
             'product' => $productToken,
             ]);
         return $newPrice;
+    }
+
+    public function deleteProduct(string $productToken, string $priceToken)
+    {
+        $product = $this->stripe->products->update(
+            $productToken,
+            [['active' => false]
+        ]);
+        return $product;
     }
 }

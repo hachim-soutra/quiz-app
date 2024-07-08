@@ -4,8 +4,8 @@ namespace App\Imports;
 
 use Harishdurga\LaravelQuiz\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
-use Harishdurga\LaravelQuiz\Models\Quiz;
-use Harishdurga\LaravelQuiz\Models\QuizQuestion;
+use App\Models\Quiz;
+use App\Models\QuizQuestion;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 use Maatwebsite\Excel\Concerns\WithStartRow;

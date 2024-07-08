@@ -98,6 +98,95 @@
             padding-right: 20px;
             padding-top: 10px;
         }
+        .card .overlay {
+            width: 100%;
+            height: 230px;
+            border-radius: 10px 10px 0 0;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: 0.3s;
+            background-color: rgb(34 33 33 / 75%);
+        }
+
+        .card:hover .overlay {
+            opacity: 1;
+        }
+
+        .button-color {
+            background-color: #051036;
+            color: white;
+        }
+
+        .button-access {
+            border-radius: 25px;
+            margin-left: -7px;
+            font-weight: 600;
+        }
+
+        .card-title {
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            font-size: 17px;
+        }
+
+        .price-desc {
+            font-size: 16px;
+            color: #f2bb13;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .description {
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .card-rounded {
+            border-radius: 10px !important;
+            width: 100%;
+            margin: 10px;
+        }
+
+        .card-img,
+        .card-img-top {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            height: 230px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .card-body::after {
+            display: none;
+        }
+
+        .dropdown-toggle::after {
+            display: none;
+        }
+
+        .btn-light:hover {
+            background-color: #051036;
+            color: white;
+        }
+
+        .filter-input {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+            height: 33px;
+            background-color: #051036;
+            color: white;
+        }
+
+        .btn-light:not(:disabled):not(.disabled):active,
+        .show>.btn-light.dropdown-toggle {
+            background-color: #051036;
+            color: white;
+        }
+
     </style>
     @yield('style')
 

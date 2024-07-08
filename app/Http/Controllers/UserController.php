@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Enum\PayementTypeEnum;
 use App\Models\Answer;
 use App\Models\Order;
+use App\Models\Promo;
+use App\Models\Product;
 use App\Models\QuestionsCategorization;
+use App\Models\Quiz;
 use App\Models\QuizTheme;
 use App\Models\Settings;
 use App\Models\User;
@@ -13,7 +16,6 @@ use App\Services\StripeService;
 use Barryvdh\DomPDF\PDF as DomPDFPDF;
 use PDF;
 use Dompdf\Options;
-use Harishdurga\LaravelQuiz\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -44,13 +46,21 @@ class UserController extends Controller
         return view('client.home', ['answer' => $answer, 'quiz' => $quiz, 'xValues' => $xValues, 'yValues' => $yValues, 'barColors' => $barColors]);
     }
 
+    public function promos()
+    {
+        $promos = Promo::where('active', true)->with(['product.orders' => function ($query) {
+            $query->where('client_id', auth()->id())->where('status', 'paid');
+        }])->get();
+        return view('client.promos', ['promos' => $promos]);
+    }
+
     public function settings()
     {
         $orders = auth()->user()->orders()->with('quiz')->latest()->get();
         return view('client.account', ['orders' => $orders]);
     }
 
-    public function checkout(Request $request, $price_token, $quiz_id)
+    public function checkout(Request $request, $price_token, $product_id, $product_type, $query)
     {
         $session = $request->user()->checkout($price_token, [
             'success_url' => route('checkout-success') . '?token={CHECKOUT_SESSION_ID}',
@@ -58,13 +68,16 @@ class UserController extends Controller
             'mode' => 'payment',
             'metadata' => [
                 'id' => auth()->id(),
-                'quiz_id' => $quiz_id,
+                'product_id' => $product_id,
+                'product_type' => $product_type,
+                'query' => $query
             ],
         ]);
 
         Order::create([
             'session_id' => $session->id,
-            'quiz_id' => $session->metadata['quiz_id'],
+            'product_id' => $session->metadata['product_id'],
+            'product_type' => $session->metadata['product_type'],
             'client_id' => $session->metadata['id'],
             'status' => $session->payment_status,
             'amount_stripe' => $session->amount_total / 100,
@@ -84,8 +97,15 @@ class UserController extends Controller
         Order::where('session_id', $session->id)->where('status', 'unpaid')->update([
             'status' => 'paid',
         ]);
-        $quiz = Quiz::find($session->metadata['quiz_id']);
-        return view('checkout.success', ['quiz' => $quiz]);
+        $product = Product::where('id', $session->metadata['product_id'])->where('productable_type', $session->metadata['product_type'])->firstOrFail();
+        if ($product->productable_type == Quiz::class) {
+            $quiz = Quiz::find($product->productable->id);
+            return view('checkout.success', ['quiz' => $quiz]);
+        } else {
+            $promo = Promo::find($product->productable->id);
+            $query = $session->metadata['query'];
+            return view('checkout.success', ['promo' => $promo, 'query' => $query]);
+        }
     }
 
     public function checkoutCancel()
@@ -93,13 +113,37 @@ class UserController extends Controller
         return redirect()->route('client.home')->with('status', 'Your payment is incomplet');
     }
 
-    public function quizzes()
+    public function quizzes(Request $request)
     {
-        $quizzes = Quiz::where('payement_type', '!=', PayementTypeEnum::NONAPPLICABLE->value)->where('payement_type', 'like', request()->query("type") ? request()->query("type") : '%%')->OrderBy('payement_type')->with(['orders' => function ($query) {
-            $query->where('client_id', auth()->id())->where('status', 'paid');
-        }])->get();
+        // to get quizzes from their promo
+        if ($request->query('ids')) {
+            $quizzes = Quiz::where('payement_type', '!=', PayementTypeEnum::NONAPPLICABLE->value)->whereIn('id', $request->query('ids'))->get();
+        }
+        // get just quizzes payed by the client
+        else if ($request->query("type") == 'payed') {
+            $ordersIds = auth()->user()->orders()->where('status', 'paid')->pluck('product_id')->toArray();
+            $quizzes = Quiz::with('product')->whereHas('product', function ($xx) use ($ordersIds) {
+                $xx->produwhereIn('id', [39]);
+            })->get();
+
+            dd($quizzes);
+        }
+        // get all quizzes free, payed and paid
+        else if (!$request->query("type")) {
+            $quizzes = Quiz::where('payement_type', '!=', PayementTypeEnum::NONAPPLICABLE->value)->OrderBy('payement_type')->with(['product.orders' => function ($query) {
+                $query->where('client_id', auth()->id())->where('status', 'paid');
+            }])->get();
+        }
+        // get free or paid quizzes (it's depend on query sended)
+        else {
+            $quizzes = Quiz::where('payement_type', '!=', PayementTypeEnum::NONAPPLICABLE->value)->where('payement_type', 'like', request()->query("type"))->OrderBy('payement_type')->with(['product.orders' => function ($query) {
+                $query->where('client_id', '!=', auth()->id());
+            }])->get();
+        }
+
+        $orders_promos = Order::where('status', 'paid')->where('product_type', Promo::class)->pluck('product_id')->toArray();
         $total_quizzes = Quiz::count();
-        return view('client.quizzes', ['quizzes' => $quizzes, 'total_quizzes' => $total_quizzes]);
+        return view('client.quizzes', ['quizzes' => $quizzes, 'total_quizzes' => $total_quizzes, 'orders_promos' => $orders_promos]);
     }
 
     public function updatePassword(Request $request)
@@ -182,10 +226,10 @@ class UserController extends Controller
             return $return;
         }, $above_target_text->value);
 
-return view('pdf.quizRecap',['answer' =>  $answer, 'below_target' => $below_target, 'above_target' => $above_target ]);
+        return view('pdf.quizRecap', ['answer' =>  $answer, 'below_target' => $below_target, 'above_target' => $above_target]);
         $options = new Options();
         $options->setIsRemoteEnabled(true);
-        $pdf = PDF::loadView('pdf.quizRecap', ['answer' =>  $answer, 'below_target' => $below_target, 'above_target' => $above_target ])
+        $pdf = PDF::loadView('pdf.quizRecap', ['answer' =>  $answer, 'below_target' => $below_target, 'above_target' => $above_target])
             ->setPaper('a4', 'portrait')
             ->setOptions(['isRemoteEnabled' => true]);
 

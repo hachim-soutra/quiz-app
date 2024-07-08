@@ -48,3 +48,9 @@
         <p>Orders</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('promo.index') }}" class="nav-link text-dark {{ Request::is('promo') ? 'active' : '' }}">
+        <i class="fa-solid fa-bullhorn"></i>
+        <p>Promos</p>
+    </a>
+</li>

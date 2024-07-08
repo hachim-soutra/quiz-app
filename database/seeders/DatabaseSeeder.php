@@ -5,7 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Settings;
-use Harishdurga\LaravelQuiz\Models\Quiz;
+use App\Models\Quiz;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 

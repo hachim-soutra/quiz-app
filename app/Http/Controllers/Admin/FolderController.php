@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\QuizTheme;
-use Harishdurga\LaravelQuiz\Models\Quiz;
+use App\Models\Quiz;
 use Illuminate\Http\Request;
 
 class FolderController extends Controller
@@ -31,11 +31,11 @@ class FolderController extends Controller
     public function update(Request $request, QuizTheme $folder)
     {
         $request->validate([
-            'label' => ['required', 'unique:folders,label,'.$folder->id ],
+            'label' => ['required', 'unique:folders,label,' . $folder->id],
         ]);
         $folder->quizzes()->update(['folder_id' => 9999]);
-        if($request->select_quizzes){
-            Quiz::whereIn("id",array_map('intval', $request->select_quizzes))->update(['folder_id'=>$folder->id]);
+        if ($request->select_quizzes) {
+            Quiz::whereIn("id", array_map('intval', $request->select_quizzes))->update(['folder_id' => $folder->id]);
         }
         $folder->update([
             'label' => $request->label,
