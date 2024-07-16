@@ -12,7 +12,7 @@ use App\Models\QuizTheme;
 use App\Models\Settings;
 use App\Models\Order;
 use App\Models\Product;
-use Harishdurga\LaravelQuiz\Models\Question;
+use App\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
 use App\Models\QuestionsCategorization;
 use App\Services\StripeService;
@@ -173,12 +173,20 @@ class QuizController extends Controller
             $filename = time() . '.' . $extention;
             $file->move('images/question', $filename);
         }
+
+        if ($request->file('video') == null) {
+            $path = null;
+        } else {
+            $path = $request->file('video')->store('videos', 'public');
+        }
+
         $quiz = Quiz::whereId($id)->firstOrFail();
         $question = Question::create([
             'name' => $request->name,
             'question_type_id' => $request->type,
             'error' => $request->error,
             'image' => $request->hasFile('image') ? $filename : null,
+            'video' => $path,
             'categorie_id' => $request->categorie,
             'is_active' => true
         ]);
@@ -229,6 +237,16 @@ class QuizController extends Controller
             $filename = time() . '.' . $extension;
             $file->move('images/question', $filename);
         }
+
+        if ($request->file('video'))
+        {
+            $destination = 'storage/' . $question->video;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+            $path = $request->file('video')->store('videos', 'public');
+        }
+
         $question->update([
             'name' => $request->name,
             'question_type_id' => $request->type,
@@ -236,8 +254,24 @@ class QuizController extends Controller
             'categorie_id' => $request->categorie,
             'is_active' => true,
             'image' => $request->hasFile('image') ? $filename : $question->image,
+            'video' => $request->hasFile('video') ? $path : $question->video,
         ]);
         return redirect()->back()->with('status', 'Question Has Been updated');
+    }
+
+    public function deleteQuizVideo (string $id)
+    {
+        $question = Question::findOrFail($id);
+
+        $destination = 'storage/' . $question->video;
+        if (File::exists($destination)) {
+            File::delete($destination);
+        }
+
+        $question->update([
+            'video' => null
+        ]);
+        return redirect()->back()->with('status', 'Video has Been deleted');
     }
 
     public function questionsShow(string $id)
@@ -262,6 +296,7 @@ class QuizController extends Controller
                 'name' => $question->question?->name,
                 'category' => $question->question?->questions_categorization?->name ?? "xxx",
                 'image' => $question->question?->image,
+                'video' => $question->question?->video,
                 'type' => $question->question?->question_type?->name,
                 'error' => $question->question?->error,
                 'options' => $question->question?->options,

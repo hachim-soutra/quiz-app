@@ -228,6 +228,7 @@
             /* animation: rotate 5s infinite linear, colorChange 2s infinite linear; */
         }
     </style>
+    @yield('style')
 </head>
 
 <body>

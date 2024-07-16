@@ -1,5 +1,14 @@
 @extends('layouts.master')
 
+@section('style')
+    <style>
+        .video {
+            object-fit: cover;
+            height: 391px;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="d-flex justify-content-center row w-100 m-0">
         <img src="{{ asset('images/' . $answer->quiz->image) }}" alt="" width="100%" class="cover border-bottom p-0">
@@ -96,8 +105,8 @@
                                 font-size: 1.3rem;
                                 color: white;
                             ">
-                                    <button class="btn btn-outline-success countdown-btn d-flex align-items-center " disabled
-                                        style="gap: 5px;">
+                                    <button class="btn btn-outline-success countdown-btn d-flex align-items-center "
+                                        disabled style="gap: 5px;">
                                         <i class="fa fa-regular fa-clock"></i>
                                         <span class="countdown fw-bold"></span>
                                     </button>
@@ -139,6 +148,13 @@
                                         width="40%" height="auto" class="mt-3 rounded" alt="img">
                                     <br>
                                     <br>
+                                @endif
+
+                                @if ($answer->getQuestion($id)['video'])
+                                    <video class="w-100 video my-3" controls>
+                                        <source src="{{ asset('storage/' . $answer->getQuestion($id)['video']) }}"
+                                            type="video/mp4">
+                                    </video>
                                 @endif
                             </div>
 
