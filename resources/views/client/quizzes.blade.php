@@ -91,10 +91,14 @@
                                     @if (
                                         $quiz->payement_type == App\Enum\PayementTypeEnum::PAYED->value &&
                                             !($quiz->product?->orders?->count() || ($quiz->promos && $quiz->promoIsPayed($orders_promos))))
-                                        <a href="{{ route('checkout', ['price_token' => $quiz->price_token, 'product_id' => $quiz->product->id, 'product_type' => $quiz->product->productable_type, 'query' => 'null']) }}"
-                                            target="_blank" class="btn d-block button-access button-color">
-                                            Buy now
-                                        </a>
+                                        @if ($quiz->product)
+                                            <a href="{{ route('checkout', ['price_token' => $quiz->price_token, 'product_id' => $quiz->product->id, 'product_type' => $quiz->product->productable_type, 'query' => 'null']) }}"
+                                                target="_blank" class="btn d-block button-access button-color">
+                                                Buy now
+                                            </a>
+                                        @else
+                                            {{ $quiz }}
+                                        @endif
                                     @else
                                         <a href="{{ route('client.quiz', ['slug' => $quiz->slug]) }}" target="_blank"
                                             class="btn d-block button-access button-color">
