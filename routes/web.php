@@ -162,6 +162,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     Route::resource("folder", FolderController::class);
     Route::get('/orders', [QuizController::class, 'payments'])->name('orders');
     Route::resource("promo", PromoController::class);
+    Route::get("/promo/edit/{promo}", [PromoController::class, 'edit'])->name('promo.edit');
 });
 
 Route::middleware(['auth', 'client'])->group(function () {

@@ -67,6 +67,12 @@ class PromoController extends Controller
         return redirect()->back()->with('status', 'Promotion created successfully');
     }
 
+    public function edit(Promo $promo)
+    {
+        $quiz = Quiz::where("payement_type", PayementTypeEnum::PAYED)->get();
+        return view('admin.promos.update', compact('promo','quiz'));
+    }
+
     public function update(PromoRequest $request, Promo $promo)
     {
         $quizzes = $request->select_quizzes;
