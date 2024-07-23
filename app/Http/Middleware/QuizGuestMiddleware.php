@@ -21,12 +21,14 @@ class QuizGuestMiddleware
         $quiz = Quiz::where('slug', $request->route()->parameter('slug'))->firstOrFail();
         if ($quiz->payement_type == PayementTypeEnum::PAYED->value) {
             // case 1 : not auth redirect to login
-            if (!auth()->check() || auth()->user()->userable_type != User::CLIENT_TYPE) {
+            if (!auth()->check()) {
                 return redirect()->route('login');
             }
-            // case 2 : quiz not purchased redirect to payment page
-            if (!$quiz->isPurchasedBy(auth()->user()->id)) {
-                return redirect()->route('checkout', ['price_token' => $quiz->price_token, 'product_id' => $quiz->product->id, 'product_type' => $quiz->product->productable_type, 'query' => 'null']);
+            if (auth()->user()->userable_type == User::CLIENT_TYPE) {
+                // case 2 : quiz not purchased redirect to payment page
+                if (!$quiz->isPurchasedBy(auth()->user()->id)) {
+                    return redirect()->route('checkout', ['price_token' => $quiz->price_token, 'product_id' => $quiz->product->id, 'product_type' => $quiz->product->productable_type, 'query' => 'null']);
+                }
             }
         }
         return $next($request);

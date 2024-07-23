@@ -64,11 +64,13 @@
                                                 <td class="text-capitalize">{{ count($promo->quizzes) }}</td>
                                                 <td>{{ $promo->price }}</td>
                                                 <td>
-                                                    @if ($promo->active)
-                                                        <span class="badge badge-success">Active</span>
-                                                    @else
-                                                        <span class="badge badge-danger">Not active</span>
-                                                    @endif
+                                                    <h4>
+                                                        @if ($promo->active)
+                                                            <span class="badge badge-pill px-3 badge-success">Active</span>
+                                                        @else
+                                                            <span class="badge badge-pill px-3 badge-danger">Not active</span>
+                                                        @endif
+                                                    </h4>
                                                 </td>
                                                 <td>
                                                     <a data-toggle="modal" data-target="#modal-update-{{ $promo->id }}"
