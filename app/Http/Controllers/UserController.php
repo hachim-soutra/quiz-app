@@ -126,7 +126,6 @@ class UserController extends Controller
                 $xx->produwhereIn('id', [39]);
             })->get();
 
-            dd($quizzes);
         }
         // get all quizzes free, payed and paid
         else if (!$request->query("type")) {

@@ -88,23 +88,20 @@
                                         </div>
                                     @endif
 
-                                    @if ($quiz->payement_type == App\Enum\PayementTypeEnum::FREE->value)
+                                    @if (
+                                        $quiz->payement_type == App\Enum\PayementTypeEnum::PAYED->value &&
+                                            !($quiz->product?->orders?->count() || ($quiz->promos && $quiz->promoIsPayed($orders_promos))))
+                                        <a href="{{ route('checkout', ['price_token' => $quiz->price_token, 'product_id' => $quiz->product->id, 'product_type' => $quiz->product->productable_type, 'query' => 'null']) }}"
+                                            target="_blank" class="btn d-block button-access button-color">
+                                            Buy now
+                                        </a>
+                                    @else
                                         <a href="{{ route('client.quiz', ['slug' => $quiz->slug]) }}" target="_blank"
-                                            class="btn d-block button-access button-color">Access now</a>
-                                    @elseif($quiz->payement_type == App\Enum\PayementTypeEnum::PAYED->value)
-                                        @if ($quiz->product?->orders?->count())
-                                            <a href="{{ route('client.quiz', ['slug' => $quiz->slug]) }}" target="_blank"
-                                                class="btn d-block  button-access button-color">Access
-                                                now</a>
-                                        @elseif($quiz->promos && $quiz->promoIsPayed($orders_promos))
-                                            <a href="{{ route('client.quiz', ['slug' => $quiz->slug]) }}" target="_blank"
-                                                class="btn d-block  button-access button-color">Access
-                                                now</a>
-                                        @else
-                                            <a @if ($quiz->price_token) href="{{ route('checkout', ['price_token' => $quiz->price_token, 'product_id' => $quiz->product->id, 'product_type' => $quiz->product->productable_type, 'query' => 'null']) }}" target="_blank" @endif
-                                                class="btn d-block button-access button-color">Buy now</a>
-                                        @endif
+                                            class="btn d-block button-access button-color">
+                                            Access now
+                                        </a>
                                     @endif
+
                                 </div>
                                 <div class="overlay justify-content-start align-items-start px-3 pt-3">
                                     <div class="xx">
