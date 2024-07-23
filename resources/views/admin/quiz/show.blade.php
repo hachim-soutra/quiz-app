@@ -58,20 +58,14 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Comment if wrong answer</label>
                                                 <input type="text" name="error" class="form-control "
                                                     placeholder="Enter ...">
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>upload image</label>
-                                                <input name="image" type="file" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>category</label>
                                                 <select name="categorie" class="form-control">
@@ -81,6 +75,20 @@
                                                             {{ $categorie->name }}</option>
                                                     @endforeach
                                                 </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>upload image</label>
+                                                <input name="image" type="file" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Upload Video</label>
+                                                <input type="file" name="video" class="form-control">
                                             </div>
                                         </div>
                                     </div>
@@ -148,7 +156,6 @@
                             <tbody>
                                 @foreach ($quiz->questions()->orderBy('order')->get() as $item)
                                     <tr>
-
                                         <td title="{{ $item->question->name }}">{!! Str::limit($item->question->name, 70, '...') !!}</td>
                                         <td>{{ $item->question->question_type?->name }}</td>
                                         <td>{{ $item->question->questions_categorization ? $item->question->questions_categorization->name : 'uncategorized' }}
@@ -161,25 +168,47 @@
                                             </a>
                                         </td>
                                         <td title="{{ $item->question->error }}">{!! Str::limit($item->question->error, 70, '...') !!}</td>
-                                        <td class="text-nowrap">
+                                        <td class="text-nowrap text-center">
 
-                                            <form method="POST"
-                                                action="{{ route('quiz.duplicate-question', ['id' => $quiz->id, 'qst_id' => $item->question->id]) }}"
-                                                class="d-inline-block">
-                                                @csrf
-                                                <button class="btn btn-secondary">
-                                                    <i class="fas fa-copy"></i>
-                                                    Duplicate
+                                            <div class="dropdown">
+                                                <button class="btn btn-outline-info btn-block dropdown-toggle" type="button"
+                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    Actions
                                                 </button>
-                                            </form>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a href="{{ asset('storage/'. $item->video)}}"  target="_blank"
+                                                        class="dropdown-item" ><i
+                                                            class="fas fa-eye"></i>Show video</a>
 
-                                            <a data-toggle="modal" data-target="#modal-update-{{ $item->id }}"
-                                                class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
+                                                    <a data-toggle="modal"
+                                                        data-target="#modal-update-{{ $item->id }}"
+                                                        class="dropdown-item"><i
+                                                            class="fas fa-edit"></i>Update</a>
 
-                                            <a data-toggle="modal" data-target="#modal-delete-{{ $item->id }}"
-                                                class="btn btn-danger">
-                                                <i class="fas fa-trash"></i> Delete
-                                            </a>
+                                                    <a data-toggle="modal"
+                                                        data-target="#modal-delete-{{ $item->id }}"
+                                                        class="dropdown-item btn btn-danger">
+                                                        <i class="fas fa-trash"></i> Delete question
+                                                    </a>
+
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('quiz.duplicate-question', ['id' => $quiz->id, 'qst_id' => $item->question->id]) }}">
+                                                        <i class="fas fa-copy"></i>
+                                                        Duplicate
+                                                    </a>
+
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('quiz.delete-question-video', ['id' => $item->question->id]) }}">
+                                                        <i class="fas fa-trash"></i>
+                                                        Delete video
+                                                    </a>
+
+                                                </div>
+                                            </div>
+
+
+
 
                                             @if ($item->question->image)
                                                 <form method="POST"
@@ -275,6 +304,12 @@
                                                                         <img src="{{ asset('images/question/' . $item->image) }}"
                                                                             width="150" class="mt-3 rounded"
                                                                             alt="imgg">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label>upload video</label>
+                                                                        <input type="file" class="form-control"
+                                                                            name="video">
                                                                     </div>
 
                                                                     <div class="form-group">
