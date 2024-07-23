@@ -1,5 +1,13 @@
 @extends('layouts.app')
 
+@section('style')
+    <style>
+        .dropdown-menu {
+            transform: translate3d(-50%, 24px, 0px) !important;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="container-fluid">
 
@@ -168,58 +176,37 @@
                                             </a>
                                         </td>
                                         <td title="{{ $item->question->error }}">{!! Str::limit($item->question->error, 70, '...') !!}</td>
-                                        <td class="text-nowrap text-center">
-
-                                            <div class="dropdown">
-                                                <button class="btn btn-outline-info btn-block dropdown-toggle" type="button"
-                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="false">
-                                                    Actions
-                                                </button>
+                                        <td colspan="3" class="text-nowrap text-center">
+                                            <div class="dropdown dropdown-submenu">
+                                                <span class="dropdown-toggle" type="button" id="dropdownMenuButton"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
+                                                </span>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a href="{{ asset('storage/'. $item->video)}}"  target="_blank"
-                                                        class="dropdown-item" ><i
-                                                            class="fas fa-eye"></i>Show video</a>
-
                                                     <a data-toggle="modal"
                                                         data-target="#modal-update-{{ $item->id }}"
-                                                        class="dropdown-item"><i
-                                                            class="fas fa-edit"></i>Update</a>
-
+                                                        class="dropdown-item"><i class="fas fa-edit"></i> Update</a>
                                                     <a data-toggle="modal"
                                                         data-target="#modal-delete-{{ $item->id }}"
                                                         class="dropdown-item btn btn-danger">
                                                         <i class="fas fa-trash"></i> Delete question
                                                     </a>
-
                                                     <a class="dropdown-item"
                                                         href="{{ route('quiz.duplicate-question', ['id' => $quiz->id, 'qst_id' => $item->question->id]) }}">
-                                                        <i class="fas fa-copy"></i>
-                                                        Duplicate
+                                                        <i class="fas fa-copy"></i> Duplicate
                                                     </a>
-
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('quiz.delete-question-video', ['id' => $item->question->id]) }}">
-                                                        <i class="fas fa-trash"></i>
-                                                        Delete video
-                                                    </a>
+                                                    @if ($item->question->video)
+                                                        <a href="{{ asset('storage/' . $item->video) }}" target="_blank"
+                                                            class="dropdown-item"><i class="fas fa-eye"></i> Show video</a>
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('quiz.delete-question-video', ['id' => $item->question->id]) }}">
+                                                            <i class="fas fa-trash"></i>
+                                                            Delete video
+                                                        </a>
+                                                    @endif
 
                                                 </div>
                                             </div>
-
-
-
-
-                                            @if ($item->question->image)
-                                                <form method="POST"
-                                                    action="{{ route('quiz.remove-question-img', ['id' => $item->question->id]) }}"
-                                                    class="d-inline-block">
-                                                    @csrf
-                                                    <button class="btn btn-secondary">
-                                                        Remove image
-                                                    </button>
-                                                </form>
-                                            @endif
                                         </td>
                                         <div class="modal fade" id="modal-delete-{{ $item->id }}" aria-modal="true"
                                             role="dialog">
