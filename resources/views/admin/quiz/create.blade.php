@@ -68,7 +68,7 @@
                                                     class="form-control text-capitalize @error('payement_type') is-invalid @enderror">
                                                     @foreach (App\Enum\PayementTypeEnum::cases() as $payementType)
                                                         <option value="{{ $payementType }}"
-                                                            {{ old('payement_type') === $payementType ? 'selected' : '' }}>
+                                                            {{ old('payement_type') === $payementType->value ? 'selected' : '' }}>
                                                             {{ $payementType }}</option>
                                                     @endforeach
                                                 </select>
