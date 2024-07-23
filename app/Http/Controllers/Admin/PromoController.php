@@ -28,6 +28,12 @@ class PromoController extends Controller
         return view('admin.promos.index', compact('promos', 'quiz'));
     }
 
+    public function create()
+    {
+        $quiz = Quiz::where("payement_type", PayementTypeEnum::PAYED)->get();
+        return view('admin.promos.create', compact('quiz'));
+    }
+
     public function store(PromoRequest $request)
     {
         $quizzes = $request->select_quizzes;
