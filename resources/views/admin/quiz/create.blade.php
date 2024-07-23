@@ -68,7 +68,7 @@
                                                     class="form-control text-capitalize @error('payement_type') is-invalid @enderror">
                                                     @foreach (App\Enum\PayementTypeEnum::cases() as $payementType)
                                                         <option value="{{ $payementType }}"
-                                                            {{ old('payement_type') ? 'selected' : $payementType->value }}>
+                                                            {{ old('payement_type') === $payementType->value ? 'selected' : '' }}>
                                                             {{ $payementType }}</option>
                                                     @endforeach
                                                 </select>
@@ -114,8 +114,7 @@
                                         <div class="col-sm-6  quiz_time_group">
                                             <div class="form-group">
                                                 <label for="name">Select timer</label>
-                                                <input type="time" name="quiz_time" 
-                                                    value="{{ old('quiz_time') }}"
+                                                <input type="time" name="quiz_time" value="{{ old('quiz_time') }}"
                                                     class="form-control @error('quiz_time') is-invalid @enderror" />
                                                 <small>format: hh:mm</small>
                                                 @error('quiz_time')
@@ -150,8 +149,7 @@
                                         <div class="col-sm-6 quiz_break_grp">
                                             <div class="form-group">
                                                 <label for="">Define break</label>
-                                                <input type="time" name="break_time"
-                                                    value="{{ old('break_time') }}"
+                                                <input type="time" name="break_time" value="{{ old('break_time') }}"
                                                     class="form-control @error('break_time') is-invalid @enderror">
                                                 <small>format: hh:mm</small>
                                                 @error('break_time')
