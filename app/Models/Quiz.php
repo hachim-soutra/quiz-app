@@ -25,6 +25,11 @@ class Quiz extends ModelsQuiz
         return $this->belongsToMany(Promo::class, 'promo_quiz');
     }
 
+    public function formations()
+    {
+        return $this->belongsToMany(Formation::class, 'formation_quiz');
+    }
+
     public function promoIsPayed($orders_promos)
     {
         return $this->promos()->whereHas('product', function ($q) use ($orders_promos) {

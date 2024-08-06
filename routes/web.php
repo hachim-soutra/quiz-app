@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\QuizController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\PromoController;
+use App\Http\Controllers\FormationController;
 use App\Http\Controllers\UserController;
 use App\Models\Answer;
 use App\Models\Settings;
@@ -163,6 +164,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     Route::get('/orders', [QuizController::class, 'payments'])->name('orders');
     Route::resource("promo", PromoController::class);
     Route::get("/promo/edit/{promo}", [PromoController::class, 'edit'])->name('promo.edit');
+    Route::resource("formation", FormationController::class);
 });
 
 Route::middleware(['auth', 'client'])->group(function () {
