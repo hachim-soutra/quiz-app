@@ -22,7 +22,6 @@ use App\Models\QuizQuestion;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Laravel\Cashier\Cashier;
 use Str;
 
@@ -175,13 +174,19 @@ class QuizController extends Controller
             $file->move('images/question', $filename);
         }
 
+        if ($request->file('video') == null) {
+            $path = null;
+        } else {
+            $path = $request->file('video')->store('videos', 'public');
+        }
+
         $quiz = Quiz::whereId($id)->firstOrFail();
         $question = Question::create([
             'name' => $request->name,
             'question_type_id' => $request->type,
             'error' => $request->error,
             'image' => $request->hasFile('image') ? $filename : null,
-            'video' => 'videos/'. $request->video,
+            'video' => $path,
             'categorie_id' => $request->categorie,
             'is_active' => true
         ]);
@@ -233,6 +238,15 @@ class QuizController extends Controller
             $file->move('images/question', $filename);
         }
 
+        if ($request->file('video'))
+        {
+            $destination = 'storage/' . $question->video;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+            $path = $request->file('video')->store('videos', 'public');
+        }
+
         $question->update([
             'name' => $request->name,
             'question_type_id' => $request->type,
@@ -240,7 +254,7 @@ class QuizController extends Controller
             'categorie_id' => $request->categorie,
             'is_active' => true,
             'image' => $request->hasFile('image') ? $filename : $question->image,
-            'video' => 'videos/'. $request->video,
+            'video' => $request->hasFile('video') ? $path : $question->video,
         ]);
         return redirect()->back()->with('status', 'Question Has Been updated');
     }

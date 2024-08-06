@@ -96,13 +96,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Upload Video</label>
-                                                <select name="video" class="form-control" required>
-                                                    <option value="" disabled selected></option>
-                                                    @foreach (Storage::AllFiles('public/videos') as $file)
-                                                        <option value="{{ File::basename($file) }}">{{ File::name($file) }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
+                                                <input type="file" name="video" class="form-control">
                                             </div>
                                         </div>
                                     </div>
@@ -202,9 +196,8 @@
                                                         <i class="fas fa-copy"></i> Duplicate
                                                     </a>
                                                     @if ($item->question->video)
-                                                        <a href="{{ asset('storage/' . $item->question->video) }}" target="_blank"
-                                                            class="dropdown-item"><i class="fas fa-eye"></i> Show
-                                                            video</a>
+                                                        <a href="{{ asset('storage/' . $item->video) }}" target="_blank"
+                                                            class="dropdown-item"><i class="fas fa-eye"></i> Show video</a>
                                                         <a class="dropdown-item"
                                                             href="{{ route('quiz.delete-question-video', ['id' => $item->question->id]) }}">
                                                             <i class="fas fa-trash"></i>
@@ -302,14 +295,8 @@
 
                                                                     <div class="form-group">
                                                                         <label>upload video</label>
-                                                                        <select name="video" class="form-control" required>
-                                                                            <option value="" disabled selected></option>
-                                                                            @foreach (Storage::AllFiles('public/videos') as $file)
-                                                                                <option value="{{ File::basename($file) }}" {{ $item->question->video == 'videos/' . File::basename($file) ? 'selected' : '' }}>
-                                                                                    {{ File::name($file) }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        </select>
+                                                                        <input type="file" class="form-control"
+                                                                            name="video">
                                                                     </div>
 
                                                                     <div class="form-group">
