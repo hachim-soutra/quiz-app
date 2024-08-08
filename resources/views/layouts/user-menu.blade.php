@@ -18,6 +18,12 @@
     </a>
 </li>
 <li class="nav-item">
+    <a href="{{ route('client.formations') }}" class="nav-link text-dark px-3 {{ Request::is('formations') ? 'active' : '' }}">
+        <i class="fa-solid fa-graduation-cap" style="margin-right: 2px;"></i>
+        <p>Formations</p>
+    </a>
+</li>
+<li class="nav-item">
     <a href="{{ route('answers') }}" class="nav-link text-dark px-2 {{ Request::is('answers') ? 'active' : '' }}">
         <i class="nav-icon fas fa-gift"></i>
         <p>Answers</p>
@@ -29,4 +35,3 @@
         <p>Profile</p>
     </a>
 </li>
-

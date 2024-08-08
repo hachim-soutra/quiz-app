@@ -54,3 +54,9 @@
         <p>Promos</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('formation.index') }}" class="nav-link text-dark {{ Request::is('formation') ? 'active' : '' }}">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <p>Formations</p>
+    </a>
+</li>
