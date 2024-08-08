@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enum\PayementTypeEnum;
 use App\Models\Answer;
+use App\Models\Formation;
 use App\Models\Order;
 use App\Models\Promo;
 use App\Models\Product;
@@ -52,6 +53,12 @@ class UserController extends Controller
             $query->where('client_id', auth()->id())->where('status', 'paid');
         }])->get();
         return view('client.promos', ['promos' => $promos]);
+    }
+
+    public function formations()
+    {
+        $formations = Formation::all();
+        return view('client.formations', ['formations' => $formations]);
     }
 
     public function settings()

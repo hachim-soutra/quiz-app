@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+;
 
 use App\Enum\PayementTypeEnum;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\FormationRequest;
 use App\Models\Formation;
 use App\Models\Quiz;
