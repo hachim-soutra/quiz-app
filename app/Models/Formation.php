@@ -11,9 +11,32 @@ class Formation extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $indexedQuizzes;
 
     public function quizzes()
     {
         return $this->belongsToMany(Quiz::class);
     }
+
+    public function getQuizzesByIndex()
+    {
+
+        $this->indexedQuizzes = $this->quizzes->map(function ($quiz, $index) {
+            return [
+                'index' => $index,
+                'quiz' => $quiz,
+            ];
+        });
+
+        return $this->indexedQuizzes;
+    }
+
+    public function getQuiz($id)
+    {
+        $quiz = $this->indexedQuizzes->filter(function ($item) use ($id) {
+            return (string) $item['quiz']->id === (string) $id;
+        })->first();
+        return $quiz;
+    }
+
 }

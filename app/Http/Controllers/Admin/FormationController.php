@@ -15,7 +15,7 @@ class FormationController extends Controller
 {
     function index()
     {
-        $formations = Formation::all();
+        $formations = Formation::with('quizzes')->get();
         return view('admin.formations.index', [ 'formations' => $formations ]);
     }
 
@@ -38,6 +38,7 @@ class FormationController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'image' => $request->hasFile('image') ? $filename : "blank.png",
+            'video' => 'videos/'. $request->video,
         ]);
 
 
@@ -45,6 +46,7 @@ class FormationController extends Controller
 
         return redirect()->back()->with('status', 'formationtion created successfully');
     }
+
 
     public function edit(Formation $formation)
     {
@@ -71,6 +73,7 @@ class FormationController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'image' => $request->hasFile('image') ? $filename : $formation->image,
+            'video' => 'videos/'. $request->video,
         ]);
 
         $formation->quizzes()->sync($quizzes);
@@ -84,5 +87,35 @@ class FormationController extends Controller
         $formation->quizzes()->detach();
         $formation->delete();
         return  redirect()->back()->with('status', 'Formation deleted successfully');
+    }
+
+
+    public function show(Formation $formation)
+    {
+        return view('admin.formations.show', ['formation' => $formation]);
+    }
+
+    // show first quiz in the collection
+    public function showQuiz($id)
+    {
+        $formation = Formation::with('quizzes')->findOrFail($id);
+        $quiz = $formation->getQuizzesByIndex()->first();
+        session(['formation' => $formation]);
+        return redirect()->route('quiz', ['slug' => $quiz['quiz']->slug]);
+    }
+
+    public function showNextQuiz($id)
+    {
+        $formation = session('formation');
+        $previousQuiz = $formation->getQuiz($id);
+        $nextQuiz = $formation->getQuizzesByIndex()->sortBy('index')->filter(function ($item) use ($previousQuiz) {
+            return $item['index'] > $previousQuiz['index'];
+        })
+        ->first();
+        if ($nextQuiz)
+        {
+            return redirect()->route('quiz', ['slug' => $nextQuiz['quiz']->slug]);
+        }
+            return redirect()->route('formation.index');
     }
 }

@@ -227,6 +227,13 @@
             /* border-radius: 50%; */
             /* animation: rotate 5s infinite linear, colorChange 2s infinite linear; */
         }
+
+        .next-button
+    {
+        background-color: #cfe2f3;
+        width: 12%;
+        font-weight: 600;
+    }
     </style>
     @yield('style')
 </head>

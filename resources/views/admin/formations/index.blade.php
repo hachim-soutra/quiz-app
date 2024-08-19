@@ -35,7 +35,8 @@
                                     Formations
                                 </div>
                                 <div class="card-tools">
-                                    <a id="btn-add" type="button" class="btn btn-success" href="{{ route('formation.create') }}">Add</a>
+                                    <a id="btn-add" type="button" class="btn btn-success"
+                                        href="{{ route('formation.create') }}">Add</a>
                                 </div>
                             </div>
                             <div class="card-body table-responsive px-2">
@@ -58,6 +59,19 @@
                                                 <td class="text-capitalize">{!! Str::limit($formation->description, 70, '...') !!}</td>
                                                 <td class="text-capitalize">{{ count($formation->quizzes) }}</td>
                                                 <td>
+                                                    @if ($formation->video)
+                                                        <a target="_blank"
+                                                            href="{{ route('formation.show', ['formation' => $formation ]) }}"
+                                                            class="btn btn-success">
+                                                            <i class="fas fa-eye" aria-hidden="true"></i> show</a>
+                                                    @else
+                                                        <a target="_blank"
+                                                            href="{{ route('formation.quiz', ['id' => $formation->id ]) }}"
+                                                            class="btn btn-success">
+                                                            <i class="fas fa-eye" aria-hidden="true"></i> show</a>
+                                                    @endif
+
+
                                                     <a href="{{ route('formation.edit', ['formation' => $formation]) }}"
                                                         class="btn btn-primary">
                                                         <i class="fas fa-edit"></i> Update</a>

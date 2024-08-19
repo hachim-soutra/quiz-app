@@ -73,7 +73,7 @@
                                                     </h4>
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('promo.edit', ['promo' => $promo]) }}"
+                                                    <a href="{{ route('promo.show-edit', ['promo' => $promo]) }}"
                                                         class="btn btn-primary">
                                                         <i class="fas fa-edit"></i> Update</a>
 

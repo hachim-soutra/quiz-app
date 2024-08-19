@@ -54,6 +54,11 @@
                             </a>
                         </div>
                     @endif
+                    @if($answer->quiz->formations)
+                    <a href="{{ auth()->check() && auth()->user()->userable_type == \App\Models\User::CLIENT_TYPE ? route('client.formation.next-quiz', ['id' => $answer->quiz->id]) : route('formation.next-quiz', ['id' => $answer->quiz->id]) }}" class="btn float-right next-button mt-2 ">
+                        Next <i class="fa-solid fa-arrow-right ml-1" aria-hidden="true"></i>
+                        </a>
+                    @endif
                 </div>
 
 

@@ -32,7 +32,11 @@
                         </div>
                         <div class="card-body d-flex flex-column justify-content-between align-items-center">
                             <h5 class="card-title text-center">{{ Str::limit($formation->title, 100, '...') }}</h5>
-                            <a href="{{ route('client.formations') }}" class="btn d-block button-access button-color">Access now</a>
+                            @if($formation->video)
+                            <a href="{{ route('client.formation.show', ['formation' => $formation ]) }}" class="btn d-block button-access button-color">Access now</a>
+                            @else
+                            <a href="{{ route('client.formation.quiz', ['id' => $formation->id ]) }}" class="btn d-block button-access button-color">Access now</a>
+                            @endif
                         </div>
                         <div class="overlay justify-content-start align-items-start px-3 pt-3">
                             <div class="xx">

@@ -62,7 +62,7 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="">Image</label>
                                                 <input type="file" name="image" id="imageInput"
@@ -73,6 +73,17 @@
                                                 @error('image')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="">Video</label>
+                                                <select name="video" class="form-control" required>
+                                                    <option value="" disabled selected></option>
+                                                    @foreach (Storage::allFiles('public/videos') as $file)
+                                                        <option value="{{ File::basename($file) }}">{{ File::name($file) }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-sm-12">

@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\QuizController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\PromoController;
-use App\Http\Controllers\FormationController;
+use App\Http\Controllers\Admin\FormationController;
 use App\Http\Controllers\UserController;
 use App\Models\Answer;
 use App\Models\Settings;
@@ -164,8 +164,10 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     Route::resource("folder", FolderController::class);
     Route::get('/orders', [QuizController::class, 'payments'])->name('orders');
     Route::resource("promo", PromoController::class);
-    Route::get("/promo/edit/{promo}", [PromoController::class, 'edit'])->name('promo.edit');
-    Route::resource("formation", AdminFormationController::class);
+    Route::get("/promo/edit/{promo}", [PromoController::class, 'edit'])->name('promo.show-edit');
+    Route::resource("formation", FormationController::class);
+    Route::get('/formation/quiz/{id}', [FormationController::class, 'showQuiz'])->name('formation.quiz');
+    Route::get('/formation/next-quiz/{id}', [FormationController::class, 'showNextQuiz'])->name('formation.next-quiz');
 });
 
 Route::middleware(['auth', 'client'])->group(function () {
@@ -180,6 +182,10 @@ Route::middleware(['auth', 'client'])->group(function () {
         Route::post('/answer/destroy', [UserController::class, 'destroy'])->name('client.answer.destroy');
         Route::get('/promos', [UserController::class, 'promos'])->name('client.promos');
         Route::get('/formations', [UserController::class, 'formations'])->name('client.formations');
+        Route::get('/formation/{formation}', [UserController::class, 'show'])->name('client.formation.show');
+        Route::get('/formation/quiz/{id}', [UserController::class, 'showQuiz'])->name('client.formation.quiz');
+        Route::get('/formation/next-quiz/{id}', [UserController::class, 'showNextQuiz'])->name('client.formation.next-quiz');
+
         //info: checkout routes
         Route::get('/checkout/{price_token}/{product_id}/{product_type}/{query}', [UserController::class, 'checkout'])->name('checkout');
         Route::get('/checkout-success', [UserController::class, 'checkoutSuccess'])->name('checkout-success');
