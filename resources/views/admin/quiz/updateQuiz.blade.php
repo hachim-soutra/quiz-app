@@ -114,13 +114,26 @@
                                                 <textarea class="form-control" name="description" rows="3">{{ old('description') ? old('description') : $item->description }}</textarea>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-6">
 
                                             <div class="form-group">
                                                 <label>Upload image</label>
                                                 <input type="file" class="form-control" name="image">
                                                 <img src="{{ asset('images/' . $item->image) }}" width="150"
                                                     alt="img" class="mt-3 rounded">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="">Video</label>
+                                                <select name="video" class="form-control" required>
+                                                    <option value="" disabled selected></option>
+                                                    @foreach (Storage::allFiles('public/videos') as $file)
+                                                        <option
+                                                            value="{{ File::basename($file) }}"{{ $item->video == 'videos/' . File::basename($file) ? 'selected' : '' }}>
+                                                            {{ File::name($file) }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-sm-6 quiz_time_group">

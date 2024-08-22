@@ -25,11 +25,15 @@ class QuestionController extends Controller
         return redirect()->back()->with('status', 'the order questions have been updated');
     }
 
-    public function show($token, $id, $pass = null)
+    public function show($token, $id, $pass = null, $show_video = null)
     {
         $answer = Answer::with("quiz")->whereToken($token)->firstOrFail();
         if ($answer->status) {
             return redirect()->route('answer', ['token' => $answer->token]);
+        }
+        if ($show_video && $answer->quiz->video)
+        {
+            return view('quiz_video')->with(["answer" => $answer, "id" => $id]);
         }
         $break = false;
         $question = $answer->getQuestion($id);

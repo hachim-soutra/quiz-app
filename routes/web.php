@@ -119,7 +119,7 @@ Route::middleware('check.answer')->group(function () {
     Route::post('/question/ignore/{token}/{id}', [App\Http\Controllers\Admin\QuestionController::class, 'ignore'])->name('question.ignore');
     Route::post('/question/review/{token}/{id}', [App\Http\Controllers\Admin\QuestionController::class, 'review'])->name('question.review');
     Route::post('/question/prev/{token}/{id}', [App\Http\Controllers\Admin\QuestionController::class, 'prev'])->name('question.prev');
-    Route::get('/questions/{token}/{id}/{pass?}', [App\Http\Controllers\Admin\QuestionController::class, 'show'])->name('questions');
+    Route::get('/questions/{token}/{id}/{pass?}/{show_video?}', [App\Http\Controllers\Admin\QuestionController::class, 'show'])->name('questions');
     Route::post('/questions/next/{token}/{question_id}', [App\Http\Controllers\Admin\QuestionController::class, 'next'])->name('quiz.next');
 });
 
@@ -152,6 +152,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     Route::post('/quiz/remove-question-image/{id}', [QuizController::class, 'removeQuestionImage'])->name('quiz.remove-question-img');
     Route::post('/quiz/delete-question/{id}', [QuizController::class, 'removeQuestion'])->name('quiz.delete-question');
     Route::post('/quiz/delete-all/{id}', [QuizController::class, 'removeAllQuestions'])->name('quiz.delete-all');
+    Route::get('/quiz/video/{quiz}', [QuizController::class, 'showVideoQuiz'])->name('quiz.video');
 
     Route::post('/quiz/add-option/{id}', [QuizController::class, 'addOption'])->name('quiz.add-option');
     Route::put('/quiz/update-option/{id}', [QuizController::class, 'updateOption'])->name('quiz.update-option');

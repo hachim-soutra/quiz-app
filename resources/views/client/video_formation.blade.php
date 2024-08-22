@@ -6,6 +6,12 @@
         object-fit: cover;
         width: 100%;
     }
+    .next-button
+    {
+        background-color: #cfe2f3;
+        width: 12%;
+        font-weight: 600;
+    }
 
 </style>
 @endsection
@@ -32,18 +38,21 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
-                                <div class="card-title">
-                                    {{ $formation->title }}
-                                </div>
-                            </div>
-                            <div class="card-body table-responsive px-2">
+                            <div class="card-body">
                                 <video height="500" controls>
                                     <source src="{{ asset('storage/' . $formation->video) }}" type="video/mp4">
                                 </video>
+                                <div class="d-flex flex-column">
+                                    <h3 class="card-title mt-4 text-uppercase" style="text-decoration: underline;">
+                                        {{ $formation->title }}
+                                    </h3>
+                                    <div class="mb-3">
+                                        {{ $formation->description }}
+                                    </div>
+                                </div>
                                 <div>
                                     <a href="{{ route('client.formation.quiz', ['id' => $formation->id]) }}" class="btn float-right next-button mt-2 ">
-                                        Next <i class="fa-solid fa-arrow-right ml-1" aria-hidden="true"></i>
+                                        Enroll <i class="fa-solid fa-arrow-right ml-1" aria-hidden="true"></i>
                                         </a>
                                 </div>
                             </div>

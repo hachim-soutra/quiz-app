@@ -47,18 +47,20 @@
                                 <i class="fa-solid fa-print"></i>
                                 Export Pdf
                             </button>
-                            <a href="{{ route('client.home') }}" class="btn text-white float-right me-3 btn-pdf"
+                            <a href="{{ route('client.home') }}" class="btn text-white float-right btn-pdf"
                                 style="background-color: #343b7c; float: right;">
                                 <i class="fa-solid fa-share"></i>
                                 Go to dashboard
                             </a>
-                        </div>
-                    @endif
-                    @if($answer->quiz->formations)
-                    <a href="{{ auth()->check() && auth()->user()->userable_type == \App\Models\User::CLIENT_TYPE ? route('client.formation.next-quiz', ['id' => $answer->quiz->id]) : route('formation.next-quiz', ['id' => $answer->quiz->id]) }}" class="btn float-right next-button mt-2 ">
+                            @if($answer->quiz->formations)
+                    <a href="{{ auth()->check() && auth()->user()->userable_type == \App\Models\User::CLIENT_TYPE ? route('client.formation.next-quiz', ['id' => $answer->quiz->id]) : route('formation.next-quiz', ['id' => $answer->quiz->id]) }}" class="btn text-white float-right me-3 btn-pdf "
+                        style="background-color: #343b7c; float: right;">
                         Next <i class="fa-solid fa-arrow-right ml-1" aria-hidden="true"></i>
                         </a>
                     @endif
+                        </div>
+                    @endif
+
                 </div>
 
 

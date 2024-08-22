@@ -46,7 +46,6 @@
                                             <th>Title</th>
                                             <th>Description</th>
                                             <th>Quizzes</th>
-                                            <th>Image</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>

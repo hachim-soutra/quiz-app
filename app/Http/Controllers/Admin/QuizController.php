@@ -106,6 +106,7 @@ class QuizController extends Controller
             'break_time' => $request->break_time,
             'slug' => Str::slug($request->name),
             'image' => $request->hasFile('image') ? $filename : "blank.png",
+            'video' => 'videos/'. $request->video,
             'price_token' => $price_token,
             'product_token' => $productToken
             // 'is_published' => 1,
@@ -319,7 +320,7 @@ class QuizController extends Controller
             "target" => $target->value,
         ]);
         $question = $answer->getQuestions()->where("sort", 1)->first();
-        return redirect()->route('questions', ['token' => $answer->token, 'id' => $question["id"]]);
+        return redirect()->route('questions', ['token' => $answer->token, 'id' => $question["id"], 'show_video' => 'true', 'pass' => 'false' ]);
     }
 
     public function removeQuestion(string $id)
@@ -423,6 +424,7 @@ class QuizController extends Controller
             'quiz_time_remind' => $request->quiz_time_remind,
             'slug' => Str::slug($request->name),
             'image' => $request->hasFile('image') ? $filename : $quiz->image,
+            'video' => 'videos/'. $request->video,
             'quiz_time' => $request->quiz_time,
             'quiz_time_remind' => $request->quiz_time_remind,
             'nbr_questions_sequance' => $request->nbr_questions_sequance,
@@ -434,6 +436,10 @@ class QuizController extends Controller
         return redirect()->route('quiz.index')->with('status', 'Quiz updated Successfully');
     }
 
+    public function showVideoQuiz(Quiz $quiz)
+    {
+        return view('admin.quiz.show_video', ['quiz' => $quiz]);
+    }
     /**
      * Remove the specified resource from storage.
      */

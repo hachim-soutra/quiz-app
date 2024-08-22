@@ -105,10 +105,21 @@
                                                 <textarea class="form-control" name="description" rows="3" placeholder="Enter ...">{{ old('description') }}</textarea>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label>Upload image</label>
                                                 <input class="form-control" name="image" type="file">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="">Video</label>
+                                                <select name="video" class="form-control" required>
+                                                    <option value="" disabled selected></option>
+                                                    @foreach (Storage::allFiles('public/videos') as $file)
+                                                        <option value="{{ File::basename($file) }}">{{ File::name($file) }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-sm-6  quiz_time_group">
