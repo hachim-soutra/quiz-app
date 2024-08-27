@@ -67,27 +67,11 @@ class UserController extends Controller
     }
 
     // show first quiz in the collection
-    public function showQuiz($id)
-    {
-        $formation = Formation::with('quizzes')->findOrFail($id);
-        $quiz = $formation->getQuizzesByIndex()->first();
-        session(['formation' => $formation]);
-        return redirect()->route('quiz', ['slug' => $quiz['quiz']->slug]);
-    }
+    
 
     public function showNextQuiz($id)
     {
-        $formation = session('formation');
-        $previousQuiz = $formation->getQuiz($id);
-        $nextQuiz = $formation->getQuizzesByIndex()->sortBy('index')->filter(function ($item) use ($previousQuiz) {
-            return $item['index'] > $previousQuiz['index'];
-        })
-        ->first();
-        if ($nextQuiz)
-        {
-            return redirect()->route('quiz', ['slug' => $nextQuiz['quiz']->slug]);
-        }
-            return redirect()->route('client.formations');
+        return redirect()->route('quiz.create-answer', ['id' => $id]);
     }
 
     public function settings()

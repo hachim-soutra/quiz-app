@@ -26,6 +26,11 @@ class Answer extends Model
         return $this->belongsTo(Quiz::class, 'quiz_id');
     }
 
+    public function formation()
+    {
+        return $this->belongsTo(Formation::class, 'formation_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

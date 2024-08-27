@@ -123,6 +123,7 @@ Route::middleware('check.answer')->group(function () {
     Route::post('/questions/next/{token}/{question_id}', [App\Http\Controllers\Admin\QuestionController::class, 'next'])->name('quiz.next');
 });
 
+
 Auth::routes();
 
 Route::post('/quiz/create-answer/{id}', [QuizController::class, 'createAnswer'])->name('quiz.create-answer');
@@ -185,7 +186,7 @@ Route::middleware(['auth', 'client'])->group(function () {
         Route::get('/promos', [UserController::class, 'promos'])->name('client.promos');
         Route::get('/formations', [UserController::class, 'formations'])->name('client.formations');
         Route::get('/formation/{formation}', [UserController::class, 'show'])->name('client.formation.show');
-        Route::get('/formation/quiz/{id}', [UserController::class, 'showQuiz'])->name('client.formation.quiz');
+        Route::get('/formation/quiz/{id}', [QuizController::class, 'showQuiz'])->name('client.formation.quiz');
         Route::get('/formation/next-quiz/{id}', [UserController::class, 'showNextQuiz'])->name('client.formation.next-quiz');
 
         //info: checkout routes

@@ -52,12 +52,13 @@
                                 <i class="fa-solid fa-share"></i>
                                 Go to dashboard
                             </a>
-                            @if($answer->quiz->formations)
-                    <a href="{{ auth()->check() && auth()->user()->userable_type == \App\Models\User::CLIENT_TYPE ? route('client.formation.next-quiz', ['id' => $answer->quiz->id]) : route('formation.next-quiz', ['id' => $answer->quiz->id]) }}" class="btn text-white float-right me-3 btn-pdf "
-                        style="background-color: #343b7c; float: right;">
-                        Next <i class="fa-solid fa-arrow-right ml-1" aria-hidden="true"></i>
-                        </a>
-                    @endif
+                            @if ($answer->formation && $formation->getNextQuiz($answer->quiz->id))
+                                <a href="{{ route('edit-product', ['id' => $formation->getNextQuiz($answer->quiz->id)->id]) }}"
+                                    class="btn text-white float-right me-3 btn-pdf "
+                                    style="background-color: #343b7c; float: right;">
+                                    Next <i class="fa-solid fa-arrow-right ml-1" aria-hidden="true"></i>
+                                </a>
+                            @endif
                         </div>
                     @endif
 
@@ -313,7 +314,9 @@
                         pdf.setFontType('bold');
                         //Add you content in place of example here
                         pdf.text('https://quizzes.pminlife.com => {{ $answer->quiz->name }}', pdf.internal.pageSize
-                            .getWidth() - 20, 15, { align: "right"});
+                            .getWidth() - 20, 15, {
+                                align: "right"
+                            });
                         pdf.text('page ' + i, pdf.internal.pageSize
                             .getWidth() / 2 - 20, pdf.internal.pageSize.getHeight() -
                             10);

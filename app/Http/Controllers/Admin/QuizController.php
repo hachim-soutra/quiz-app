@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\Models\QuizTheme;
 use App\Models\Settings;
 use App\Models\Order;
+use App\Models\Formation;
 use App\Models\Product;
 use App\Models\Question;
 use Harishdurga\LaravelQuiz\Models\QuestionOption;
@@ -544,4 +545,47 @@ class QuizController extends Controller
         $orders = Order::whereHas('product')->with(['product', 'user'])->get();
         return view('admin.orders.index', ['orders' => $orders]);
     }
+
+    public function showQuiz($id)
+    {
+        $formation = Formation::with('quizzes')->findOrFail($id);
+        $quiz = $formation->quizzes()->first();
+        // session(['formation' => $formation]);
+
+        $sort = 0;
+        $question_json = $quiz->questions()->whereHas('question')->with('question')->get()->sortBy('question.name')->map(function ($question) use (&$sort, $quiz) {
+            $sort++;
+            return [
+                'id' => $question->question?->id,
+                'name' => $question->question?->name,
+                'category' => $question->question?->questions_categorization?->name ?? "xxx",
+                'image' => $question->question?->image,
+                'video' => $question->question?->video,
+                'type' => $question->question?->question_type?->name,
+                'error' => $question->question?->error,
+                'options' => $question->question?->options,
+                'corrects' => $question->question?->question_type?->name != "row answers" ? $question->question?->options->where('is_correct', 1)->pluck('id')->toArray() : $question->question?->options->pluck('value', 'id')->toArray(),
+                'value' => -1,
+                'skipped' => null,
+                'sort' => $sort,
+            ];
+        });
+        $target = Settings::where("name", "answer target")->first();
+        $answer = Answer::create([
+            "quiz_id" => $quiz->id,
+            "token" => Str::random(16),
+            "answers" => [],
+            "questions_json" => $question_json,
+            "email" => auth()->user()->email ?? "",
+            "user_id" => auth()?->user()?->id,
+            "score" => 0,
+            "timer" => $quiz->quiz_time ? Carbon::parse($quiz->quiz_time)->format('H:i:s') : null,
+            "target" => $target->value,
+            "formation_id" => $formation->id
+        ]);
+        $question = $answer->getQuestions()->where("sort", 1)->first();
+        return redirect()->route('questions', ['token' => $answer->token, 'id' => $question["id"], 'show_video' => 'true', 'pass' => 'false' ]);
+
+    }
+
 }

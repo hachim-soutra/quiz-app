@@ -18,6 +18,11 @@ class Formation extends Model
         return $this->belongsToMany(Quiz::class);
     }
 
+    public function answers()
+    {
+        return $this->belongsToMany(Answer::class);
+    }
+
     public function product(): MorphOne
     {
         return $this->morphOne(Product::class, 'productable');
@@ -44,4 +49,13 @@ class Formation extends Model
         return $quiz;
     }
 
+    public function getNextQuiz($quiz_id)
+    {
+        $previousQuiz = $this->getQuiz($quiz_id);
+        $nextQuiz = $this->getQuizzesByIndex()->sortBy('index')->filter(function ($item) use ($previousQuiz) {
+            return $item['index'] > $previousQuiz['index'];
+        })->first();
+
+        return $nextQuiz;
+    }
 }
