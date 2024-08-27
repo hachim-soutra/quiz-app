@@ -18,6 +18,11 @@ class Formation extends Model
         return $this->belongsToMany(Quiz::class);
     }
 
+    public function product(): MorphOne
+    {
+        return $this->morphOne(Product::class, 'productable');
+    }
+
     public function getQuizzesByIndex()
     {
 

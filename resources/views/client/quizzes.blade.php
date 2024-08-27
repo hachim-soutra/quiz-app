@@ -96,8 +96,6 @@
                                                 target="_blank" class="btn d-block button-access button-color">
                                                 Buy now
                                             </a>
-                                        @else
-                                            {{ $quiz }}
                                         @endif
                                     @else
                                         <a href="{{ route('client.quiz', ['slug' => $quiz->slug]) }}" target="_blank"

@@ -169,6 +169,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
     Route::resource("formation", FormationController::class);
     Route::get('/formation/quiz/{id}', [FormationController::class, 'showQuiz'])->name('formation.quiz');
     Route::get('/formation/next-quiz/{id}', [FormationController::class, 'showNextQuiz'])->name('formation.next-quiz');
+    Route::delete('/formation/delete/{formation}', [FormationController::class, 'destroy'])->name('formation.delete');
 });
 
 Route::middleware(['auth', 'client'])->group(function () {

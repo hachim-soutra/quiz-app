@@ -43,6 +43,7 @@
                                 <table class="table" id="myTable">
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>Title</th>
                                             <th>Description</th>
                                             <th>Quizzes</th>
@@ -52,24 +53,26 @@
                                     <tbody>
                                         @foreach ($formations as $formation)
                                             <tr>
+                                                @if ($formation->payment_type == App\Enum\PayementTypeEnum::FREE->value)
+                                                                        <td
+                                                                            class="d-flex justify-content-center align-items-center">
+                                                                            🆓</td>
+                                                                            @else
+
+                                                                        <td
+                                                                            class="d-flex justify-content-center align-items-center">
+                                                                            💰</td>
+                                                                    @endif
                                                 <td class="text-capitalize">
                                                     {!! Str::limit($formation->title, 70, '...') !!}
                                                 </td>
                                                 <td class="text-capitalize">{!! Str::limit($formation->description, 70, '...') !!}</td>
                                                 <td class="text-capitalize">{{ count($formation->quizzes) }}</td>
-                                                <td>
-                                                    @if ($formation->video)
-                                                        <a target="_blank"
-                                                            href="{{ route('formation.show', ['formation' => $formation ]) }}"
-                                                            class="btn btn-success">
-                                                            <i class="fas fa-eye" aria-hidden="true"></i> show</a>
-                                                    @else
-                                                        <a target="_blank"
-                                                            href="{{ route('formation.quiz', ['id' => $formation->id ]) }}"
-                                                            class="btn btn-success">
-                                                            <i class="fas fa-eye" aria-hidden="true"></i> show</a>
-                                                    @endif
-
+                                                <td class="white-space">
+                                                    {{-- <a target="_blank"
+                                                        href="{{ route('formation.show', ['formation' => $formation]) }}"
+                                                        class="btn btn-success">
+                                                        <i class="fas fa-eye" aria-hidden="true"></i> show</a> --}}
 
                                                     <a href="{{ route('formation.edit', ['formation' => $formation]) }}"
                                                         class="btn btn-primary">
@@ -91,7 +94,7 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <form method="POST"
-                                                                        action="{{ route('formation.destroy', ['formation' => $formation]) }}"
+                                                                        action="{{ route('formation.delete', ['formation' => $formation]) }}"
                                                                         enctype="multipart/form-data">
                                                                         <div class="row">
                                                                             @csrf

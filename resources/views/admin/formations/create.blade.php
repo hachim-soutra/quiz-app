@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('style')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 @endsection
@@ -35,8 +35,7 @@
                                 </h3>
                             </div>
                             <div class="card-body">
-                                <form method="POST" action="{{ route('formation.store') }}"
-                                enctype="multipart/form-data">
+                                <form method="POST" action="{{ route('formation.store') }}" enctype="multipart/form-data">
                                     <div class="row">
                                         @csrf
                                         @method('post')
@@ -50,14 +49,39 @@
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
-                                </div>
+                                        </div>
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <label for="">Description</label>
                                                 <input type="text" name="description"
                                                     value="{{ old('description') ? old('description') : '' }}"
-                                                    class="form-control @error('description') is-invalid @enderror">
-                                                @error('description')
+                                                    class="form-control ">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label for="">Payment type </label>
+                                                <select name="payment_type" id="payement_type"
+                                                    class="form-control text-capitalize @error('payment_type') is-invalid @enderror">
+                                                    @foreach (App\Enum\PayementTypeEnum::cases() as $paymentType)
+                                                        <option value="{{ $paymentType }}"
+                                                            {{ old('payment_type') === $paymentType->value ? 'selected' : '' }}>
+                                                            {{ $paymentType }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('payment_type')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
+                                        </div>
+                                        <div class="col-sm-12 formation_price">
+                                            <div class="form-group">
+                                                <label for="">Price (€)</label>
+                                                <input type="text"
+                                                    class="form-control @error('price') is-invalid @enderror"
+                                                    name="price">
+                                                @error('price')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
@@ -67,9 +91,8 @@
                                                 <label for="">Image</label>
                                                 <input type="file" name="image" id="imageInput"
                                                     class="form-control @error('image') is-invalid @enderror">
-                                                <img src="" width="150" id="imagePreview"
-                                                    alt="formation's image" class="mt-3 rounded"
-                                                    style="display: none;">
+                                                <img src="" width="150" id="imagePreview" alt="formation's image"
+                                                    class="mt-3 rounded" style="display: none;">
                                                 @error('image')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
@@ -78,10 +101,11 @@
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="">Video</label>
-                                                <select name="video" class="form-control" required>
+                                                <select name="video" class="form-control">
                                                     <option value="" disabled selected></option>
                                                     @foreach (Storage::allFiles('public/videos') as $file)
-                                                        <option value="{{ File::basename($file) }}">{{ File::name($file) }}</option>
+                                                        <option value="{{ File::basename($file) }}">
+                                                            {{ File::name($file) }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -91,8 +115,8 @@
                                                 <label>quizzes :</label>
                                                 <select name="select_quizzes[]"
                                                     class="form-control select2 select2-hidden-accessible @error('price') is-invalid @enderror"
-                                                    multiple="" data-placeholder="Select a quiz"
-                                                    style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                                    multiple="" data-placeholder="Select a quiz" style="width: 100%;"
+                                                    tabindex="-1" aria-hidden="true">
                                                     @foreach ($quiz as $item)
                                                         <option value="{{ $item->id }}">
                                                             {{ $item->name }}
@@ -119,15 +143,28 @@
     </div>
 @endsection
 @section('js')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-<script>
-    $(document).ready(function() {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
 
-        $('.select2').select2({
-            closeOnSelect: false
+            $('.select2').select2({
+                closeOnSelect: false
+            });
+
+            function payementProcess() {
+                if ($('#payement_type').val() == 'free') {
+                    $('.formation_price').hide();
+                }
+                if ($('#payement_type').val() == 'paid') {
+                    $('.formation_price').show();
+                }
+            }
+
+            payementProcess();
+
+            $('#payement_type').on('change', function() {
+                payementProcess();
+            });
         });
-    });
-
-</script>
-
+    </script>
 @endsection

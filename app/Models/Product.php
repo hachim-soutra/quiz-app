@@ -31,6 +31,10 @@ class Product extends Model
         if ($this->productable_type == Quiz::class) {
             return $this->productable->name;
         }
+        if ($this->productable_type == Formation::class)
+        {
+            return $this->productable->title;
+        }
         return $this->productable->title;
     }
 
@@ -38,6 +42,9 @@ class Product extends Model
     {
         if ($this->productable_type == Quiz::class) {
             return 'Quiz';
+        }
+        if ($this->productable_type == Formation::class) {
+            return 'Formation';
         }
         return 'Promotion';
     }

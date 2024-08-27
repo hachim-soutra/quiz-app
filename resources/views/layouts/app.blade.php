@@ -130,6 +130,13 @@
             font-size: 17px;
         }
 
+        .next-button
+    {
+        background-color: #cfe2f3;
+        width: 12%;
+        font-weight: 600;
+    }
+
         .price-desc {
             font-size: 16px;
             color: #f2bb13;

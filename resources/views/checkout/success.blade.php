@@ -10,6 +10,9 @@
         @if (isset($quiz))
             <a href="{{ route('client.quiz', ['slug' => $quiz->slug]) }}" class="btn btn-primary d-block w-25 mt-4">Access
                 Quiz Now</a>
+        @elseif (isset($formation))
+            <a href="{{ route('client.formation.show', ['formation' => $formation]) }}" class="btn btn-primary d-block w-25 mt-4">Access
+                Formation Now</a>
         @else
             <a href="{{ route('client.quizzes') }}?{{ $query }}"
             class="btn d-block button-access button-color">Access Promotion Now</a>

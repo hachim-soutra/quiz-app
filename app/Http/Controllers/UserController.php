@@ -137,10 +137,14 @@ class UserController extends Controller
         if ($product->productable_type == Quiz::class) {
             $quiz = Quiz::find($product->productable->id);
             return view('checkout.success', ['quiz' => $quiz]);
-        } else {
+        } elseif ($product->productable_type == Promo::class) {
             $promo = Promo::find($product->productable->id);
             $query = $session->metadata['query'];
             return view('checkout.success', ['promo' => $promo, 'query' => $query]);
+        } else {
+            $formation = Formation::find($product->productable->id);
+            $query = $session->metadata['query'];
+            return view('checkout.success', ['formation' => $formation]);
         }
     }
 

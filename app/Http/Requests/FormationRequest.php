@@ -24,12 +24,16 @@ class FormationRequest extends FormRequest
         if ($this->isMethod('post')) {
             return [
                 'title' => ['required', 'unique:formations,title'],
-                'select_quizzes' => 'required|min:1'
+                'select_quizzes' => 'required|min:1',
+                'payment_type' => 'required',
+                'price' => 'required_if:payment_type,==,paid,numeric'
             ];
         } else {
             return [
                 'title' => ['required', 'unique:formations,title,' . $this->route('formation')->id],
-                'select_quizzes' => 'required|min:1'
+                'select_quizzes' => 'required|min:1',
+                'payment_type' => 'required',
+                'price' => 'required_if:payment_type,==,paid,numeric'
             ];
         }
     }

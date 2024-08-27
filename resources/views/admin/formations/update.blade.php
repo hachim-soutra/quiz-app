@@ -57,10 +57,33 @@
                                                 <label for="">Description</label>
                                                 <input type="text" name="description"
                                                     value="{{ old('description') ? old('description') : $formation->description }}"
-                                                    class="form-control @error('description') is-invalid @enderror">
-                                                @error('description')
-                                                    <div class="text-danger">
-                                                        {{ $message }}</div>
+                                                    class="form-control ">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label for="">Payment type </label>
+                                                <select name="payment_type" id="payment_type"
+                                                    class="form-control text-capitalize @error('payment_type') is-invalid @enderror">
+                                                    @foreach (App\Enum\PayementTypeEnum::cases() as $paymentType)
+                                                        <option value="{{ $paymentType }}"
+                                                        {{ (!old('payment_type') ? $formation->payment_type : old('payment_type')) == $paymentType->value ? 'selected' : '' }}>
+                                                        {{ $paymentType }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('payment_type')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 formation_price">
+                                            <div class="form-group">
+                                                <label for="">Price (€)</label>
+                                                <input type="text" value="{{ old('price') ? old('price') : $formation->price }}"
+                                                    class="form-control @error('price') is-invalid @enderror"
+                                                    name="price">
+                                                @error('price')
+                                                    <div class="text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
@@ -78,7 +101,7 @@
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="">Video</label>
-                                                <select name="video" class="form-control" required>
+                                                <select name="video" class="form-control">
                                                     <option value="" disabled selected></option>
                                                     @foreach (Storage::allFiles('public/videos') as $file)
                                                         <option
@@ -129,6 +152,20 @@
                 closeOnSelect: false
             });
 
+            function paymentProcess() {
+                if ($('#payment_type').val() == 'free') {
+                    $('.formation_price').hide();
+                }
+                if ($('#payment_type').val() == 'paid') {
+                    $('.formation_price').show();
+                }
+            }
+
+            paymentProcess();
+
+            $('#payment_type').on('change', function() {
+                paymentProcess();
+            });
         });
     </script>
 @endsection

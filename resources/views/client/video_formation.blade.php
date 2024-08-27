@@ -39,9 +39,12 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
+                                @if($formation->video)
                                 <video height="500" controls>
                                     <source src="{{ asset('storage/' . $formation->video) }}" type="video/mp4">
                                 </video>
+                                @endif
+                                
                                 <div class="d-flex flex-column">
                                     <h3 class="card-title mt-4 text-uppercase" style="text-decoration: underline;">
                                         {{ $formation->title }}
