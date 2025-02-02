@@ -194,7 +194,6 @@ Route::middleware(['auth', 'client'])->group(function () {
         Route::get('/checkout-cancel', [UserController::class, 'checkoutCancel'])->name('checkout-cancel');
         //end checkout routes
 
-        Route::post('/save-profil', [UserController::class, 'saveUpdatedProfil'])->name('client.save-profil');
 
         Route::middleware('quiz.guest')->get('/quiz/{slug}', function ($slug) {
             $quiz = Quiz::whereSlug($slug)->firstOrFail();
@@ -202,4 +201,7 @@ Route::middleware(['auth', 'client'])->group(function () {
             return view('quiz')->with(["quiz" => $quiz, "logo" => $logo]);
         })->name('client.quiz');
     });
+});
+Route::middleware(['auth'])->group(function () {
+    Route::post('/save-profil', [UserController::class, 'saveUpdatedProfil'])->name('client.save-profil');
 });
